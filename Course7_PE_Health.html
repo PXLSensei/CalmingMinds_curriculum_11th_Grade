@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Healthful Living & PE — Calming Minds Day School</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0faf4;
+  --s1: #ffffff;
+  --s2: #f7fdf9;
+  --border: #d1ead9;
+  --green: #16a34a;
+  --green-mid: #22c55e;
+  --green-dim: rgba(22,163,74,.1);
+  --green-border: rgba(22,163,74,.25);
+  --teal: #0d9488;
+  --teal-dim: rgba(13,148,136,.1);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,.1);
+  --amber-border: rgba(217,119,6,.25);
+  --rose: #e11d48;
+  --rose-dim: rgba(225,29,72,.08);
+  --sky: #0284c7;
+  --sky-dim: rgba(2,132,199,.1);
+  --text: #1a2e1f;
+  --dim: #4a7055;
+  --dimmer: #a8c4b0;
+  --sw: 272px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sw); min-height: 100vh;
+  background: var(--green); position: fixed; top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column; overflow-y: auto; z-index: 10;
+}
+.brand {
+  padding: 22px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.2);
+  background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, transparent 100%);
+}
+.brand-tag {
+  font-family: 'Nunito', sans-serif;
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(255,255,255,.7); margin-bottom: 7px; font-weight: 700;
+}
+.brand h1 { font-family: 'Nunito', sans-serif; font-size: 17px; color: #fff; font-weight: 800; line-height: 1.2; }
+.brand h1 span { opacity: .8; font-weight: 400; }
+.brand .school { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 4px; }
+
+.s-stats { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,.15); }
+.s-stat { padding: 11px 14px; text-align: center; border-right: 1px solid rgba(255,255,255,.15); }
+.s-stat:last-child { border-right: none; }
+.s-val { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 800; color: #fff; }
+.s-lbl { font-size: 9px; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .1em; margin-top: 2px; }
+
+.unit-nav { padding: 6px 0 20px; flex: 1; }
+.u-sect {
+  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); padding: 10px 16px 3px; font-weight: 700;
+}
+.u-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 8px 16px; color: rgba(255,255,255,.75); font-size: 12px;
+  font-family: 'Nunito Sans', sans-serif;
+  display: flex; align-items: center; gap: 9px;
+  transition: background .14s, color .14s;
+  border-left: 2px solid transparent;
+}
+.u-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+.u-btn.active { background: rgba(255,255,255,.18); color: #fff; border-left-color: #fff; }
+.u-btn.done { color: rgba(255,255,255,.45); }
+.u-ic { font-size: 14px; flex-shrink: 0; }
+.u-nm { flex: 1; line-height: 1.3; font-size: 11.5px; }
+.u-ck { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 700; }
+
+.lesson-list { display: none; }
+.lesson-list.open { display: block; }
+.l-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 5px 16px 5px 38px; color: rgba(255,255,255,.45); font-size: 11px;
+  font-family: 'Nunito Sans', sans-serif;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: color .14s, background .14s;
+}
+.l-btn:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.08); }
+.l-btn.active { color: #fff; }
+.l-btn.done { color: rgba(255,255,255,.38); }
+.l-sc { font-size: 10px; color: rgba(255,255,255,.7); font-weight: 700; }
+
+/* ── MAIN ── */
+.main { margin-left: var(--sw); flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  background: #fff; border-bottom: 2px solid var(--border);
+  padding: 13px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 5;
+}
+.tb-left h2 { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
+.tb-left .crumb { font-size: 11px; color: var(--dimmer); margin-top: 2px; }
+.prog-chip {
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  color: var(--green); padding: 5px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; font-family: 'Nunito', sans-serif;
+}
+
+.content { flex: 1; padding: 32px 40px; max-width: 880px; }
+
+/* ── WELCOME ── */
+.w-hero {
+  background: linear-gradient(135deg, var(--green) 0%, var(--teal) 100%);
+  border-radius: 16px; padding: 36px 40px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.w-hero::after {
+  content: '🌿';
+  position: absolute; right: 30px; top: 20px;
+  font-size: 100px; opacity: .15; user-select: none;
+}
+.w-tag { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: 10px; font-weight: 700; }
+.w-title { font-family: 'Nunito', sans-serif; font-size: 36px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 10px; }
+.w-sub { font-size: 14px; color: rgba(255,255,255,.8); line-height: 1.65; max-width: 560px; }
+
+.u-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.u-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-top: 3px solid var(--green);
+  border-radius: 10px; padding: 16px 18px; cursor: pointer;
+  transition: border-color .18s, background .18s, transform .14s, box-shadow .18s;
+}
+.u-card:hover { border-color: var(--green); background: var(--s2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(22,163,74,.1); }
+.u-card:nth-child(even) { border-top-color: var(--teal); }
+.u-card:nth-child(3) { border-top-color: var(--amber); }
+.u-card:nth-child(4) { border-top-color: var(--sky); }
+.uc-ic { font-size: 22px; margin-bottom: 7px; }
+.uc-tt { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+.uc-wk { font-size: 11px; color: var(--dimmer); }
+.uc-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.uc-fill { height: 100%; background: var(--green); transition: width .4s; border-radius: 2px; }
+
+/* ── LESSON ── */
+.l-header { padding-bottom: 18px; margin-bottom: 22px; border-bottom: 2px solid var(--border); }
+.l-unit-tag { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; font-weight: 700; }
+.l-header h2 { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.2; }
+.l-meta { font-size: 11px; color: var(--dimmer); margin-top: 5px; }
+
+.obj-box {
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 22px;
+}
+.obj-head { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; font-weight: 700; }
+.obj-box ul { list-style: none; }
+.obj-box li { font-size: 13.5px; color: #1a4a2a; padding: 3px 0; display: flex; gap: 9px; align-items: flex-start; }
+.obj-box li::before { content: "✓"; color: var(--green); font-size: 12px; margin-top: 1px; flex-shrink: 0; font-weight: 700; }
+
+.section { margin-bottom: 26px; }
+.sec-head {
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 14px; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-head::after { content: ''; flex: 1; height: 2px; background: var(--border); border-radius: 1px; }
+
+.body-text { font-size: 15px; line-height: 1.85; color: #2a3e2f; }
+.body-text p { margin-bottom: 13px; }
+.body-text strong { color: var(--text); font-weight: 700; }
+
+/* Content blocks */
+.info-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; margin: 14px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+.ic-head {
+  background: var(--green); color: #fff; padding: 9px 16px;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.ic-row { display: flex; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.ic-row:last-child { border-bottom: none; }
+.ic-row:nth-child(even) { background: var(--s2); }
+.ic-key { width: 180px; min-width: 180px; padding: 9px 14px; color: var(--green); font-weight: 700; border-right: 1px solid var(--border); font-size: 13px; }
+.ic-val { padding: 9px 14px; color: var(--dim); flex: 1; line-height: 1.55; }
+
+.highlight-box {
+  background: linear-gradient(135deg, var(--green-dim) 0%, var(--teal-dim) 100%);
+  border: 1px solid var(--green-border); border-left: 4px solid var(--green);
+  border-radius: 0 10px 10px 0; padding: 15px 19px; margin: 14px 0;
+}
+.hb-head { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; font-weight: 700; }
+.highlight-box p { font-size: 13.5px; color: #1a4a2a; line-height: 1.7; }
+
+.tip-box {
+  background: var(--amber-dim); border: 1px solid var(--amber-border);
+  border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+}
+.tb-head { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; font-weight: 700; }
+.tip-box p { font-size: 13.5px; color: #7c4a00; line-height: 1.7; }
+
+.stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+.stat-card { background: var(--s1); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.stat-num { font-family: 'Nunito', sans-serif; font-size: 28px; font-weight: 800; color: var(--green); }
+.stat-lbl { font-size: 11px; color: var(--dimmer); margin-top: 3px; }
+
+.checklist { margin: 14px 0; }
+.check-item {
+  display: flex; gap: 12px; padding: 9px 14px;
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 8px; margin-bottom: 7px; align-items: flex-start;
+  font-size: 13.5px; color: var(--dim); line-height: 1.5;
+}
+.check-item .ci-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.formula-box {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 20px; margin: 14px 0;
+}
+.fb-head { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; font-weight: 700; }
+.formula { font-size: 14px; color: var(--teal); margin: 5px 0; line-height: 1.6; font-weight: 600; }
+.formula-note { font-size: 13px; color: var(--dim); margin-top: 8px; line-height: 1.6; }
+
+/* ── QUIZ ── */
+.quiz-wrap {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: 12px; padding: 24px 28px; margin-top: 8px;
+  box-shadow: 0 4px 16px rgba(22,163,74,.06);
+}
+.quiz-wrap h4 { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; color: var(--green); margin-bottom: 4px; }
+.quiz-sub { font-size: 12px; color: var(--dimmer); margin-bottom: 20px; }
+
+.score-banner {
+  background: var(--green-dim); border: 2px solid var(--green-border);
+  border-radius: 10px; padding: 18px; text-align: center;
+  display: none; margin-bottom: 18px;
+}
+.score-banner.show { display: block; }
+.score-big { font-family: 'Nunito', sans-serif; font-size: 48px; color: var(--green); font-weight: 800; }
+.score-msg { font-size: 13px; color: var(--dim); margin-top: 3px; font-weight: 600; }
+
+.q-card {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 17px; margin-bottom: 13px;
+}
+.q-num { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--dimmer); margin-bottom: 7px; font-weight: 700; }
+.q-text { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.45; margin-bottom: 13px; }
+
+.choice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border-radius: 8px;
+  border: 2px solid var(--border);
+  background: #fff; cursor: pointer; margin-bottom: 7px;
+  font-size: 13.5px; color: var(--dim);
+  transition: border-color .13s, background .13s;
+  text-align: left; width: 100%;
+  font-family: 'Nunito Sans', sans-serif;
+}
+.choice:hover { border-color: var(--green); background: var(--green-dim); color: var(--text); }
+.choice.selected { border-color: var(--green); background: var(--green-dim); color: var(--text); }
+.choice.correct { border-color: var(--green) !important; background: rgba(22,163,74,.15) !important; color: #14532d; }
+.choice.wrong { border-color: var(--rose) !important; background: var(--rose-dim) !important; color: #881337; }
+.c-ltr {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  background: var(--green-dim); color: var(--green);
+  font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 0; font-family: 'Nunito', sans-serif;
+}
+.correct .c-ltr { background: var(--green); color: #fff; }
+.wrong .c-ltr { background: var(--rose); color: #fff; }
+
+.feedback {
+  border-radius: 8px; padding: 10px 14px; margin-top: 8px;
+  font-size: 13px; line-height: 1.55; display: none;
+}
+.feedback.show { display: block; }
+.feedback.ok { background: rgba(22,163,74,.12); color: #14532d; border: 1px solid rgba(22,163,74,.3); }
+.feedback.bad { background: var(--rose-dim); color: #881337; border: 1px solid rgba(225,29,72,.2); }
+.fun-n { font-size: 12px; margin-top: 5px; opacity: .8; font-style: italic; }
+
+.sub-btn {
+  background: var(--green); color: #fff; border: none;
+  padding: 12px 28px; border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+  cursor: pointer; margin-top: 6px; transition: opacity .18s, transform .14s;
+}
+.sub-btn:hover { opacity: .88; transform: translateY(-1px); }
+.sub-btn:disabled { opacity: .3; cursor: default; transform: none; }
+
+.lesson-nav {
+  display: flex; gap: 10px; margin-top: 28px; padding-top: 20px;
+  border-top: 2px solid var(--border);
+}
+.nav-btn {
+  padding: 10px 22px; border-radius: 10px; font-size: 13px;
+  cursor: pointer; transition: .14s;
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+}
+.nav-prev { background: #fff; border: 2px solid var(--border); color: var(--dim); }
+.nav-prev:hover { border-color: var(--green); color: var(--green); }
+.nav-next { background: var(--green); border: none; color: #fff; }
+.nav-next:hover { opacity: .88; }
+
+@media(max-width:800px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.u-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="brand">
+    <div class="brand-tag">Course 7 of 7</div>
+    <h1>Healthful Living <span>& PE</span></h1>
+    <div class="school">Calming Minds Day School · 2026–27</div>
+  </div>
+  <div class="s-stats">
+    <div class="s-stat"><div class="s-val" id="stat-done">0</div><div class="s-lbl">Done</div></div>
+    <div class="s-stat"><div class="s-val" id="stat-avg">—</div><div class="s-lbl">Score</div></div>
+  </div>
+  <nav class="unit-nav" id="unit-nav"></nav>
+</nav>
+
+<main class="main">
+  <header class="topbar">
+    <div class="tb-left">
+      <h2 id="tb-title">Healthful Living & Physical Education</h2>
+      <div class="crumb" id="tb-crumb">Course 7 · 0.5 Credit · Full Year · NC Healthful Living Standards</div>
+    </div>
+    <div class="prog-chip" id="prog-chip">0 / 42</div>
+  </header>
+  <div class="content" id="content"></div>
+</main>
+
+<script>
+const COURSE = { units: [
+
+// ══════════════════════════════════════
+// UNIT 1: FITNESS FUNDAMENTALS
+// ══════════════════════════════════════
+{id:'u1', emoji:'💪', name:'Fitness Fundamentals', weeks:'Weeks 1–5, Semester 1', lessons:[
+{id:'u1l1', day:'Week 1, Day 1', title:'The Five Components of Health-Related Fitness',
+objectives:['Define and distinguish the five health-related fitness components','Explain why each component matters for long-term health','Differentiate health-related from skill-related fitness'],
+content:`<div class="body-text">
+<p>Fitness is not one thing — it is a collection of related but distinct physical qualities. Understanding the components helps you train intelligently, identify your weak points, and design a program that actually moves you toward health rather than just toward soreness.</p>
+<div class="info-card">
+  <div class="ic-head">The Five Health-Related Fitness Components</div>
+  <div class="ic-row"><div class="ic-key">Cardiovascular Endurance</div><div class="ic-val">The ability of the heart, lungs, and circulatory system to deliver oxygen to working muscles over sustained periods. The most important predictor of long-term health and longevity. Examples: running a mile, cycling, swimming laps.</div></div>
+  <div class="ic-row"><div class="ic-key">Muscular Strength</div><div class="ic-val">The maximum force a muscle or muscle group can exert in a single effort. Examples: one-rep max on a bench press, pulling yourself up over an obstacle. Important for posture, injury prevention, and daily tasks.</div></div>
+  <div class="ic-row"><div class="ic-key">Muscular Endurance</div><div class="ic-val">The ability of a muscle to exert force repeatedly over time. Examples: push-ups until failure, holding a plank, doing many reps with light weight. Different from strength — a marathon runner has high muscular endurance, not necessarily max strength.</div></div>
+  <div class="ic-row"><div class="ic-key">Flexibility</div><div class="ic-val">The range of motion available at a joint. Reduces injury risk, improves posture, and maintains functional movement as we age. Examples: touching toes, shoulder rotation, hip mobility.</div></div>
+  <div class="ic-row"><div class="ic-key">Body Composition</div><div class="ic-val">The ratio of fat mass to lean mass (muscle, bone, organs, water). A person can be "normal weight" with unhealthy body composition, or "overweight" by BMI while being extremely fit. BMI is a crude measure that doesn't capture this distinction.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Health-Related vs. Skill-Related Fitness</div>
+  <p>Health-related fitness (the five components above) predicts long-term health outcomes. Skill-related fitness — speed, agility, power, balance, coordination, reaction time — matters for sports performance. You can be extremely healthy with low skill-related fitness. A 65-year-old who walks 5 miles daily may have better health-related fitness than a 20-year-old athlete despite having no sports skill at all.</p>
+</div>
+<div class="tip-box">
+  <div class="tb-head">The Most Important Component</div>
+  <p>Cardiovascular endurance (also called cardiorespiratory fitness or VO₂ max) is the single strongest predictor of all-cause mortality — better than BMI, cholesterol, blood pressure, or any other commonly measured factor. Low cardiorespiratory fitness is a bigger risk factor for early death than obesity. This is one of the most robust findings in exercise science.</p>
+</div>
+</div>`,
+cultural:`The President's Challenge fitness test (now the Presidential Youth Fitness Program) was introduced in 1956 after research showed American children were less fit than European children. Physical fitness became a national security concern during the Cold War — Eisenhower, Kennedy, and every president since have had some fitness initiative. Kennedy's 1960 Sports Illustrated article "The Soft American" argued that physical weakness threatened national vigor. The irony: the most powerful predictor of population health and longevity — cardiorespiratory fitness — requires something completely free: sustained moderate-intensity movement. The bottleneck is cultural and motivational, not technological.`,
+quiz:[
+  {q:"Which fitness component is the strongest predictor of long-term health and longevity?",choices:["Muscular strength","Flexibility","Cardiovascular endurance (cardiorespiratory fitness)","Body composition"],a:2,fun:"VO₂ max (maximal oxygen uptake) is the gold standard measure of cardiovascular fitness. Research consistently shows that low cardiorespiratory fitness predicts early mortality more strongly than high cholesterol, high blood pressure, obesity, or smoking. The good news: it responds well to training. 🏃"},
+  {q:"Body composition differs from body weight because:",choices:["Body composition measures height and weight together","Body composition measures the ratio of fat to lean mass — a person can be normal weight with unhealthy body composition, or 'overweight' by BMI while being very fit","Body composition only measures bone density","They measure the same thing using different scales"],a:1,fun:"A 200-lb linebacker and a 200-lb sedentary person weigh the same. Their body compositions are completely different — the athlete has much higher lean mass percentage. BMI can't distinguish these cases. Body composition is what actually matters for health; weight is just a proxy that often misleads. 📊"},
+  {q:"Muscular endurance differs from muscular strength in that:",choices:["Muscular endurance applies only to leg muscles","Muscular endurance is the ability to exert force repeatedly over time; strength is maximum force in a single effort — a marathon runner demonstrates endurance, a powerlifter demonstrates strength","Muscular strength requires weights; endurance only uses bodyweight","They are identical concepts measured with different tests"],a:1,fun:"A person who can do 100 push-ups has high muscular endurance. A person who can do 3 push-ups but can deadlift 400 pounds has high muscular strength. Training for each requires different approaches: high reps/light weight builds endurance; low reps/heavy weight builds strength. 💪"},
+  {q:"Flexibility training is most effective when performed:",choices:["Before exercise with cold muscles to prevent injury during the workout","Immediately after exercise when muscles are warm and blood-filled — muscles stretch more safely and effectively when warm","Only on rest days to avoid overtraining","At any time — muscle temperature doesn't affect flexibility outcomes"],a:1,fun:"Cold muscles are stiffer and more injury-prone when stretched forcefully. Post-workout static stretching (hold 30-60 seconds) takes advantage of warm, pliable muscles. Pre-workout: use dynamic stretching (movement-based) instead of static. This distinction is exercise science consensus that contradicts what many people were taught in gym class. 🧘"}
+]},
+
+{id:'u1l2', day:'Week 2, Day 1', title:'The FITT Principle & Designing Exercise Programs',
+objectives:['Apply the FITT principle to design any exercise program','Understand progressive overload and why it\'s necessary','Calculate target heart rate zones for aerobic training'],
+content:`<div class="body-text">
+<p>The FITT principle gives you four variables to adjust in any exercise program. Understanding these variables means you can design training for any goal — and understand why your current routine might not be working.</p>
+<div class="formula-box">
+  <div class="fb-head">The FITT Principle</div>
+  <div class="formula">F — Frequency: How often you exercise (days per week)</div>
+  <div class="formula">I — Intensity: How hard you exercise (% of max heart rate, RPE, % of 1RM)</div>
+  <div class="formula">T — Time: How long each session lasts (minutes)</div>
+  <div class="formula">T — Type: What kind of exercise (aerobic, strength, flexibility, sport)</div>
+  <div class="formula-note">Change any one variable and you change the training stimulus. Progressive overload = systematically increasing one or more FITT variables over time to continue making gains.</div>
+</div>
+<div class="info-card">
+  <div class="ic-head">FITT Recommendations — General Health (ACSM Guidelines)</div>
+  <div class="ic-row"><div class="ic-key">Cardiovascular</div><div class="ic-val">F: 3–5 days/week · I: Moderate (50–70% max HR) or vigorous (70–85% max HR) · T: 150 min/week moderate OR 75 min/week vigorous · Type: Any sustained aerobic activity</div></div>
+  <div class="ic-row"><div class="ic-key">Strength</div><div class="ic-val">F: 2–3 days/week (not consecutive) · I: 60–80% of 1RM for health · T: 2–4 sets of 8–15 reps per exercise · Type: Free weights, machines, bodyweight — all effective</div></div>
+  <div class="ic-row"><div class="ic-key">Flexibility</div><div class="ic-val">F: 2–3 days/week minimum; daily is ideal · I: Mild discomfort, never pain · T: Hold static stretches 30–60 seconds · Type: Static, dynamic, PNF</div></div>
+</div>
+<div class="formula-box">
+  <div class="fb-head">Target Heart Rate Zones</div>
+  <div class="formula">Estimated Max HR = 220 − age</div>
+  <div class="formula">At age 16: max HR ≈ 204 bpm</div>
+  <div class="formula">Moderate intensity zone: 50–70% of max HR = ~102–143 bpm</div>
+  <div class="formula">Vigorous intensity zone: 70–85% of max HR = ~143–173 bpm</div>
+  <div class="formula-note">These are estimates — actual max HR varies. The "talk test": moderate = can speak in sentences; vigorous = can only say a few words before needing to breathe. Both intensities provide health benefits; vigorous is more time-efficient.</div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Progressive Overload — Why You Must Keep Challenging Yourself</div>
+  <p>Your body adapts to whatever stress you consistently impose on it — then stops changing. If you run the same 2-mile route at the same pace every day, you'll maintain that fitness level but not improve it. Progressive overload means systematically increasing the challenge: run farther, run faster, add hills, add intervals. Without it, you're maintaining, not improving. The same principle applies to strength training: add weight, reps, sets, or reduce rest as your capacity grows.</p>
+</div>
+</div>`,
+cultural:`The American College of Sports Medicine (ACSM) guidelines for physical activity are evidence-based recommendations updated periodically as research develops. The current recommendation of 150 minutes of moderate activity per week was chosen partly because it's achievable: 30 minutes five days a week, or even 10-minute walks scattered throughout the day. Research shows accumulated activity (multiple short bouts) produces similar health benefits to single longer sessions. The hardest part of exercise prescription is designing something people will actually do — not the most optimal possible program, but the most optimal program that fits a specific person's life.`,
+quiz:[
+  {q:"Progressive overload in exercise training means:",choices:["Starting with very heavy weights and reducing weight as you fatigue","Systematically increasing the exercise challenge over time — more weight, reps, sets, or reduced rest — to continue improving beyond initial adaptation","Exercising progressively more hours each day until reaching peak fitness","Alternating between easy and hard workouts in a progressive pattern"],a:1,fun:"Your body is remarkably good at adapting — which is great, but means you have to keep raising the bar. The powerlifter who always lifts 200 lbs will always lift 200 lbs. Add 5 lbs each week and after a year you've transformed. The principle is simple; the discipline is the challenge. 📈"},
+  {q:"The target heart rate zone for moderate-intensity aerobic exercise for a 16-year-old is approximately:",choices:["50–100 bpm","102–143 bpm (50–70% of estimated 220–16=204 max HR)","150–180 bpm","60–90 bpm"],a:1,fun:"Max HR estimate: 220 - 16 = 204. Moderate zone: 50-70% of 204 = 102-143 bpm. This is a comfortable challenge — you're breathing harder but can still talk in sentences. Vigorous is 70-85%: 143-173 bpm. Both zones produce health benefits. Monitor with a fitness tracker or count pulse for 15 seconds × 4. 💓"},
+  {q:"The ACSM recommendation of 150 minutes of moderate activity per week can be broken into:",choices:["One 150-minute session per week only","Any combination that totals 150 minutes — including multiple 10-minute bouts throughout the day, which produce similar health benefits to longer single sessions","Only two 75-minute sessions to maximize benefit","It must be three 50-minute sessions specifically"],a:1,fun:"This is one of the most practically important exercise science findings: accumulated activity counts. Three 10-minute walks produce similar health benefits to one 30-minute walk. This removes the 'I don't have time' objection — 10 minutes is nearly always findable. Adherence matters more than optimization. 🚶"},
+  {q:"In the FITT principle, 'Intensity' for strength training is often measured by:",choices:["How much you sweat during the workout","Percentage of your one-repetition maximum (1RM) — the maximum weight you can lift for one rep","How long each set takes to complete","Your perceived enjoyment of the exercise"],a:1,fun:"1RM-based intensity prescription: 60-80% of 1RM for hypertrophy/health, 80-95% for strength, under 60% for muscular endurance. To find 1RM without maximal effort: use a rep-max formula (e.g., 10RM weight × 1.33 ≈ 1RM estimate). Professional programs always anchor intensity to individual capacity, not absolute weights. 🏋️"}
+]},
+
+{id:'u1l3', day:'Week 3, Day 1', title:'Nutrition Foundations for Active Lifestyles',
+objectives:['Distinguish macronutrients and their roles in the body','Understand nutrient timing for exercise performance','Identify common nutrition myths and what the evidence actually shows'],
+content:`<div class="body-text">
+<p>Nutrition is one of the most myth-laden topics in health. Everyone has opinions; the evidence is often more nuanced than headlines suggest. Here is what the science actually supports for an active person seeking health — not six-pack abs, but genuine long-term wellbeing.</p>
+<div class="info-card">
+  <div class="ic-head">Macronutrients — The Big Three</div>
+  <div class="ic-row"><div class="ic-key">Carbohydrates (4 cal/g)</div><div class="ic-val">The body's preferred fuel for high-intensity exercise. Stored as glycogen in muscle and liver. "Carbs are bad" is a persistent myth — endurance athletes and strength athletes both require adequate carbohydrates for performance and recovery.</div></div>
+  <div class="ic-row"><div class="ic-key">Protein (4 cal/g)</div><div class="ic-val">Builds and repairs muscle tissue. Also used as enzymes, hormones, and immune factors. Active people need more: 1.4–2.0 g/kg body weight/day (vs. ~0.8 g/kg for sedentary adults). Spread throughout the day — the body can't store excess protein.</div></div>
+  <div class="ic-row"><div class="ic-key">Fats (9 cal/g)</div><div class="ic-val">Essential for hormone production, vitamin absorption (A, D, E, K), brain function, and as fuel for low-intensity exercise. Unsaturated fats (olive oil, avocado, nuts, fish) are associated with better health outcomes. Fats are not the enemy.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Hydration — The Most Underrated Performance Factor</div>
+  <p>Even mild dehydration (1–2% of body weight) impairs cognitive function, mood, and physical performance. By the time you feel thirsty, you're already mildly dehydrated. For exercise: drink before, during (especially in heat), and after. Urine color is a practical indicator: pale yellow = well hydrated; dark yellow = drink more; clear = possibly overhydrated. Water is adequate for most exercise under 60–90 minutes; sports drinks add electrolytes for longer efforts.</p>
+</div>
+<div class="info-card">
+  <div class="ic-head">Common Nutrition Myths vs. Evidence</div>
+  <div class="ic-row"><div class="ic-key">"Eating fat makes you fat"</div><div class="ic-val">False. Fat is calorie-dense but doesn't directly cause fat gain — caloric surplus does. Dietary fat is essential for health.</div></div>
+  <div class="ic-row"><div class="ic-key">"Carbs are bad"</div><div class="ic-val">Oversimplified. Refined carbs in excess are problematic; whole food carbohydrates are a healthy energy source, especially for active people.</div></div>
+  <div class="ic-row"><div class="ic-key">"You must eat within 30 min of exercise"</div><div class="ic-val">Overstated. The "anabolic window" is real but wider than 30 min — getting adequate total daily protein matters more than precise timing.</div></div>
+  <div class="ic-row"><div class="ic-key">"Protein shakes are necessary"</div><div class="ic-val">No. Whole food protein sources are equally effective. Shakes are convenient, not superior.</div></div>
+  <div class="ic-row"><div class="ic-key">"You can out-exercise a bad diet"</div><div class="ic-val">Almost impossible at a caloric level. Nutrition is the foundation; exercise builds on it.</div></div>
+</div>
+</div>`,
+cultural:`The US government's dietary guidelines have changed significantly over decades, often lagging behind research. The "low-fat" craze of the 1980s–90s — driven partly by flawed research and partly by the food industry's influence on dietary guidelines — led Americans to replace fat with refined carbohydrates, likely contributing to the obesity and diabetes rise. The research on saturated fat, dietary cholesterol, and optimal macronutrient ratios has become much more nuanced. "The science is settled" in nutrition is rarely accurate — the science is ongoing and often messier than headlines suggest. Critical evaluation of nutrition claims is a fundamental health skill.`,
+quiz:[
+  {q:"Carbohydrates are the body's preferred fuel for high-intensity exercise because:",choices:["They have more calories per gram than protein or fat","They are quickly converted to glucose and can fuel both aerobic and anaerobic metabolism — fat cannot fuel anaerobic (high-intensity) exercise efficiently","Carbohydrates are stored more easily than fat","The digestive system processes carbohydrates faster than other macronutrients"],a:1,fun:"At high intensities, your body needs ATP fast — faster than fat can provide it. Only carbohydrates (glycogen) can fuel anaerobic exercise. At low intensities, fat is the primary fuel. This is why 'carb loading' before endurance events is scientifically justified, and why very low-carb diets impair high-intensity performance. Carbs aren't bad — they're essential. 🍝"},
+  {q:"The most accurate indicator of hydration status is:",choices:["Whether you feel thirsty","Urine color — pale yellow indicates good hydration; dark yellow indicates dehydration; clear may indicate overhydration","How much you sweated during exercise","Your weight before and after exercise"],a:1,fun:"Thirst lags behind actual hydration status — you're already mildly dehydrated when thirst kicks in. Urine color is practical and accurate. Dark yellow/amber = drink water now. Pale yellow = you're good. Clear for extended periods = you might be overdrinking (can dilute electrolytes). 💧"},
+  {q:"Active people need more protein than sedentary people because:",choices:["Exercise damages muscle protein and the body needs extra protein to repair and grow stronger muscle tissue","Exercise increases body temperature which requires more protein to maintain","Active people lose protein through sweat","Higher caloric intake from exercise increases all macronutrient needs proportionally"],a:0,fun:"Exercise (especially strength training) creates micro-damage in muscle fibers. The repair process builds them back stronger — but requires protein as building material. Active adults: 1.4–2.0 g protein per kg body weight daily. An active 150-lb person (68 kg) needs 95–136g protein per day. Spreading it across meals maximizes muscle protein synthesis. 💪"},
+  {q:"The statement 'you can out-exercise a bad diet' is mostly false because:",choices:["Exercise has no effect on caloric needs","The calorie expenditure from exercise is typically much smaller than the caloric content of poor dietary choices — a 30-minute run burns roughly 300 calories, equivalent to one fast food item","Exercise makes people less hungry, reducing the impact of diet quality","The human body absorbs fewer calories when exercising regularly"],a:1,fun:"A 30-minute run ≈ 300 calories. A large fast food meal ≈ 1,000–1,500 calories. The math is brutal. This doesn't mean exercise is unimportant — exercise is essential for health independent of weight — but for body composition, nutrition creates the conditions and exercise refines them. 🍔"}
+]},
+
+{id:'u1l4', day:'Week 4, Day 1', title:'Sleep Science — The Foundation of Recovery',
+objectives:['Explain the stages and functions of sleep','Understand the health consequences of sleep deprivation','Apply sleep hygiene principles for optimal recovery'],
+content:`<div class="body-text">
+<p>Sleep is not a passive state — it is when critical biological repair and consolidation happen. For active people especially, sleep is the most powerful recovery tool available. It is also the most commonly sacrificed.</p>
+<div class="stat-strip">
+  <div class="stat-card"><div class="stat-num">8–10</div><div class="stat-lbl">Hours recommended for teenagers (AASM)</div></div>
+  <div class="stat-card"><div class="stat-num">~20%</div><div class="stat-lbl">Teens who actually get 8+ hours on school nights</div></div>
+  <div class="stat-card"><div class="stat-num">↓40%</div><div class="stat-lbl">Learning capacity with severe sleep deprivation</div></div>
+</div>
+<div class="info-card">
+  <div class="ic-head">Sleep Stages and Their Functions</div>
+  <div class="ic-row"><div class="ic-key">NREM Stage 1–2 (Light)</div><div class="ic-val">Transition to sleep; body temperature drops, heart rate slows. Memory consolidation begins. Easy to wake from. Takes up ~50% of total sleep.</div></div>
+  <div class="ic-row"><div class="ic-key">NREM Stage 3 (Deep / Slow Wave)</div><div class="ic-val">Most physically restorative — growth hormone released, muscle repair occurs, immune system consolidates. Hardest to wake from. More concentrated in early part of night.</div></div>
+  <div class="ic-row"><div class="ic-key">REM Sleep</div><div class="ic-val">Rapid Eye Movement — most dreaming occurs. Critical for emotional processing, creativity, and procedural memory (learning skills). More concentrated in later part of night. This is why cutting sleep short is especially costly for learning.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">What Sleep Deprivation Does to You</div>
+  <p>Sleep deprivation mimics intoxication: 17 hours awake ≈ 0.05% blood alcohol (legal impairment threshold in many countries). 24 hours awake ≈ 0.10% BAC. Effects include: impaired decision-making, reduced impulse control, emotional dysregulation, reduced athletic performance (reaction time, accuracy, endurance all decline), impaired immune function, increased cortisol (stress hormone), and with chronic deprivation — elevated risk of obesity, diabetes, cardiovascular disease, and depression.</p>
+</div>
+<div class="info-card">
+  <div class="ic-head">Sleep Hygiene — Evidence-Based Practices</div>
+  <div class="ic-row"><div class="ic-key">Consistent schedule</div><div class="ic-val">Same sleep and wake time daily (including weekends). Irregular schedules disrupt circadian rhythm — "social jet lag" from weekend sleep shifts is a real phenomenon with measurable health effects.</div></div>
+  <div class="ic-row"><div class="ic-key">Screen-free wind-down</div><div class="ic-val">Blue light from screens suppresses melatonin production (the sleep signal). 30–60 minutes screen-free before bed; or use blue light filters and dim mode.</div></div>
+  <div class="ic-row"><div class="ic-key">Cool, dark room</div><div class="ic-val">Core body temperature must drop ~1–2°F to initiate sleep. A cool room facilitates this. Darkness is essential — even small amounts of light can disrupt sleep architecture.</div></div>
+  <div class="ic-row"><div class="ic-key">Avoid caffeine late</div><div class="ic-val">Caffeine has a half-life of ~5 hours. A coffee at 3pm means half the caffeine is still in your system at 8pm. Affects sleep quality even if you fall asleep easily.</div></div>
+  <div class="ic-row"><div class="ic-key">Exercise timing</div><div class="ic-val">Regular exercise dramatically improves sleep quality. Intense exercise within 1–2 hours of bedtime can temporarily elevate cortisol and delay sleep — individual variation is large.</div></div>
+</div>
+</div>`,
+cultural:`Teenagers have a biologically delayed circadian rhythm — melatonin releases about 1–3 hours later than in adults, making it genuinely difficult to fall asleep before 11pm or wake easily before 8am. School start times before 8:30am conflict with adolescent biology. The American Academy of Pediatrics and the CDC recommend that middle and high schools start no earlier than 8:30am. Some school districts have shifted start times and seen improvements in attendance, grades, mental health, and reduced traffic accidents by teen drivers. This is a public health issue with a known solution that conflicts with adult scheduling convenience.`,
+quiz:[
+  {q:"REM sleep is particularly important for:",choices:["Physical muscle repair and growth hormone release","Emotional processing, creativity, and procedural memory consolidation — skills learning happens largely during REM","Maintaining a stable body temperature during sleep","Clearing metabolic waste from the brain"],a:1,fun:"REM sleep is when your brain consolidates skills — it's why 'sleeping on it' improves performance on motor tasks. A musician who practices before sleep and gets good REM sleep performs better the next day than one who practices but cuts sleep short. This is why cramming all night before a test is doubly counterproductive: you learn less AND consolidate less. 🧠"},
+  {q:"Sleep deprivation impairs performance similarly to alcohol intoxication because:",choices:["Both substances increase serotonin levels in similar ways","17 hours of wakefulness produces cognitive impairment equivalent to a 0.05% blood alcohol concentration — both impair reaction time, decision-making, and impulse control","Both primarily affect the cerebellum","Sleep deprivation and alcohol both reduce cortisol levels"],a:1,fun:"This comparison comes from research by Charles Czeisler at Harvard. Most people driving while very sleepy would be legally impaired if they were drunk. Yet we treat sleep-deprived driving as acceptable and drunk driving as criminal. The impairment is comparable. 'I'm fine' is not reliable self-assessment in either condition. 🚗"},
+  {q:"The teenage biological circadian delay means:",choices:["Teenagers need less sleep than adults","Teenagers' melatonin release is biologically delayed ~1–3 hours compared to adults, making early school start times a public health mismatch with adolescent biology","Teenagers are lazy by choice about sleeping late","Teenage sleep patterns are entirely determined by screen use"],a:1,fun:"This is not laziness — it's melatonin. Teenagers who 'can't fall asleep' before 11pm often genuinely cannot because their circadian clock doesn't signal sleep until later. Early school start times force biological misalignment. Schools that have shifted to later start times see measurable improvements in grades, attendance, depression rates, and teen driving accidents. 😴"},
+  {q:"The most important sleep hygiene practice for improving sleep quality is:",choices:["Taking melatonin supplements every night","Maintaining a consistent sleep and wake time every day — including weekends — to stabilize the circadian rhythm","Sleeping in a completely silent room","Getting exactly 8 hours of sleep regardless of natural wake time"],a:1,fun:"Consistency beats all other interventions. Variable sleep times create 'social jet lag' — Monday morning after a weekend of late sleeping feels like you flew across time zones. The circadian rhythm is robust and self-regulating if you let it anchor. Other hygiene practices help; this one is foundational. ⏰"}
+]},
+
+{id:'u1l5', day:'Week 5, Day 1', title:'CPR, First Aid & Emergency Response',
+objectives:['Perform the steps of adult/child/infant CPR correctly','Operate an AED (Automated External Defibrillator)','Respond appropriately to common first aid emergencies'],
+content:`<div class="body-text">
+<p>CPR and first aid skills are required for NC high school graduation. But beyond the graduation requirement, these are skills that may save a life — possibly someone you love. Cardiac arrest outside a hospital has a survival rate of about 10%. Bystander CPR can double or triple that rate. Knowing what to do in the critical minutes before EMS arrives matters enormously.</p>
+<div class="info-card">
+  <div class="ic-head">The Chain of Survival (American Heart Association)</div>
+  <div class="ic-row"><div class="ic-key">1. Recognize & Call</div><div class="ic-val">Recognize cardiac arrest (unresponsive, no normal breathing). Call 911 immediately. Activate emergency response.</div></div>
+  <div class="ic-row"><div class="ic-key">2. Early CPR</div><div class="ic-val">Start CPR immediately. Each minute without CPR reduces survival by 7–10%. Compressions keep blood circulating to brain and heart.</div></div>
+  <div class="ic-row"><div class="ic-key">3. Early Defibrillation</div><div class="ic-val">AED shock restores normal heart rhythm. Most effective in the first minutes. AEDs are designed for bystander use — they tell you what to do.</div></div>
+  <div class="ic-row"><div class="ic-key">4. Advanced Care</div><div class="ic-val">EMS arrives and provides advanced interventions. Then hospital care.</div></div>
+</div>
+<div class="formula-box">
+  <div class="fb-head">Hands-Only CPR — Adult (Most Common Scenario)</div>
+  <div class="formula">1. CHECK: Tap shoulders — "Are you okay?" — check for normal breathing (no more than 10 seconds)</div>
+  <div class="formula">2. CALL: Send someone to call 911 and get an AED. Do both simultaneously if alone.</div>
+  <div class="formula">3. COMPRESS: Heel of hand on center of chest. Arms straight. Push hard and fast.</div>
+  <div class="formula">Rate: 100–120 compressions per minute (tempo of "Stayin' Alive" by the Bee Gees)</div>
+  <div class="formula">Depth: At least 2 inches for adults; allow full chest recoil between compressions</div>
+  <div class="formula-note">Hands-only CPR (no rescue breaths) is recommended for untrained bystanders on adults. It is effective and simpler than full CPR. Don't stop until EMS arrives or the person shows clear signs of life.</div>
+</div>
+<div class="checklist">
+  <div class="check-item"><span class="ci-icon">⚡</span><span>AED use: Power on → follow voice prompts → attach pads → clear everyone → push shock button if advised → resume CPR immediately after shock</span></div>
+  <div class="check-item"><span class="ci-icon">🩸</span><span>Severe bleeding: Apply direct pressure with clean cloth, maintain pressure, don't remove if soaked (add more material), elevate if possible</span></div>
+  <div class="check-item"><span class="ci-icon">🔥</span><span>Burns: Cool with cool (not cold) running water for 10–20 minutes; do NOT use ice, butter, or toothpaste; cover loosely</span></div>
+  <div class="check-item"><span class="ci-icon">🦴</span><span>Suspected fracture: Immobilize — don't try to straighten; apply ice wrapped in cloth; seek medical care</span></div>
+  <div class="check-item"><span class="ci-icon">🌡️</span><span>Heat stroke (hot, dry skin, confusion): Call 911; cool rapidly (ice packs to neck, armpits, groin; fan; move to shade/AC)</span></div>
+</div>
+</div>`,
+cultural:`The "Stayin' Alive" CPR connection was discovered by researchers who measured the song's tempo (103 BPM — within the 100–120 recommended range) and found it actually worked as a mental metronome for compression rate. It became standard teaching practice. Other songs at the right tempo: "Dancing Queen" (ABBA), "Another One Bites the Dust" (Queen — though the title seems unfortunate for this purpose), "Crazy in Love" (Beyoncé). The American Heart Association literally published a playlist. Science meets pop culture in the service of saving lives.`,
+quiz:[
+  {q:"The compression rate for adult CPR is:",choices:["60–80 compressions per minute","80–100 compressions per minute","100–120 compressions per minute — approximately the tempo of 'Stayin' Alive'","140–160 compressions per minute"],a:2,fun:"100–120 BPM. 'Stayin' Alive' is 103 BPM — right in the zone. Push hard (2+ inches deep), push fast, let the chest fully recoil between compressions. Do NOT lean on the chest between compressions — full recoil allows the heart to refill. Fatigue is real — if someone else is available, switch every 2 minutes. 💓"},
+  {q:"Bystander CPR is important because:",choices:["It eliminates the need for EMS response","Each minute without CPR reduces cardiac arrest survival by 7–10% — bystander CPR can double or triple survival rates by maintaining blood flow until EMS arrives","CPR alone can restart a stopped heart without an AED","Only trained medical professionals can effectively perform CPR"],a:1,fun:"Survival from out-of-hospital cardiac arrest without CPR: about 10%. With bystander CPR: 20–30% or more. CPR doesn't restart the heart — it keeps blood circulating until a defibrillator can restore normal rhythm. Every minute counts. This is why AEDs are placed in public spaces and why bystander response matters enormously. ⏱️"},
+  {q:"An AED (Automated External Defibrillator) is designed so that:",choices:["Only trained medical professionals can operate it safely","Any bystander can use it — it analyzes heart rhythm and will only advise a shock when one is needed; it talks you through every step","It requires knowledge of cardiac rhythms to operate effectively","It must be used simultaneously with CPR at all times"],a:1,fun:"AEDs are specifically designed for panicked, untrained bystanders. They will NOT advise a shock if the heart is in a shockable rhythm — they analyze and make the decision. Your job: turn it on, follow the voice prompts, clear everyone before the shock, immediately resume CPR after. The device tells you what to do. Don't be afraid to use one — you cannot make the situation worse. ⚡"},
+  {q:"For severe external bleeding, the most important first aid action is:",choices:["Applying a tourniquet above the wound immediately","Cleaning the wound thoroughly with water before applying pressure","Applying direct, continuous pressure with clean material — and maintaining that pressure even if it soaks through","Keeping the wound elevated above heart level as the primary intervention"],a:2,fun:"Direct pressure is the cornerstone. Don't remove blood-soaked material (you'll disrupt clotting); add more material on top and keep pressing. Elevation helps if possible. Tourniquets for limbs in life-threatening bleeding are now standard recommendation — the 'only as last resort' guidance has changed based on military medicine data. For most bleeding: pressure, pressure, pressure. 🩸"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 2: MENTAL HEALTH & WELLNESS
+// ══════════════════════════════════════
+{id:'u2', emoji:'🧠', name:'Mental Health & Wellness', weeks:'Weeks 6–10, Semester 1', lessons:[
+{id:'u2l1', day:'Week 6, Day 1', title:'Mental Health Literacy — Understanding the Basics',
+objectives:['Define mental health and mental health disorders','Recognize common mental health conditions and their symptoms','Understand stigma and why it prevents people from seeking help'],
+content:`<div class="body-text">
+<p>Mental health is not just the absence of mental illness — it's a positive state of wellbeing where you can recognize your own potential, cope with normal stresses, work productively, and contribute to your community. Like physical health, mental health exists on a spectrum, changes over time, and responds to effort and care.</p>
+<div class="stat-strip">
+  <div class="stat-card"><div class="stat-num">1 in 5</div><div class="stat-lbl">US adults experience mental illness each year</div></div>
+  <div class="stat-card"><div class="stat-num">1 in 8</div><div class="stat-lbl">Adolescents with depression</div></div>
+  <div class="stat-card"><div class="stat-num">75%</div><div class="stat-lbl">Mental health conditions begin by age 24</div></div>
+</div>
+<div class="info-card">
+  <div class="ic-head">Common Mental Health Conditions — Facts vs. Myths</div>
+  <div class="ic-row"><div class="ic-key">Depression</div><div class="ic-val">Not just sadness — persistent low mood, loss of interest, fatigue, cognitive changes, sleep disruption. A medical condition involving brain chemistry, not a character flaw. Responds to treatment (therapy, medication, lifestyle). About 1 in 8 adolescents is affected.</div></div>
+  <div class="ic-row"><div class="ic-key">Anxiety Disorders</div><div class="ic-val">The most common mental health condition. Some anxiety is normal and adaptive (improves performance). Anxiety disorders involve excessive, persistent, disruptive anxiety. Generalized anxiety, social anxiety, panic disorder, phobias — each has specific features.</div></div>
+  <div class="ic-row"><div class="ic-key">ADHD</div><div class="ic-val">Neurodevelopmental difference involving difficulty with attention regulation, impulse control, and executive function. Not a result of poor parenting or lack of effort. Often undiagnosed in girls (presentation can differ). Many strategies help.</div></div>
+  <div class="ic-row"><div class="ic-key">Eating Disorders</div><div class="ic-val">Anorexia, bulimia, binge eating disorder, ARFID — serious medical conditions with the highest mortality rate of any psychiatric diagnosis. Driven by complex psychological, social, and biological factors. Not vanity or choice.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Stigma — The Biggest Barrier to Getting Help</div>
+  <p>Mental health stigma — negative attitudes, stereotypes, and discrimination based on mental illness — prevents millions of people from seeking help. Studies show people wait an average of 11 years between first experiencing symptoms and seeking treatment. Stigma says: weakness, danger, personal failure. Science says: medical condition, treatable, common. Reducing stigma starts with accurate information, talking openly, and treating mental health with the same matter-of-fact approach as physical health.</p>
+</div>
+<div class="tip-box">
+  <div class="tb-head">When to Reach Out for Help</div>
+  <p>Reach out to a trusted adult, counselor, or mental health professional when: feelings of hopelessness, sadness, or anxiety are persistent (lasting more than 2 weeks), interfering with school, relationships, or daily functioning, or when you're having thoughts of self-harm or harming others. Crisis resources: National Suicide and Crisis Lifeline: 988 (call or text). Crisis Text Line: text HOME to 741741. These services are free and confidential.</p>
+</div>
+</div>`,
+cultural:`The Mental Health Parity and Addiction Equity Act (2008) required that insurance coverage for mental health conditions be comparable to coverage for physical health conditions — but enforcement has been weak and loopholes significant. The COVID-19 pandemic created a significant increase in anxiety, depression, and suicide ideation, especially among adolescents, while simultaneously disrupting access to mental health services. Telehealth expanded mental health access significantly. In NC, the availability of mental health services in rural areas remains a significant gap — understanding and navigating available resources is a genuine health literacy skill.`,
+quiz:[
+  {q:"Mental health, as defined by the WHO, is best described as:",choices:["The absence of any mental illness or psychological symptoms","A positive state of wellbeing in which a person can realize their potential, cope with normal stresses, work productively, and contribute to their community — not just the absence of illness","A fixed trait determined by genetics that doesn't change over time","The ability to manage emotions without professional assistance"],a:1,fun:"This framing shifts mental health from 'not sick' to 'actively thriving.' You can be diagnosable with depression AND work toward mental health. You can have no diagnosis AND struggle with mental health. It's a spectrum that changes over time and responds to effort — much like physical fitness. 🌱"},
+  {q:"The primary reason people wait an average of 11 years between experiencing mental health symptoms and seeking help is:",choices:["Mental health treatment is too expensive for most people","Mental health conditions resolve on their own without treatment in most cases","Mental health stigma — negative attitudes and fear of judgment prevent people from acknowledging symptoms and seeking help","There are not enough mental health providers to meet demand"],a:2,fun:"11 years. The average. During that time, conditions often worsen, complications develop, and opportunities for earlier, easier treatment are missed. The gap is primarily stigma-driven — 'I should be able to handle this,' 'people will think I'm weak,' 'it's not serious enough.' Mental health treatment works best early. 😔"},
+  {q:"Eating disorders are best understood as:",choices:["Choices made by vain people who prioritize appearance over health","Serious medical conditions with the highest mortality rate of any psychiatric diagnosis, driven by complex psychological, social, and biological factors","Problems that primarily affect white, upper-class teenage girls","Primarily a result of social media influence on body image"],a:1,fun:"Eating disorders have the highest mortality rate of any psychiatric condition. They affect people of all genders, ages, races, and body sizes. They are driven by complex interactions of genetics, psychology, and social factors — not vanity or choice. 'Just eat more' is as useful as telling someone with a broken leg to 'just walk.' 💙"},
+  {q:"If you or someone you know is experiencing thoughts of self-harm or suicide, the most important first step is:",choices:["Wait to see if the feelings pass on their own before involving anyone else","Tell the person to think positively and focus on reasons to live","Reach out to a trusted adult or crisis resource immediately — 988 (call or text) is the National Suicide and Crisis Lifeline","Research self-help resources online before contacting any professional"],a:2,fun:"988 is free, confidential, available 24/7, and staffed by trained crisis counselors. Crisis Text Line (text HOME to 741741) is also available. These are not last resorts — they're first resources. Connecting someone to help is not betraying their trust; it's taking their safety seriously. If someone is in immediate danger, call 911. 📞"}
+]},
+
+{id:'u2l2', day:'Week 7, Day 1', title:'Stress, Emotional Regulation & Coping Strategies',
+objectives:['Understand the physiological stress response','Distinguish healthy from unhealthy coping mechanisms','Practice evidence-based emotional regulation techniques'],
+content:`<div class="body-text">
+<p>Stress is not inherently bad — it's a biological response that evolved to help us handle threats. The problem is when the stress system stays activated chronically, when the "threat" is social media or school pressure rather than a predator, and when we cope with maladaptive strategies that create new problems.</p>
+<div class="info-card">
+  <div class="ic-head">The Stress Response — What Happens in Your Body</div>
+  <div class="ic-row"><div class="ic-key">Trigger</div><div class="ic-val">Brain perceives a threat (real or imagined, physical or psychological). The amygdala sends a distress signal.</div></div>
+  <div class="ic-row"><div class="ic-key">HPA axis activation</div><div class="ic-val">Hypothalamus triggers the adrenal glands to release adrenaline (immediate) and cortisol (sustained). Heart rate and blood pressure rise. Blood goes to muscles, away from digestion.</div></div>
+  <div class="ic-row"><div class="ic-key">Acute response</div><div class="ic-val">Heightened alertness, faster reaction time, suppressed digestion and immune function, elevated blood sugar for quick energy. Useful short-term.</div></div>
+  <div class="ic-row"><div class="ic-key">Chronic activation</div><div class="ic-val">Sustained high cortisol: disrupts sleep, impairs memory (shrinks hippocampus), suppresses immune system, increases inflammation, promotes fat storage, elevates cardiovascular risk, worsens mood. Deeply harmful long-term.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">The Yerkes-Dodson Curve — Optimal Arousal</div>
+  <p>Performance on most tasks is best at intermediate levels of arousal (stress/activation). Too little stress → boredom, lack of motivation, poor performance. Too much stress → anxiety, cognitive overload, poor performance. The sweet spot — called optimal arousal — is where you feel engaged and challenged but not overwhelmed. This is why some exam anxiety can improve performance (increases focus) while severe anxiety impairs it (cognitive resources hijacked by worry). Managing stress is about finding and maintaining optimal arousal, not eliminating stress entirely.</p>
+</div>
+<div class="info-card">
+  <div class="ic-head">Evidence-Based Coping Strategies</div>
+  <div class="ic-row"><div class="ic-key">Diaphragmatic breathing</div><div class="ic-val">Deep belly breathing activates the parasympathetic nervous system (the "rest and digest" system), directly counteracting the stress response. 4-7-8 breathing: inhale 4 sec, hold 7 sec, exhale 8 sec. Takes effect in minutes.</div></div>
+  <div class="ic-row"><div class="ic-key">Physical exercise</div><div class="ic-val">Metabolizes stress hormones, releases endorphins and BDNF (brain-derived neurotrophic factor — "miracle-gro for the brain"), improves sleep, reduces anxiety and depression. One of the most consistently effective interventions.</div></div>
+  <div class="ic-row"><div class="ic-key">Cognitive reappraisal</div><div class="ic-val">Change how you think about the stressor: "This is an opportunity to show what I've learned" vs. "I'm going to fail." Reframing changes the emotional response without denying the challenge. More effective long-term than suppression.</div></div>
+  <div class="ic-row"><div class="ic-key">Social connection</div><div class="ic-val">Talking to a trusted person reduces cortisol. The "tend and befriend" stress response (more common in women) — social connection in response to stress — is highly adaptive. Isolation amplifies stress.</div></div>
+  <div class="ic-row"><div class="ic-key">Adequate sleep</div><div class="ic-val">Sleep is when cortisol is cleared and emotional processing occurs. Sleep deprivation significantly amplifies emotional reactivity — the amygdala is 60% more reactive when sleep-deprived.</div></div>
+</div>
+</div>`,
+cultural:`The Adverse Childhood Experiences (ACE) study (1995–1997, over 17,000 participants) found that childhood exposure to abuse, neglect, and household dysfunction creates lasting biological changes — epigenetic, neurological, and physiological — that increase risk for physical and mental health problems decades later. People with 4+ ACE scores have dramatically higher rates of heart disease, cancer, depression, and early death. This research reframed childhood trauma as a public health crisis. Trauma-informed care — in schools, healthcare, and criminal justice — is a direct policy response to this evidence. Understanding stress biology helps explain why adverse early experiences have such long reach.`,
+quiz:[
+  {q:"The Yerkes-Dodson curve shows that performance is best when:",choices:["Stress and arousal are completely absent","Stress and arousal are at an intermediate 'optimal' level — enough to focus and motivate, not so much as to overwhelm","Maximum stress is present to trigger peak performance","Stress is suppressed through medication or relaxation techniques"],a:1,fun:"This is why some pre-competition nervousness helps athletes, and why boredom hurts performance. The optimal zone varies by task: complex cognitive tasks have a lower optimal arousal level than simple physical tasks. Test anxiety beyond moderate levels hijacks cognitive resources, reducing performance. The goal is optimal, not zero. 📊"},
+  {q:"Chronic (long-term) activation of the stress response causes harm primarily because:",choices:["The stress response uses too much blood sugar, causing nutritional deficiency","Sustained high cortisol disrupts sleep, impairs memory, suppresses immune function, increases inflammation, and elevates cardiovascular risk — systems meant to be temporarily diverted become chronically disrupted","Adrenaline accumulates in tissues and becomes toxic","People become physically exhausted from continuous physiological activation"],a:1,fun:"Cortisol is useful for sprinting away from a threat. Cortisol activated by work stress for years shrinks your hippocampus (memory center), suppresses your immune system, disrupts sleep, and increases cardiovascular risk. The same mechanism that saves your life in the short term damages it in the long term when never turned off. 😰"},
+  {q:"Diaphragmatic (deep belly) breathing reduces the stress response because:",choices:["It distracts the mind from stressful thoughts","It directly activates the parasympathetic nervous system ('rest and digest') which physiologically counteracts the sympathetic stress response","It increases oxygen levels that help cortisol break down faster","It triggers the release of endorphins that offset cortisol"],a:1,fun:"The vagus nerve — the primary parasympathetic nerve — is activated by slow, deep breathing. This is the physiological mechanism behind meditation, yoga, mindfulness, and most relaxation techniques. 4-7-8 breathing, box breathing, and simple slow exhales all work. This is one of the fastest, most reliable ways to shift your nervous system state. 🌬️"},
+  {q:"Cognitive reappraisal as a coping strategy involves:",choices:["Suppressing stressful thoughts until they go away","Distraction through physical activity or social media","Changing how you interpret a stressful situation — finding a different, less threatening, or more empowering meaning — which changes the emotional response","Accepting that the stressor is unchangeable and unimportant"],a:2,fun:"'I have a test tomorrow — I'm going to fail' (catastrophizing) → 'I have a test tomorrow — this is an opportunity to show what I've learned, and I've been preparing' (reappraisal). Same test, different interpretation, different emotional response, different performance. Research shows reappraisal is more effective than suppression (which actually amplifies stress). 🔄"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 3: SUBSTANCE EDUCATION
+// ══════════════════════════════════════
+{id:'u3', emoji:'⚠️', name:'Substance Use Education', weeks:'Weeks 11–14, Semester 1', lessons:[
+{id:'u3l1', day:'Week 11, Day 1', title:'Understanding Addiction — How the Brain Changes',
+objectives:['Explain the neurological mechanism of addiction','Understand why adolescent brains are more vulnerable to addiction','Evaluate tobacco, alcohol, and cannabis risks for developing brains'],
+content:`<div class="body-text">
+<p>Addiction is not a moral failure or lack of willpower — it is a change in brain structure and function caused by repeated substance exposure. Understanding the biology removes the moral judgment and clarifies why recovery is genuinely difficult, and why prevention during adolescence matters so much.</p>
+<div class="info-card">
+  <div class="ic-head">The Neuroscience of Addiction</div>
+  <div class="ic-row"><div class="ic-key">The reward system</div><div class="ic-val">The brain's limbic system releases dopamine in response to rewards (food, connection, achievement). Addictive substances hijack this system, releasing dopamine at levels impossible to reach naturally — creating a "shortcut" to intense pleasure.</div></div>
+  <div class="ic-row"><div class="ic-key">Tolerance</div><div class="ic-val">The brain adapts to repeated substance exposure by reducing dopamine receptor sensitivity. More substance is needed to get the same effect — and the natural reward system becomes relatively inadequate, making normal pleasures feel flat.</div></div>
+  <div class="ic-row"><div class="ic-key">Dependence</div><div class="ic-val">Physical adaptation where the body requires the substance to function "normally." Withdrawal — the unpleasant symptoms of stopping — is the physical manifestation of dependence. Not the same as addiction, though often co-occurring.</div></div>
+  <div class="ic-row"><div class="ic-key">Craving & relapse</div><div class="ic-val">Environmental cues (places, people, emotions) associated with substance use can trigger powerful cravings long after stopping — because memory circuits linked to the reward system remain changed. This is why relapse is common even after years of abstinence.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Why Adolescent Brains Are More Vulnerable</div>
+  <p>The prefrontal cortex — responsible for impulse control, risk assessment, and long-term planning — isn't fully developed until around age 25. Adolescents have a fully-developed reward system (seeking novel experiences, immediate rewards) without the fully-developed brake system (evaluating long-term consequences). Substances used during adolescence produce addiction more quickly, with lower doses, and cause more lasting neurological changes than the same substances used as adults. The earlier the initiation, the higher the addiction risk.</p>
+</div>
+<div class="info-card">
+  <div class="ic-head">Specific Substance Risks for Adolescents</div>
+  <div class="ic-row"><div class="ic-key">Nicotine / Vaping</div><div class="ic-val">Nicotine reaches the brain in 10 seconds; causes dopamine release. Adolescent brains become addicted faster and more deeply than adult brains. Vaping delivers nicotine more efficiently than cigarettes. "Just occasional" use during adolescence often becomes regular use. JUUL delivered nicotine equivalent to 20 cigarettes per pod.</div></div>
+  <div class="ic-row"><div class="ic-key">Alcohol</div><div class="ic-val">A central nervous system depressant. The prefrontal cortex is depressed first (inhibition released before coordination impaired — why people "feel braver"). Alcohol disrupts REM sleep. Adolescent brains show greater neurological damage from alcohol than adult brains at equivalent doses.</div></div>
+  <div class="ic-row"><div class="ic-key">Cannabis (THC)</div><div class="ic-val">THC binds to endocannabinoid receptors that play important roles in brain development during adolescence. Regular adolescent cannabis use is associated with IQ changes, increased depression/anxiety risk, and higher probability of cannabis use disorder. High-potency concentrates (dabs, wax) carry higher risk.</div></div>
+</div>
+</div>`,
+cultural:`The national conversation about cannabis has shifted dramatically with legalization in many states — creating a gap between legal status and the evidence on adolescent risk. Cannabis is legal for adults in NC's neighboring states; it is not legal for minors anywhere. The public health concern is specific to adolescent developing brains, not adult use. The evidence on adolescent cannabis use is consistent: earlier use + more frequent use + higher potency = greater risk of negative outcomes. Legalization for adults changes the legal landscape; it does not change adolescent neurobiology. These are distinct questions.`,
+quiz:[
+  {q:"Addiction involves changes in the brain primarily because:",choices:["Addictive substances create psychological habits without physical brain changes","Repeated substance exposure causes structural and functional changes in the brain's reward circuitry — tolerance, altered dopamine systems, memory-linked cravings — making quitting genuinely difficult even after the desire to quit is strong","Addiction is primarily a behavioral habit rather than a brain disorder","The physical withdrawal symptoms are the primary driver of continued substance use"],a:1,fun:"The brain physically changes — receptor densities shift, dopamine systems recalibrate, memory circuits link cues to craving. Telling an addicted person to 'just stop' ignores these biological changes — it's similar to telling someone with a broken leg to 'just run.' This doesn't remove personal responsibility, but it explains why willpower alone is often insufficient. 🧠"},
+  {q:"The adolescent brain is more vulnerable to addiction than an adult brain because:",choices:["Teenagers metabolize substances faster, leading to more frequent use","The fully-developed reward system (novelty-seeking) is not matched by a fully-developed prefrontal cortex (impulse control, long-term thinking) — substances produce addiction faster with lower doses during this critical window","Adolescent bodies have more receptor sites for addictive substances","Teenagers are more likely to be exposed to addictive substances than adults"],a:1,fun:"This is why the evidence on all substances — nicotine, alcohol, cannabis — shows greater risk with earlier initiation. The developing brain is literally being built during adolescence. Substances that bind to neurotransmitter systems during this construction phase leave lasting changes that wouldn't occur in an adult brain. 🔧"},
+  {q:"Tolerance to a substance develops because:",choices:["The substance becomes less pure over time","The body produces antibodies that neutralize the substance","The brain reduces receptor sensitivity in response to repeated exposure — making more substance necessary for the same effect, and making normal pleasures feel less rewarding by comparison","The liver processes the substance more efficiently with practice"],a:2,fun:"Tolerance is adaptation — your brain downregulates dopamine receptors to compensate for the artificial flooding. The user now needs more substance AND finds natural rewards (food, connection, achievement) less satisfying because the baseline dopamine sensitivity has dropped. This is the trap: the thing that made you feel good now just makes you feel normal. 😔"},
+  {q:"Relapse after a period of sobriety is common because:",choices:["People who relapse never truly wanted to stop","The treatment they received was ineffective","Environmental cues linked to past substance use can trigger intense cravings long after stopping — because memory circuits connecting cues to reward remain in the brain","People who relapse have a moral weakness that prevents sustained recovery"],a:2,fun:"The place, people, songs, smells, or emotions associated with past use can trigger powerful cravings through conditioned associations — sometimes years after stopping. This isn't failure of will; it's neuroscience. Recovery programs address cue exposure systematically. Understanding relapse as a brain phenomenon rather than a moral failure changes how we support people in recovery. 🔄"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 4: DIGITAL WELLNESS
+// ══════════════════════════════════════
+{id:'u4', emoji:'📱', name:'Digital Wellness & Consumer Health', weeks:'Weeks 1–4, Semester 2', lessons:[
+{id:'u4l1', day:'S2 Week 1, Day 1', title:'Screens, Social Media & Mental Health',
+objectives:['Evaluate the evidence on social media\'s mental health effects','Apply the concept of intentional technology use','Develop personal strategies for digital wellness'],
+content:`<div class="body-text">
+<p>You are the first generation to grow up with smartphones and social media as normal from childhood. The research on effects is still developing — but what we know is nuanced: it's not simply that social media is harmful, nor that it's neutral. The effects depend heavily on how, how much, and for what purpose you use it.</p>
+<div class="info-card">
+  <div class="ic-head">What the Research Actually Shows</div>
+  <div class="ic-row"><div class="ic-key">The nuanced picture</div><div class="ic-val">Research (Jonathan Haidt, Jean Twenge, Amy Orben, Andrew Przybylski) shows associations between heavy social media use and anxiety/depression — especially in teenage girls. But associations don't prove causation. Unhappy people may use social media more; social media may make people more unhappy; both; neither alone.</div></div>
+  <div class="ic-row"><div class="ic-key">Passive vs. active use</div><div class="ic-val">Passive use (scrolling, watching others' lives) is more consistently associated with negative feelings than active use (posting, interacting, creating). The "compare and despair" dynamic comes primarily from passive consumption of curated highlight reels.</div></div>
+  <div class="ic-row"><div class="ic-key">Sleep disruption</div><div class="ic-val">Most consistently harmful documented effect: phone use displaces sleep, blue light disrupts melatonin, and content activates rather than relaxes before bed. The combination of less sleep + worse sleep quality + more emotional content creates measurable mental health consequences.</div></div>
+  <div class="ic-row"><div class="ic-key">Positive effects exist too</div><div class="ic-val">Social media provides connection for isolated teens, community for marginalized groups (LGBTQ+ youth in unsupportive environments), creative outlets, access to information and activism. The relationship is complex, not simply harmful.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Intentional Technology Use</div>
+  <p>The question isn't "is social media good or bad?" — it's "how are YOU using it, and is that serving your wellbeing?" Intentional use means: using platforms with purpose rather than defaulting to them when bored, knowing what you're looking for when you open an app, noticing how you feel during and after use, and making conscious choices about time and content. Social media is designed by psychologists and engineers to maximize engagement — your intentional use is competing against deliberate engineering. That's the real challenge.</p>
+</div>
+<div class="checklist">
+  <div class="check-item"><span class="ci-icon">📵</span><span><strong>Phone-free bedroom:</strong> Charge your phone outside your room. Sleep quality and morning mood consistently improve. This single change has the strongest evidence base of any digital wellness intervention.</span></div>
+  <div class="check-item"><span class="ci-icon">⏱️</span><span><strong>Time boundaries:</strong> Set specific times for checking social media rather than responding to every notification. Notifications are engineered to feel urgent; most aren't.</span></div>
+  <div class="check-item"><span class="ci-icon">👁️</span><span><strong>Audit your feeds:</strong> Curate what you see. Accounts that make you feel inadequate, envious, or anxious — unfollow. You have control over your information environment.</span></div>
+  <div class="check-item"><span class="ci-icon">🔄</span><span><strong>Notice your state:</strong> How do you feel before and after phone use? Track it for a week. The data from your own experience is the most relevant data you can collect.</span></div>
+</div>
+</div>`,
+cultural:`The Center for Humane Technology — founded by former Google Design Ethicist Tristan Harris — argues that social media platforms are "slot machines in your pocket" — using variable reward schedules (sometimes you get a like, sometimes you don't) to maximize engagement. The same psychological principles that make gambling addictive are applied to social media by design. Harris's Netflix documentary "The Social Dilemma" (2020) made this argument to a broad audience. The platforms dispute the characterization while employing hundreds of psychologists and behavioral scientists whose job is to maximize the time you spend on the platform. The incentive structure is what it is.`,
+quiz:[
+  {q:"Research on social media and mental health is best summarized as showing:",choices:["Social media definitively causes depression and anxiety in all users","Social media has no meaningful effects on mental health","Associations between heavy use and negative mental health outcomes — especially in teenage girls — with the causal direction and mechanisms still being studied","Social media improves mental health for most users through increased social connection"],a:2,fun:"The research is genuinely complex. Associations are real; causation is debated. Heavy passive use correlates with lower wellbeing. Causation could run either direction. What IS clear: sleep displacement from phones has documented harmful effects, and platforms are designed to maximize engagement regardless of wellbeing effects. 📊"},
+  {q:"Passive social media use (scrolling, observing others' lives) is more consistently associated with negative feelings than active use because:",choices:["Passive use takes more time than active use","Passive scrolling exposes you primarily to curated highlight reels of others' best moments, triggering upward social comparison — while active use (creating, connecting) provides a sense of agency and belonging","Passive use contains more advertising content","The algorithms show more negative content during passive browsing"],a:1,fun:"Upward social comparison (comparing yourself to people who seem better off) reliably reduces wellbeing. Instagram highlights are curated — nobody posts their bad days, mundane moments, or failures at the same rate as their exciting experiences. Passive consumption of highlights creates a systematically distorted picture of others' lives. 📸"},
+  {q:"The most consistently documented harmful effect of smartphone use on adolescent wellbeing is:",choices:["Increased exposure to cyberbullying","Reduced physical activity due to time spent on devices","Sleep displacement and disruption — phones in bedrooms delay sleep, reduce sleep quality, and expose users to emotionally activating content before sleep","Reduced face-to-face social skills development"],a:2,fun:"Sleep is where the evidence is clearest. Blue light suppresses melatonin. Notification checking delays sleep onset. Emotionally activating content prevents the wind-down needed for sleep. The phone in the bedroom combines all three. Charging the phone outside the bedroom is the single intervention with the strongest evidence base for improving adolescent wellbeing. 😴"},
+  {q:"'Intentional technology use' means:",choices:["Using technology only for educational purposes","Limiting technology use to specific approved apps","Using technology with conscious awareness of your purpose, noticing its effects on your wellbeing, and making deliberate choices about time and content rather than using it by default or habit","Tracking all your screen time and keeping it under one hour daily"],a:2,fun:"The opposite of intentional use: opening your phone every time you're slightly bored, scrolling for an hour without any particular purpose, checking notifications the moment they arrive. Intentional use asks: why am I reaching for my phone? Is this serving me? How do I feel right now, and how will I feel in 30 minutes? These questions create space between stimulus and response — where wellbeing is built. 🎯"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 5: PHYSICAL ACTIVITY FOR LIFE
+// ══════════════════════════════════════
+{id:'u5', emoji:'🏃', name:'Physical Activity for Life', weeks:'Weeks 5–9, Semester 2', lessons:[
+{id:'u5l1', day:'S2 Week 5, Day 1', title:'Building Lifelong Fitness Habits',
+objectives:['Apply behavior change principles to fitness habit formation','Design a personalized fitness plan','Understand how to maintain fitness across life stages'],
+content:`<div class="body-text">
+<p>Knowledge of exercise is not the same as exercising. The gap between knowing you should be physically active and consistently being physically active is where most people live. Behavior change science has identified evidence-based strategies that bridge this gap — and they work better than willpower alone.</p>
+<div class="info-card">
+  <div class="ic-head">Evidence-Based Behavior Change Strategies</div>
+  <div class="ic-row"><div class="ic-key">SMART goals</div><div class="ic-val"><strong>S</strong>pecific · <strong>M</strong>easurable · <strong>A</strong>chievable · <strong>R</strong>elevant · <strong>T</strong>ime-bound. "Get in shape" fails; "Walk 30 minutes 4 days/week for 8 weeks starting Monday" succeeds. Specificity creates accountability.</div></div>
+  <div class="ic-row"><div class="ic-key">Implementation intentions</div><div class="ic-val">"When/where/how" planning. "I will exercise on Monday, Wednesday, and Friday at 4pm at the park near my house." Research shows if-then planning dramatically improves follow-through compared to vague intentions.</div></div>
+  <div class="ic-row"><div class="ic-key">Habit stacking</div><div class="ic-val">Attach new behavior to an existing habit. "After I brush my teeth in the morning, I will do 10 minutes of stretching." The existing habit serves as the trigger for the new one.</div></div>
+  <div class="ic-row"><div class="ic-key">Remove friction</div><div class="ic-val">Put your workout clothes by your bed. Pack your bag the night before. Make the desired behavior the path of least resistance. Every barrier reduced is a meaningful increase in the probability of follow-through.</div></div>
+  <div class="ic-row"><div class="ic-key">Identity-based habits</div><div class="ic-val">James Clear (Atomic Habits): the most durable habit change comes from identity shift, not outcome goals. "I'm trying to exercise more" vs. "I'm becoming a person who is physically active." Each workout is a vote for the identity you're building.</div></div>
+</div>
+<div class="tip-box">
+  <div class="tb-head">The Most Important Exercise Principle for Long-Term Adherence</div>
+  <p>Find activities you enjoy enough to do consistently — even if they're not "optimal" — rather than doing the theoretically best exercise program poorly. A person who enjoys hiking and does it twice a week will have dramatically better long-term outcomes than a person who does the "best" gym program for 6 weeks then quits. Consistency over optimization. The best workout is the one you'll actually do.</p>
+</div>
+<div class="formula-box">
+  <div class="fb-head">Building Your Personal Fitness Plan</div>
+  <div class="formula">Step 1: Assess your current fitness (what can you do comfortably?)</div>
+  <div class="formula">Step 2: Identify your goal (health maintenance? strength gain? endurance?)</div>
+  <div class="formula">Step 3: Choose activities you enjoy and can access</div>
+  <div class="formula">Step 4: Apply FITT principle — start conservatively, build gradually</div>
+  <div class="formula">Step 5: Schedule it — put it in your calendar like a commitment</div>
+  <div class="formula">Step 6: Track progress and adjust every 4–6 weeks</div>
+  <div class="formula-note">Start where you are, not where you think you should be. Starting too hard leads to injury and burnout. Sustainable progress beats heroic starts followed by collapse.</div>
+</div>
+</div>`,
+cultural:`The Blue Zones research (Dan Buettner) identified regions of the world with exceptional longevity — Okinawa, Sardinia, Nicoya Peninsula, Ikaria, Loma Linda. Common factors: plant-rich diets, moderate natural wine consumption, strong social connection, purpose ("ikigai" in Okinawan), stress management practices, and crucially — not going to the gym, but having movement built into daily life. Walking everywhere, gardening, herding animals. The lesson: you don't need an elaborate gym program; you need consistent moderate movement woven into your life. The American model of sedentary life punctuated by gym visits is less effective than a lifestyle that makes movement the default.`,
+quiz:[
+  {q:"SMART goals are more effective than general goals because:",choices:["They are more ambitious and motivating","Specificity, measurability, and time-binding create accountability and a clear success criterion — 'get fit' gives you no way to know if you succeeded or what to do next","They are designed by certified fitness professionals","They automatically adjust to your current fitness level"],a:1,fun:"'Get in shape' — how do you know when you've succeeded? What exactly are you doing? When? 'Run a 5K in under 35 minutes by June 1st by running 3× per week starting this Monday' — every part of this is actionable and measurable. The specificity is what makes follow-through possible. 🎯"},
+  {q:"Identity-based habits (James Clear's framework) are more durable than outcome-based habits because:",choices:["They focus on immediate rewards rather than distant goals","Shifting your self-concept ('I am a physically active person') makes each workout consistent with who you are — rather than a sacrifice toward a distant goal that may feel irrelevant on any given day","They require less effort than traditional goal-setting approaches","They are based on scientific research that outcome-based goals do not use"],a:1,fun:"'I'm trying to exercise more' requires continuous motivation. 'I'm a person who is physically active' — when you skip a workout, it conflicts with your identity rather than just your goal. Each workout reinforces the identity; each skipped workout becomes a choice about who you are. Identity change is slow but the most durable kind. 🏃"},
+  {q:"The most important factor for long-term fitness maintenance is:",choices:["Following the scientifically optimal exercise program","Consistency over optimization — finding activities you genuinely enjoy enough to do regularly, even if they're not theoretically best","Exercising at maximum intensity every session","Training with a professional coach or trainer"],a:1,fun:"A person who does 'good enough' exercise consistently for 10 years will be vastly healthier than a person who does the 'best' program for 3 months and then stops. Enjoyment and sustainability are the multipliers. This is the meta-lesson of exercise science for the general population. 💪"},
+  {q:"'Implementation intentions' improve exercise adherence compared to vague intentions because:",choices:["They make goals more ambitious","Specifying exactly when, where, and how you will exercise removes the daily decision-making that often leads to skipping — the plan is already made","They require social accountability from others","They connect exercise to financial incentives"],a:1,fun:"Research by Peter Gollwitzer shows that if-then planning (when X happens, I will do Y) dramatically increases follow-through compared to just intending to do something. 'I will exercise more' → maybe. 'When I finish school on Tuesdays and Thursdays, I will put on my shoes immediately and walk for 30 minutes' → much more likely. The plan removes the friction of deciding. 📅"}
+]},
+
+{id:'u5l2', day:'S2 Week 7, Day 1', title:'Sexual Health — Rights, Responsibility & Resources',
+objectives:['Understand NC sexual health education standards','Apply decision-making frameworks to relationship and sexual health choices','Know how to access sexual health resources and services'],
+content:`<div class="body-text">
+<p>Sexual health is a normal and important part of overall health. Making informed decisions requires accurate information, clear values, and knowledge of available resources — not shame or avoidance. This lesson provides factual, age-appropriate information aligned with NC Healthful Living Standards.</p>
+<div class="info-card">
+  <div class="ic-head">Key Sexual Health Facts</div>
+  <div class="ic-row"><div class="ic-key">Consent</div><div class="ic-val">Freely given, reversible, informed, enthusiastic, and specific (FRIES). All sexual activity requires consent from all people involved. Consent cannot be given by someone who is intoxicated, unconscious, or under the legal age of consent. NC age of consent: 16.</div></div>
+  <div class="ic-row"><div class="ic-key">STI prevention</div><div class="ic-val">Consistent and correct condom use reduces STI transmission risk significantly. Regular STI testing is recommended for sexually active people. Many STIs (including chlamydia) are asymptomatic — testing is the only way to know status. Most STIs are treatable; some are curable.</div></div>
+  <div class="ic-row"><div class="ic-key">Pregnancy prevention</div><div class="ic-val">Abstinence is the only 100% effective method. Hormonal contraception (pills, patch, ring, injection, implant) and IUDs are highly effective when used correctly. Condoms are the only method that also reduces STI risk. Combining methods is most effective.</div></div>
+  <div class="ic-row"><div class="ic-key">LGBTQ+ health</div><div class="ic-val">LGBTQ+ individuals have the same sexual health needs as others, plus specific considerations. Finding affirming healthcare providers is important. Trevor Project: 1-866-488-7386 (crisis support for LGBTQ+ youth).</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Decision-Making Framework for Relationships</div>
+  <p>Healthy relationships share several qualities: mutual respect, trust, honesty, equality, safety, and the freedom to maintain your own identity and friendships. Warning signs in any relationship — romantic, friendship, or otherwise: pressure to change who you are, jealousy framed as love, isolation from other relationships, disrespect of your "no," and control of your time or communication. If something doesn't feel right, it probably isn't. Trusted adults, school counselors, and hotlines (loveisrespect.org, 1-866-331-9474) can help.</p>
+</div>
+<div class="checklist">
+  <div class="check-item"><span class="ci-icon">🏥</span><span><strong>Health departments</strong> provide confidential STI testing, contraception, and sexual health services — often free or low cost regardless of insurance or parental status for minors in NC.</span></div>
+  <div class="check-item"><span class="ci-icon">💊</span><span><strong>Emergency contraception</strong> (Plan B) is available without a prescription and is most effective within 72 hours of unprotected sex.</span></div>
+  <div class="check-item"><span class="ci-icon">📞</span><span><strong>Planned Parenthood</strong> (plannedparenthood.org) and NC public health clinics provide comprehensive sexual health services regardless of income.</span></div>
+  <div class="check-item"><span class="ci-icon">🔒</span><span><strong>Confidentiality:</strong> In NC, minors can receive STI testing, treatment, and contraception confidentially without parental consent in most cases.</span></div>
+</div>
+</div>`,
+cultural:`North Carolina uses a "stress abstinence" approach in sex education — teaching abstinence as the preferred choice while also providing information about contraception. Research on abstinence-only vs. comprehensive sex education consistently shows that comprehensive education does not increase sexual activity but does reduce rates of unintended pregnancy and STIs. The CDC and virtually every major medical organization recommend comprehensive sex education. NC's approach is more comprehensive than some states, less comprehensive than others. Understanding how to access services and information outside the classroom is a genuine health literacy skill.`,
+quiz:[
+  {q:"Consent in sexual activity must be (using the FRIES framework):",choices:["Given once and assumed for future encounters","Freely given, reversible, informed, enthusiastic, and specific — not assumed, coerced, or given while intoxicated or under legal age","Simply verbal agreement without conditions","Implied by relationship status or past behavior"],a:1,fun:"FRIES: Freely given (not coerced), Reversible (can be withdrawn at any time, even during), Informed (both parties understand what they're agreeing to), Enthusiastic (not just absence of 'no'), Specific (for this activity, not all activities). Past consent doesn't mean future consent. Relationship status doesn't mean automatic consent. 🤝"},
+  {q:"Why is regular STI testing important for sexually active people?",choices:["STI testing is only needed if you have symptoms","Most common STIs (including chlamydia, the most commonly reported) are frequently asymptomatic — testing is the only way to know your status and prevent unknowing transmission","Testing is only recommended annually for people over 25","STI testing is only available through doctors who require parental notification for minors"],a:1,fun:"Chlamydia, the most commonly reported STI, is asymptomatic in about 70-80% of women and 50% of men. Without testing, people can unknowingly transmit infection for years. Testing is straightforward, often free at health departments, and confidential for minors in most cases in NC. Knowing your status is the responsible choice. 🏥"},
+  {q:"In NC, minors can generally access STI testing and contraception:",choices:["Only with written parental consent","Only through their primary care physician","Confidentially without parental consent through health departments and clinics","Only after age 18 for any sexual health services"],a:2,fun:"NC law allows minors to consent to their own STI testing, treatment, and contraception in most cases — the healthcare provider is not required to notify parents. This is a public health approach: confidentiality encourages testing and treatment. Health departments often provide these services free or at low cost. Knowing your rights is part of health literacy. 🔒"},
+  {q:"The warning sign most clearly indicating an unhealthy relationship is:",choices:["Disagreements about lifestyle choices or preferences","Spending significant time together","Pressure to change who you are, isolation from other relationships, jealousy framed as love, or disrespect of your boundaries — signs of control rather than care","Having different social circles and friend groups"],a:2,fun:"Healthy relationships support your independence. Unhealthy relationships — romantic or otherwise — often look like love but function as control. Isolation from friends and family, monitoring your communications, jealousy framed as 'I love you so much,' pressure to change your appearance or values. loveisrespect.org and 1-866-331-9474 provide help navigating these situations. 💙"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 6: CONSUMER HEALTH & FINAL ASSESSMENT
+// ══════════════════════════════════════
+{id:'u6', emoji:'🔍', name:'Consumer Health & Year Review', weeks:'Weeks 10–18, Semester 2', lessons:[
+{id:'u6l1', day:'S2 Week 10, Day 1', title:'Evaluating Health Information — Navigating a Confusing World',
+objectives:['Apply critical thinking to health claims','Identify reliable vs. unreliable health information sources','Understand the difference between correlation and causation in health research'],
+content:`<div class="body-text">
+<p>You live in a world of infinite health information and spectacular misinformation. Supplement companies, wellness influencers, clickbait health articles, and genuinely peer-reviewed research all exist in the same information ecosystem. Being able to tell them apart is a foundational health skill.</p>
+<div class="info-card">
+  <div class="ic-head">Evaluating Health Claims — Key Questions</div>
+  <div class="ic-row"><div class="ic-key">Who is making the claim?</div><div class="ic-val">What are their credentials? Do they have expertise in the relevant area? Are they selling something? Do they have a financial interest in your belief? A registered dietitian vs. a fitness influencer selling supplements have very different expertise and incentives.</div></div>
+  <div class="ic-row"><div class="ic-key">What is the evidence?</div><div class="ic-val">A single study ≠ settled science. Look for: systematic reviews and meta-analyses (analyze many studies together), peer-reviewed research, large sample sizes, replication by independent researchers. "Studies show" without citation is meaningless.</div></div>
+  <div class="ic-row"><div class="ic-key">Correlation vs. causation</div><div class="ic-val">Two things can be associated without one causing the other. People who eat breakfast cereal have higher academic achievement — correlation. Does cereal cause academic achievement? Unlikely — families who eat regular breakfast may have other advantageous factors. Always ask: what else might explain this relationship?</div></div>
+  <div class="ic-row"><div class="ic-key">Absolute vs. relative risk</div><div class="ic-val">"This supplement reduces cancer risk by 50%!" From what? If baseline risk is 0.2%, a 50% reduction = 0.1% — not very impressive. Always ask for absolute numbers, not just relative percentages.</div></div>
+  <div class="ic-row"><div class="ic-key">Who funded the research?</div><div class="ic-val">Industry-funded nutrition research is several times more likely to show favorable results for the funding company's products than independently funded research. Conflicts of interest don't automatically invalidate research — but they're relevant context.</div></div>
+</div>
+<div class="highlight-box">
+  <div class="hb-head">Reliable Health Information Sources</div>
+  <p><strong>High reliability:</strong> CDC (cdc.gov), NIH (nih.gov), Mayo Clinic (mayoclinic.org), American Heart Association, peer-reviewed journals via PubMed (pubmed.ncbi.nlm.nih.gov), WHO (who.int).</p>
+  <p style="margin-top:8px;"><strong>Use with caution:</strong> News articles about studies (often oversimplify or sensationalize), wellness blogs, supplement company websites, social media health content, and anyone selling something they're also telling you to buy.</p>
+  <p style="margin-top:8px;"><strong>Red flags:</strong> "Doctors don't want you to know," "one simple trick," dramatic before/after photos, testimonials as primary evidence, products that cure everything, and "natural" as a synonym for "safe."</p>
+</div>
+<div class="tip-box">
+  <div class="tb-head">The Supplement Industry — Buyer Beware</div>
+  <p>Dietary supplements are regulated less strictly than medications — companies don't need to prove efficacy before selling. Third-party testing (NSF, USP, Informed Sport certifications) verifies what's in the product but not that it does what it claims. Most supplements with dramatic claims have weak or no evidence supporting those claims. The exceptions: vitamin D and omega-3 fatty acids have meaningful evidence bases. Creatine has solid evidence for strength/power athletes. Protein supplements work as well as food protein — they're convenient, not magic.</p>
+</div>
+</div>`,
+cultural:`The wellness industry in the US generates over $450 billion annually. Much of it sells products, services, and beliefs with little to no evidence base. Gwyneth Paltrow's Goop has been fined for unsubstantiated health claims. "Detox" products and cleanses have no scientific support — your liver and kidneys are your detox system and they work fine unless you have organ disease. The appeal of wellness culture is understandable: people want to feel in control of their health, and conventional medicine often feels impersonal and pill-focused. But the desire for control shouldn't override the demand for evidence. Health literacy means applying the same critical thinking to wellness claims that you'd apply to anything else.`,
+quiz:[
+  {q:"The difference between correlation and causation in health research matters because:",choices:["Correlations are always unreliable and should be ignored","Two things being associated doesn't mean one causes the other — many correlations have alternative explanations that are more plausible","Only randomized controlled trials provide any meaningful health information","Causation is impossible to establish in human health research"],a:1,fun:"Ice cream sales and drowning deaths are correlated — not because ice cream causes drowning, but because both increase in summer (a confounding variable). Countries with more TV sets per capita have longer lifespans — TV isn't the mechanism; both reflect economic development. Always ask: what else could explain this relationship? 📊"},
+  {q:"When evaluating a health supplement company's claims about their product, the most important red flag is:",choices:["The product has a celebrity endorsement","The product is described as 'natural'","The company is using their own research to support efficacy claims, and is simultaneously selling the product — financial conflicts of interest significantly bias research outcomes","The product is expensive"],a:2,fun:"Industry-funded research showing industry-favorable results is dramatically more common than independently funded research showing the same. This doesn't automatically mean the product doesn't work — but it means the evidence is less trustworthy than it appears. Look for independent replication by researchers with no financial stake in the outcome. 🔍"},
+  {q:"The distinction between absolute and relative risk matters when evaluating health claims because:",choices:["They measure the same thing in different units","A 50% relative risk reduction sounds dramatic but may represent a tiny absolute difference — from 0.2% to 0.1% risk — context is essential for meaningful interpretation","Absolute risk is always more impressive than relative risk","Healthcare providers only use relative risk to communicate treatment benefits"],a:1,fun:"Drug companies and supplement companies love relative risk percentages — they sound more impressive. 'Reduces heart attack risk by 33%' could mean from 3% to 2% (a 1% absolute reduction) or from 30% to 20% (a 10% absolute reduction). Same relative number, very different real-world impact. Ask for both. 📈"},
+  {q:"Which of the following is the most reliable source of health information?",choices:["Popular wellness blogs with large followings","Social media posts from health influencers with medical-sounding titles","Peer-reviewed systematic reviews and meta-analyses from PubMed, or guidance from major health organizations like the CDC and NIH","News articles reporting on individual new studies"],a:2,fun:"Systematic reviews pool many studies and analyze them together — much more reliable than any single study. The CDC, NIH, and WHO base their guidance on this kind of evidence synthesis. Individual studies — especially reported in news articles that often cherry-pick dramatic results — represent one data point, not a conclusion. 'Scientists find X' ≠ 'we now know X.' 🏛️"}
+]},
+
+{id:'u6l2', day:'S2 Week 12, Day 1', title:'Year Review — Building Your Personal Wellness Plan',
+objectives:['Integrate all course concepts into a personal wellness framework','Demonstrate application of health knowledge to real decisions','Create a sustainable personal health plan for the future'],
+content:`<div class="body-text">
+<p>This final lesson connects everything from the year into a coherent personal health framework. Health is not a destination you reach — it is a set of daily practices and long-term habits. The goal is not perfection but direction: consistently moving toward better health, knowing what to prioritize, and having the knowledge to make informed choices.</p>
+<div class="highlight-box">
+  <div class="hb-head">The Foundations That Matter Most — Year in Review</div>
+  <p>If you could only do five things for your health, research consistently points to: <strong>regular moderate physical activity</strong> (cardiovascular endurance especially), <strong>adequate sleep</strong> (7-9 hours consistently), <strong>a diet built mostly on whole foods</strong> (plants, proteins, minimal ultra-processed), <strong>strong social connections</strong> (loneliness is as harmful as smoking 15 cigarettes/day by some measures), and <strong>stress management practices</strong> that work for you. These are not glamorous — but they are what the evidence shows, consistently, across decades of research.</p>
+</div>
+<div class="formula-box">
+  <div class="fb-head">Building Your Personal Wellness Plan — Framework</div>
+  <div class="formula">PHYSICAL: What exercise will you do? When? What's your backup plan for bad days?</div>
+  <div class="formula">NUTRITION: What does a realistic healthy eating pattern look like for YOUR life?</div>
+  <div class="formula">SLEEP: What bedtime and wake time will you protect? What will you change first?</div>
+  <div class="formula">MENTAL: What practices help you manage stress? Who is in your support network?</div>
+  <div class="formula">DIGITAL: What intentional boundaries do you want around technology?</div>
+  <div class="formula">PREVENTIVE: When did you last see a doctor? Dentist? When is your next checkup?</div>
+  <div class="formula-note">Start with one area. Small, consistent improvements compound over time. You are building a person — don't renovate everything at once. Pick the lever that moves you most.</div>
+</div>
+<div class="checklist">
+  <div class="check-item"><span class="ci-icon">🏃</span><span><strong>Physical activity:</strong> 150 min/week moderate OR 75 min vigorous · 2× strength per week · Consistency over intensity</span></div>
+  <div class="check-item"><span class="ci-icon">🥗</span><span><strong>Nutrition:</strong> Mostly whole foods · Adequate protein · Hydrate consistently · Don't fear any macronutrient group</span></div>
+  <div class="check-item"><span class="ci-icon">😴</span><span><strong>Sleep:</strong> 8–10 hours (you're 16-17) · Consistent schedule · Phone outside bedroom · Cool and dark room</span></div>
+  <div class="check-item"><span class="ci-icon">🧠</span><span><strong>Mental health:</strong> Know your stress signals · Practice evidence-based coping · Reach out proactively · 988 when needed</span></div>
+  <div class="check-item"><span class="ci-icon">📱</span><span><strong>Digital:</strong> Intentional use · Phone-free bedroom · Audit your feeds · Notice how you feel</span></div>
+  <div class="check-item"><span class="ci-icon">🏥</span><span><strong>Preventive care:</strong> Annual physical · Dental cleanings · Know your health numbers · Vaccinations current</span></div>
+</div>
+<div class="tip-box">
+  <div class="tb-head">The Permission to Be Imperfect</div>
+  <p>Wellness perfectionism is counterproductive. People who try to be perfect often give up entirely after any slip — the "all or nothing" trap. The research is clear: consistently doing 60% of the ideal is dramatically better than doing 100% for two weeks and then nothing. Miss a workout — do something small instead of nothing. Eat a bad meal — make the next one better. The goal is the direction of the journey, not the perfection of each step. Small consistent actions over long time horizons build the health outcomes that matter.</p>
+</div>
+</div>`,
+cultural:`Blue Zones researcher Dan Buettner identified that the longest-lived populations in the world don't have gym memberships, diet plans, or wellness apps. They move naturally through their days, eat mostly plants, have strong community bonds, have a clear sense of purpose, and manage stress through faith, family, and rest. The lesson isn't to live like an Okinawan — it's that the fundamentals of human health are deeply simple and deeply human: move, eat real food, sleep, connect, and have something worth waking up for. The wellness industry profits from complexity; your body thrives on basics. This course has been about giving you the knowledge to navigate the complexity and return to the basics with confidence.`,
+quiz:[
+  {q:"According to research, the five most impactful things you can do for long-term health are:",choices:["Take the right supplements, follow a strict diet, exercise intensively, avoid all processed food, and see specialists regularly","Regular moderate physical activity, adequate sleep, a mostly whole-food diet, strong social connections, and evidence-based stress management","Maximize exercise volume, eliminate all sugar and carbohydrates, meditate daily, avoid alcohol entirely, and take vitamin supplements","Get a gym membership, hire a personal trainer, follow a meal plan, track all macros, and weigh yourself daily"],a:1,fun:"These five consistently appear across the world's longevity research. None of them require money, special equipment, or extreme discipline. They require consistency over time. The unglamorous truth: the basics, done consistently, produce better outcomes than any optimization strategy imperfectly applied. 🌿"},
+  {q:"'Wellness perfectionism' undermines health goals because:",choices:["Perfect health is actually unachievable","It motivates people to try harder and maintain higher standards","The 'all or nothing' mindset causes people to abandon entirely after any imperfection — while consistent imperfect action over time produces dramatically better outcomes than perfect action in short bursts","Perfectionism only applies to weight loss goals, not general wellness"],a:2,fun:"The person who exercises 3 times a week for 20 years — even with occasional off weeks — will have dramatically better health outcomes than the person who does a perfect program for 6 weeks and then quits. 'I ruined my diet today, might as well eat terribly all week' is the all-or-nothing trap. The next meal is always an opportunity to make a better choice. 🔄"},
+  {q:"A personal wellness plan is most sustainable when it:",choices:["Maximizes every health variable simultaneously for optimal results","Starts with one or two changes, is built around your actual life and preferences, and treats imperfection as normal rather than as failure","Follows a specific expert-designed protocol without modification","Involves purchasing a comprehensive health program with all components included"],a:1,fun:"Behavior change research is consistent: smaller changes are more sustainable than dramatic overhauls. Fitting changes to your actual life (not an imaginary ideal life) is essential. Expecting imperfection and planning for it prevents the all-or-nothing trap. You're building habits you'll have for decades — they need to fit your real life. 🏗️"},
+  {q:"The most important lesson about health information from this course is:",choices:["Always trust doctors over any other source of information","Most health information online is dangerous and should be avoided","Apply critical thinking to all health claims — evaluate the source, the evidence quality, potential conflicts of interest, and the difference between correlation and causation — regardless of how credible the source appears","The most popular health approaches are usually the most evidence-based"],a:2,fun:"Critical thinking doesn't stop working when you like the claim. Your favorite wellness influencer, your doctor, the CDC — all deserve the same critical lens: what is the evidence? Who funded it? Does correlation show causation? What are the alternatives? Health literacy is applying intellectual standards to health claims, not just accepting the most authoritative-sounding source. 🔍"}
+]},
+]},
+
+]};
+
+// ── STATE ──────────────────────────────
+const KEY = 'pe_health_course';
+let state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+function totalL() { return COURSE.units.reduce((s,u)=>s+u.lessons.length,0); }
+function doneL() { return Object.keys(state).length; }
+function avgSc() {
+  const v = Object.values(state).map(x=>x.score).filter(x=>x!=null);
+  return v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length) : null;
+}
+function getLesson(lid) {
+  for (const u of COURSE.units) for (const l of u.lessons) if (l.id===lid) return {unit:u,lesson:l};
+  return null;
+}
+
+// ── SIDEBAR ─────────────────────────────
+function buildSidebar() {
+  const nav = document.getElementById('unit-nav'); nav.innerHTML = '';
+  COURSE.units.forEach((u,ui) => {
+    const done = u.lessons.filter(l=>state[l.id]).length;
+    const allDone = done === u.lessons.length;
+    const sh = document.createElement('div'); sh.className = 'u-sect'; sh.textContent = 'Unit '+(ui+1); nav.appendChild(sh);
+    const btn = document.createElement('button');
+    btn.className = 'u-btn' + (allDone ? ' done' : '');
+    btn.innerHTML = `<span class="u-ic">${u.emoji}</span><span class="u-nm">${u.name}</span><span class="u-ck">${done>0?(allDone?'✓':done+'/'+u.lessons.length):''}</span>`;
+    btn.onclick = () => document.getElementById('ll_'+u.id)?.classList.toggle('open');
+    nav.appendChild(btn);
+    const ll = document.createElement('div'); ll.className = 'lesson-list'; ll.id = 'll_'+u.id;
+    u.lessons.forEach(l => {
+      const d = state[l.id];
+      const lb = document.createElement('button');
+      lb.className = 'l-btn' + (d ? ' done' : '');
+      lb.innerHTML = `<span>${l.title.substring(0,28)}${l.title.length>28?'…':''}</span>${d?`<span class="l-sc">${d.score}%</span>`:''}`;
+      lb.onclick = () => showLesson(u.id, l.id);
+      ll.appendChild(lb);
+    });
+    nav.appendChild(ll);
+  });
+  document.getElementById('stat-done').textContent = doneL()+'/'+totalL();
+  const a = avgSc(); document.getElementById('stat-avg').textContent = a!==null ? a+'%' : '—';
+  document.getElementById('prog-chip').textContent = doneL()+' / '+totalL();
+}
+
+// ── WELCOME ─────────────────────────────
+function showWelcome() {
+  document.getElementById('tb-title').textContent = 'Healthful Living & Physical Education';
+  document.getElementById('tb-crumb').textContent = 'Course 7 · 0.5 Credit · Full Year · NC Healthful Living Standards';
+  const cards = COURSE.units.map((u,ui) => {
+    const done = u.lessons.filter(l=>state[l.id]).length;
+    const pct = Math.round(done/u.lessons.length*100);
+    return `<div class="u-card" onclick="showLesson('${u.id}','${u.lessons[0].id}')">
+      <div class="uc-ic">${u.emoji}</div>
+      <div class="uc-tt">Unit ${ui+1} — ${u.name}</div>
+      <div class="uc-wk">${u.weeks}</div>
+      <div class="uc-bar"><div class="uc-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('content').innerHTML = `
+    <div class="w-hero">
+      <div class="w-tag">Course 7 · Calming Minds Day School · 2026–27</div>
+      <div class="w-title">Healthful Living<br>& Physical Education</div>
+      <p class="w-sub">The science of fitness, nutrition, sleep, mental health, stress, and smart health decisions — everything you need to build a healthy life on your own terms.</p>
+    </div>
+    <div class="u-grid">${cards}</div>`;
+}
+
+// ── LESSON ──────────────────────────────
+let curUid=null, curLid=null, qa={}, submitted=false;
+
+function showLesson(uid, lid) {
+  const found = getLesson(lid); if (!found) return;
+  const {unit, lesson} = found;
+  curUid=uid; curLid=lid; qa={}; submitted=false;
+  document.querySelectorAll('.lesson-list').forEach(el=>el.classList.remove('open'));
+  document.getElementById('ll_'+uid)?.classList.add('open');
+  document.getElementById('tb-title').textContent = lesson.title;
+  document.getElementById('tb-crumb').textContent = `${unit.name} · ${lesson.day}`;
+  const saved = state[lid]; const L=['A','B','C','D'];
+  const qHtml = lesson.quiz.map((q,qi) => `
+    <div class="q-card">
+      <div class="q-num">Question ${qi+1} of ${lesson.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.choices.map((c,ci) => `<button class="choice" id="ch${qi}_${ci}" onclick="pick(${qi},${ci})">
+        <span class="c-ltr">${L[ci]}</span><span>${c}</span>
+      </button>`).join('')}
+      <div class="feedback" id="fb${qi}"></div>
+    </div>`).join('');
+  const banner = saved
+    ? `<div class="score-banner show"><div class="score-big">${saved.score}%</div><div class="score-msg">${msg(saved.score)}</div></div>`
+    : `<div class="score-banner" id="score-banner"></div>`;
+  const allL = COURSE.units.flatMap(u=>u.lessons.map(l=>({uid:u.id,lid:l.id})));
+  const idx = allL.findIndex(x=>x.lid===lid);
+  const prev = idx>0?allL[idx-1]:null; const next = idx<allL.length-1?allL[idx+1]:null;
+  document.getElementById('content').innerHTML = `
+    <div class="l-header">
+      <div class="l-unit-tag">${unit.emoji} ${unit.name} · ${unit.weeks}</div>
+      <h2>${lesson.title}</h2>
+      <div class="l-meta">${lesson.day} · Calming Minds Day School · 2026–27</div>
+    </div>
+    <div class="obj-box">
+      <div class="obj-head">Today's Objectives</div>
+      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="section">
+      <div class="sec-head">Lesson Content</div>
+      ${lesson.content}
+    </div>
+    <div class="section">
+      <div class="sec-head">Historical & Cultural Context</div>
+      <div class="highlight-box"><div class="hb-head">Context</div><p>${lesson.cultural}</p></div>
+    </div>
+    <div class="quiz-wrap">
+      <h4>Lesson Quiz 🌿</h4>
+      <div class="quiz-sub">${lesson.quiz.length} questions · Submit to save your score</div>
+      ${banner}
+      ${qHtml}
+      <button class="sub-btn" id="sub-btn" onclick="submitQ()" ${saved?'disabled':''}>
+        ${saved?'Already Submitted ✓':'Submit Answers'}
+      </button>
+    </div>
+    <div class="lesson-nav">
+      ${prev?`<button class="nav-btn nav-prev" onclick="showLesson('${prev.uid}','${prev.lid}')">← Previous</button>`:''}
+      ${next?`<button class="nav-btn nav-next" onclick="showLesson('${next.uid}','${next.lid}')">Next Lesson →</button>`:''}
+    </div>`;
+  if (saved) showPrev(lesson, saved);
+  window.scrollTo(0,0);
+}
+
+function showPrev(lesson, saved) {
+  submitted = true; const L=['A','B','C','D'];
+  lesson.quiz.forEach((q,qi) => {
+    const sel = saved.answers ? saved.answers[qi] : null;
+    if (sel!==null && sel!==undefined) {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add(sel===q.a?'correct':'wrong');
+      if (sel!==q.a) document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      const fb = document.getElementById(`fb${qi}`);
+      if (fb) {
+        fb.className = `feedback ${sel===q.a?'ok':'bad'} show`;
+        fb.innerHTML = sel===q.a
+          ? `✓ Correct! ${q.fun ? `<div class="fun-n">💡 ${q.fun}</div>` : ''}`
+          : `The answer is ${L[q.a]}. ${q.choices[q.a]}${q.fun?`<div class="fun-n">💡 ${q.fun}</div>`:''}`;
+      }
+    }
+  });
+}
+
+function pick(qi, ci) {
+  if (submitted) return;
+  document.querySelectorAll(`[id^="ch${qi}_"]`).forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`ch${qi}_${ci}`)?.classList.add('selected');
+  qa[qi] = ci;
+}
+
+function submitQ() {
+  const found = getLesson(curLid); if (!found) return;
+  const {lesson} = found; submitted = true;
+  const L=['A','B','C','D']; let correct=0; const answers={};
+  lesson.quiz.forEach((q,qi) => {
+    const sel = qa[qi]; answers[qi] = sel!==undefined?sel:null;
+    const fb = document.getElementById(`fb${qi}`);
+    if (sel===undefined) {
+      if(fb){fb.className='feedback bad show';fb.textContent='No answer. Correct: '+L[q.a]+'. '+q.choices[q.a];}
+    } else if (sel===q.a) {
+      correct++;
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('correct');
+      if(fb){fb.className='feedback ok show';fb.innerHTML='✓ Correct!'+(q.fun?` <div class="fun-n">💡 ${q.fun}</div>` : '');}
+    } else {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('wrong');
+      document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      if(fb){fb.className='feedback bad show';fb.innerHTML=`The answer is ${L[q.a]}. ${q.choices[q.a]}`+(q.fun?` <div class="fun-n">💡 ${q.fun}</div>`:'');}
+    }
+  });
+  const score = Math.round(correct/lesson.quiz.length*100);
+  state[curLid] = {score, answers}; save();
+  const banner = document.getElementById('score-banner');
+  if(banner){banner.className='score-banner show';banner.innerHTML=`<div class="score-big">${score}%</div><div class="score-msg">${msg(score)}</div>`;}
+  const btn = document.getElementById('sub-btn');
+  if(btn){btn.disabled=true;btn.textContent='Submitted ✓';}
+  buildSidebar();
+}
+
+function msg(s) {
+  if(s===100) return '🏆 Perfect score!';
+  if(s>=90) return '⭐ Outstanding!';
+  if(s>=80) return '👍 Great work!';
+  if(s>=70) return '📖 Good — review the misses';
+  return '💪 Review and retry!';
+}
+
+buildSidebar();
+showWelcome();
+</script>
+</body>
+</html>

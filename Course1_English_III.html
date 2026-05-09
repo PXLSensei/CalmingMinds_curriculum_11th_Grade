@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>English III — Calming Minds Day School</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a2e;
+  --paper: #f5f0e8;
+  --cream: #faf7f2;
+  --gold: #c9a84c;
+  --gold-light: #e8d5a0;
+  --rust: #a0432f;
+  --sage: #5a7a5a;
+  --mist: #e8edf2;
+  --sidebar-w: 280px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── SIDEBAR ─────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--ink);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  z-index: 10;
+}
+.sidebar-brand {
+  padding: 28px 22px 20px;
+  border-bottom: 1px solid rgba(201,168,76,0.3);
+}
+.sidebar-brand .course-label {
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); font-family: 'Source Serif 4', serif; font-weight: 600;
+  margin-bottom: 6px;
+}
+.sidebar-brand h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; color: #fff; font-weight: 700; line-height: 1.3;
+}
+.sidebar-brand .school {
+  font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px;
+}
+.sidebar-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: rgba(255,255,255,.08);
+  margin: 0 0 2px;
+}
+.stat-cell {
+  background: rgba(255,255,255,.04);
+  padding: 12px 14px; text-align: center;
+}
+.stat-cell .val { font-size: 20px; font-weight: 700; color: var(--gold); font-family: 'Playfair Display', serif; }
+.stat-cell .lbl { font-size: 10px; color: rgba(255,255,255,.4); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+
+.unit-nav { padding: 8px 0 20px; flex: 1; }
+.unit-head {
+  padding: 10px 22px 4px;
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); font-weight: 600;
+}
+.unit-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 9px 22px; color: rgba(255,255,255,.65); font-size: 13px;
+  font-family: 'Source Serif 4', serif;
+  display: flex; align-items: center; gap: 10px;
+  transition: background .15s, color .15s;
+  border-left: 3px solid transparent;
+}
+.unit-btn:hover { background: rgba(255,255,255,.05); color: #fff; }
+.unit-btn.active { background: rgba(201,168,76,.12); color: var(--gold); border-left-color: var(--gold); }
+.unit-btn.completed { color: rgba(255,255,255,.5); }
+.unit-btn .u-emoji { font-size: 15px; flex-shrink: 0; }
+.unit-btn .u-name { flex: 1; line-height: 1.3; font-size: 12px; }
+.unit-btn .u-check { font-size: 11px; color: var(--gold); }
+
+.lesson-list { display: none; }
+.lesson-list.open { display: block; }
+.lesson-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 6px 22px 6px 46px; color: rgba(255,255,255,.45); font-size: 11.5px;
+  font-family: 'Source Serif 4', serif;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: color .15s, background .15s;
+}
+.lesson-btn:hover { color: rgba(255,255,255,.8); background: rgba(255,255,255,.03); }
+.lesson-btn.active { color: var(--gold-light); }
+.lesson-btn.done { color: rgba(255,255,255,.4); }
+.lesson-btn .l-score { font-size: 10px; color: var(--sage); }
+
+/* ── MAIN ─────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1; min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+.topbar {
+  background: var(--cream);
+  border-bottom: 2px solid var(--gold-light);
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 5;
+}
+.topbar-left h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; color: var(--ink); font-weight: 700;
+}
+.topbar-left .breadcrumb { font-size: 12px; color: #888; margin-top: 2px; }
+.progress-pill {
+  background: var(--ink); color: var(--gold);
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 12px; font-family: 'Playfair Display', serif;
+  font-weight: 700;
+}
+
+.content-area {
+  flex: 1; padding: 40px;
+  max-width: 860px;
+}
+
+/* ── WELCOME ─────────────────────────────── */
+.welcome {
+  padding: 20px 0;
+}
+.welcome .hero-tag {
+  font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 12px;
+}
+.welcome h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px; line-height: 1.15; color: var(--ink);
+  margin-bottom: 16px;
+}
+.welcome .intro {
+  font-size: 17px; line-height: 1.7; color: #444;
+  max-width: 640px; margin-bottom: 28px;
+  font-style: italic;
+}
+.unit-cards {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-top: 8px;
+}
+.unit-card {
+  background: #fff; border: 1px solid var(--gold-light);
+  border-radius: 10px; padding: 18px 20px; cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+.unit-card:hover {
+  border-color: var(--gold); box-shadow: 0 4px 20px rgba(201,168,76,.15);
+  transform: translateY(-2px);
+}
+.unit-card .uc-emoji { font-size: 22px; margin-bottom: 8px; }
+.unit-card .uc-name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.unit-card .uc-weeks { font-size: 11px; color: #888; }
+.unit-card .uc-progress { margin-top: 10px; height: 3px; background: var(--gold-light); border-radius: 2px; overflow: hidden; }
+.unit-card .uc-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .4s; }
+
+/* ── LESSON ─────────────────────────────── */
+.lesson-header {
+  border-bottom: 2px solid var(--gold-light);
+  padding-bottom: 20px; margin-bottom: 28px;
+}
+.lesson-header .unit-tag {
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 8px;
+}
+.lesson-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px; color: var(--ink); line-height: 1.2;
+}
+.lesson-header .day-meta {
+  font-size: 13px; color: #888; margin-top: 6px;
+  font-style: italic;
+}
+
+.objectives {
+  background: rgba(201,168,76,.08);
+  border: 1px solid var(--gold-light);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px; margin-bottom: 28px;
+}
+.objectives h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px; color: var(--gold); text-transform: uppercase;
+  letter-spacing: .1em; margin-bottom: 10px;
+}
+.objectives ul { list-style: none; }
+.objectives li {
+  font-size: 14px; color: #444; padding: 3px 0;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.objectives li::before { content: "◆"; color: var(--gold); font-size: 8px; margin-top: 5px; flex-shrink: 0; }
+
+.section { margin-bottom: 32px; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--rust); font-weight: 700; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after {
+  content: ''; flex: 1; height: 1px; background: var(--gold-light);
+}
+
+.reading-body {
+  font-size: 16px; line-height: 1.85; color: #333;
+}
+.reading-body p { margin-bottom: 14px; }
+.reading-body strong { color: var(--ink); font-weight: 600; }
+.reading-body em { color: var(--rust); }
+
+.text-block {
+  background: #fff; border: 1px solid #e8e0d0;
+  border-radius: 8px; padding: 20px 24px;
+  font-size: 15px; line-height: 1.8; color: #333;
+  margin-bottom: 14px;
+}
+.text-block h5 {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; color: var(--ink); margin-bottom: 10px;
+  border-bottom: 1px solid var(--gold-light); padding-bottom: 6px;
+}
+.text-block .term {
+  display: flex; gap: 10px; padding: 5px 0;
+  border-bottom: 1px solid #f0e8d8; font-size: 14px;
+}
+.text-block .term:last-child { border-bottom: none; }
+.text-block .term strong { min-width: 170px; color: var(--ink); flex-shrink: 0; }
+.text-block .term span { color: #555; }
+
+.cultural-note {
+  background: linear-gradient(135deg, #f0f4ed 0%, #e8ede4 100%);
+  border: 1px solid #b8ccb4; border-left: 4px solid var(--sage);
+  border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 14px;
+}
+.cultural-note .cn-label {
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sage); font-weight: 700; margin-bottom: 6px;
+}
+.cultural-note p { font-size: 14px; line-height: 1.7; color: #3a4e3a; }
+
+.quote-block {
+  border-left: 4px solid var(--gold);
+  padding: 14px 20px;
+  margin: 16px 0;
+  background: rgba(201,168,76,.04);
+}
+.quote-block p {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; line-height: 1.6; color: var(--ink);
+  font-style: italic; margin-bottom: 6px;
+}
+.quote-block .attribution { font-size: 12px; color: #888; }
+
+/* ── QUIZ ─────────────────────────────── */
+.quiz-section {
+  background: var(--ink); border-radius: 14px;
+  padding: 28px 32px; margin-top: 8px;
+}
+.quiz-section h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; color: var(--gold); margin-bottom: 6px;
+}
+.quiz-section .quiz-sub {
+  font-size: 13px; color: rgba(255,255,255,.5); margin-bottom: 24px;
+}
+.q-card {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px; padding: 20px; margin-bottom: 16px;
+}
+.q-num { font-size: 10px; color: rgba(201,168,76,.7); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 8px; }
+.q-text { font-size: 15px; color: #fff; font-family: 'Playfair Display', serif; line-height: 1.5; margin-bottom: 14px; }
+.choice {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 14px; border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03);
+  cursor: pointer; margin-bottom: 7px; font-size: 13.5px; color: rgba(255,255,255,.8);
+  transition: border-color .15s, background .15s; text-align: left; width: 100%;
+  font-family: 'Source Serif 4', serif;
+}
+.choice:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
+.choice.selected { border-color: var(--gold); background: rgba(201,168,76,.1); color: #fff; }
+.choice.correct { border-color: #6abf69 !important; background: rgba(106,191,105,.12) !important; color: #b9f0b8; }
+.choice.wrong { border-color: #ef9a9a !important; background: rgba(239,154,154,.1) !important; color: #ffcdd2; }
+.choice-letter {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(201,168,76,.2); color: var(--gold);
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.correct .choice-letter { background: #6abf69; color: #fff; }
+.wrong .choice-letter { background: #ef9a9a; color: #fff; }
+.feedback {
+  border-radius: 8px; padding: 10px 14px; margin-top: 8px;
+  font-size: 13px; line-height: 1.55; display: none;
+}
+.feedback.show { display: block; }
+.feedback.ok { background: rgba(106,191,105,.1); color: #b9f0b8; border: 1px solid rgba(106,191,105,.25); }
+.feedback.bad { background: rgba(239,154,154,.1); color: #ffcdd2; border: 1px solid rgba(239,154,154,.2); }
+.fun-tag { font-size: 12px; margin-top: 5px; opacity: .8; font-style: italic; }
+
+.check-btn {
+  background: var(--gold); color: var(--ink); border: none;
+  padding: 12px 28px; border-radius: 8px; font-size: 14px;
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  cursor: pointer; margin-top: 8px; transition: opacity .2s, transform .15s;
+}
+.check-btn:hover { opacity: .9; transform: translateY(-1px); }
+.check-btn:disabled { opacity: .35; cursor: default; transform: none; }
+
+.score-banner {
+  background: rgba(201,168,76,.15); border: 1px solid rgba(201,168,76,.4);
+  border-radius: 10px; padding: 20px 24px;
+  display: none; margin-bottom: 20px; text-align: center;
+}
+.score-banner.show { display: block; }
+.score-big { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--gold); font-weight: 900; }
+.score-msg { font-size: 14px; color: rgba(255,255,255,.7); margin-top: 4px; }
+.next-btn {
+  background: none; border: 1.5px solid var(--gold); color: var(--gold);
+  padding: 8px 22px; border-radius: 8px; font-size: 13px;
+  cursor: pointer; margin-top: 12px; font-family: 'Playfair Display', serif; font-weight: 700;
+  transition: background .2s, color .2s;
+}
+.next-btn:hover { background: var(--gold); color: var(--ink); }
+
+/* Nav buttons */
+.lesson-nav {
+  display: flex; gap: 10px; margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid var(--gold-light);
+}
+.nav-btn {
+  padding: 10px 20px; border-radius: 8px; font-size: 13px;
+  font-family: 'Source Serif 4', serif; cursor: pointer; transition: .15s;
+  font-weight: 600;
+}
+.nav-btn.prev { background: #fff; border: 1.5px solid var(--gold-light); color: #666; }
+.nav-btn.prev:hover { border-color: var(--gold); color: var(--ink); }
+.nav-btn.next-lesson { background: var(--ink); border: none; color: var(--gold); }
+.nav-btn.next-lesson:hover { background: #2a2a42; }
+
+@media (max-width: 860px) {
+  .sidebar { transform: translateX(-100%); }
+  .main { margin-left: 0; }
+  .unit-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="course-label">Course 1 of 7</div>
+    <h1>English III</h1>
+    <div class="school">Calming Minds Day School · 2026–27</div>
+  </div>
+  <div class="sidebar-stats">
+    <div class="stat-cell"><div class="val" id="stat-done">0</div><div class="lbl">Done</div></div>
+    <div class="stat-cell"><div class="val" id="stat-score">—</div><div class="lbl">Avg Score</div></div>
+  </div>
+  <nav class="unit-nav" id="unit-nav"></nav>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <h2 id="topbar-title">English III — American Literature & Composition</h2>
+      <div class="breadcrumb" id="topbar-crumb">11th Grade · Full Year · 1.0 Credit · NC ELA Standards</div>
+    </div>
+    <div class="progress-pill" id="prog-pill">0 / 35</div>
+  </header>
+  <div class="content-area" id="content"></div>
+</main>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const COURSE = {
+  units: [
+    {
+      id: 'u1', emoji: '✍️', name: 'Voice & Identity',
+      weeks: 'Weeks 1–5',
+      lessons: [
+        {
+          id: 'u1l1', day: 'Week 1, Day 1',
+          title: 'What Is American Literature?',
+          objectives: [
+            'Define American literature and understand its diverse scope',
+            'Identify major periods and traditions in American literary history',
+            'Begin building the vocabulary of literary analysis'
+          ],
+          content: `
+<p>American literature is not a single story — it is a chorus of voices, many of them long silenced or ignored. When people say "American literature," they often mean the canon: the official list of "great" works taught in schools. But the canon has changed dramatically over the last 50 years as scholars have recovered voices that were always there, just not always listened to.</p>
+<div class="text-block">
+  <h5>Major Periods in American Literature</h5>
+  <div class="term"><strong>Colonial & Early National (1620–1820)</strong><span>Puritan writing, political documents, early republic; key figures: Bradford, Edwards, Franklin, Jefferson</span></div>
+  <div class="term"><strong>Romanticism & Transcendentalism (1820–1865)</strong><span>Nature, individualism, the divine in everyday life; Emerson, Thoreau, Hawthorne, Poe, Melville</span></div>
+  <div class="term"><strong>Realism & Naturalism (1865–1914)</strong><span>Truthful depiction of ordinary life; Twain, James, Crane, Dreiser, Chopin</span></div>
+  <div class="term"><strong>Modernism (1914–1945)</strong><span>Fragmentation, stream of consciousness, WWI's aftermath; Fitzgerald, Hemingway, Faulkner, Hughes, Hurston</span></div>
+  <div class="term"><strong>Postwar & Contemporary (1945–present)</strong><span>Diverse voices, social criticism, experimentation; O'Connor, Baldwin, Morrison, Cisneros, Díaz</span></div>
+</div>
+<p>One of the most important shifts in American literary studies has been the inclusion of writers who were always producing powerful work but weren't included in the "official" story: African American writers of the Harlem Renaissance, Native American storytellers, Latinx writers, immigrant voices, women writers who wrote outside acceptable genres. The story of American literature is the story of who gets to be heard.</p>
+<div class="quote-block">
+  <p>"I, too, sing America. I am the darker brother."</p>
+  <div class="attribution">— Langston Hughes, "I, Too" (1926)</div>
+</div>
+<p>Hughes's poem is a direct response to Walt Whitman's "I Hear America Singing." Both poems are "American literature." Reading them together — the canonical voice and the excluded voice answering back — is how we understand the full picture.</p>`,
+          cultural: `The study of American literature is itself political. For most of the 20th century, "great American novels" meant works by white men, almost exclusively. Toni Morrison was the first African American woman to win the Nobel Prize in Literature (1993). Zora Neale Hurston died in poverty and was buried in an unmarked grave before Alice Walker helped resurrect her legacy in the 1970s. The question of who gets included in the canon is always a question about power.`,
+          quiz: [
+            { q: "Transcendentalism as a literary movement emphasized:", choices: ["The importance of industrial progress and national expansion", "The divine nature of the individual and the spiritual significance of nature", "Strict Calvinist religious doctrine and divine punishment", "Realistic depictions of everyday working-class life"], a: 1, fun: "Emerson's 'Self-Reliance' and Thoreau's 'Walden' are the core texts. Thoreau literally built a cabin by Walden Pond to test transcendentalist ideas about simple living and connection to nature. He lived there for 2 years, 2 months, and 2 days. 🌲" },
+            { q: "Which literary period directly responded to the trauma and disillusionment of World War I?", choices: ["Transcendentalism", "Realism", "Modernism", "Naturalism"], a: 2, fun: "WWI killed 20 million people with industrial-scale efficiency. Writers like Hemingway (who was wounded in Italy) and Fitzgerald saw the old certainties collapse. Modernism's fragmented forms mirrored a fragmented world. 💔" },
+            { q: "Langston Hughes's 'I, Too' is best understood as:", choices: ["A celebration of the American Dream without qualification", "A response to Whitman — asserting African American belonging in the American story despite exclusion", "A rejection of American identity in favor of African heritage", "A nature poem in the Transcendentalist tradition"], a: 1, fun: "Hughes published this poem in 1926 during the Harlem Renaissance. He's directly talking to Whitman's 'I Hear America Singing' (1860). The conversation across 66 years of American history is what makes it so powerful. 🎵" },
+            { q: "The term 'canon' in literature refers to:", choices: ["Military weaponry used as metaphors in war poetry", "The officially recognized list of 'great' literary works taught in schools", "Works published before 1900 only", "Poetry written in strict formal meter"], a: 1, fun: "The literary canon has been hotly debated since the 1960s. 'Canon wars' in universities became almost literal — professors arguing fiercely about whether to add Toni Morrison and remove another white male author. The canon tells you what a society values. 📚" },
+          ]
+        },
+        {
+          id: 'u1l2', day: 'Week 1, Day 3',
+          title: 'The Harlem Renaissance',
+          objectives: [
+            'Understand the historical context of the Harlem Renaissance (1920s–30s)',
+            'Read and analyze poetry by Hughes and Countee Cullen',
+            'Identify key themes: identity, pride, protest, belonging'
+          ],
+          content: `
+<p>Between roughly 1920 and 1940, Harlem — a neighborhood in upper Manhattan — became the cultural capital of Black America. Writers, musicians, artists, and intellectuals poured in from the South and the Caribbean, creating an explosion of creative work that would permanently change American culture.</p>
+<div class="cultural-note">
+  <div class="cn-label">Historical Context</div>
+  <p>The Great Migration (1910–1970) saw approximately 6 million Black Americans move from the rural South to northern cities, fleeing Jim Crow laws and seeking economic opportunity. Harlem was the destination for many, and the concentration of talent created the conditions for a cultural renaissance — a rebirth. Jazz clubs, poetry readings, art galleries, and political organizations all thrived simultaneously.</p>
+</div>
+<div class="text-block">
+  <h5>Key Harlem Renaissance Figures</h5>
+  <div class="term"><strong>Langston Hughes (1902–1967)</strong><span>Poet laureate of the movement; incorporated jazz and blues rhythms; explored Black urban life without romanticizing</span></div>
+  <div class="term"><strong>Zora Neale Hurston (1891–1960)</strong><span>Novelist and anthropologist; celebrated Black Southern dialect; "Their Eyes Were Watching God"</span></div>
+  <div class="term"><strong>Countee Cullen (1903–1946)</strong><span>Formally trained poet; classical influences; explored double consciousness and racial identity</span></div>
+  <div class="term"><strong>Claude McKay (1889–1948)</strong><span>Jamaican-born poet; powerful protest poetry; "If We Must Die" written during the Red Summer of 1919</span></div>
+</div>
+<p>W.E.B. Du Bois famously described the African American experience as "double consciousness" — always seeing yourself through the eyes of others, never just seeing yourself. Much Harlem Renaissance writing wrestles with this: how do you create an authentic identity when the dominant culture sees you through a lens of prejudice?</p>
+<div class="quote-block">
+  <p>"Yet do I marvel at this curious thing: / To make a poet black, and bid him sing!"</p>
+  <div class="attribution">— Countee Cullen, "Yet Do I Marvel" (1925)</div>
+</div>
+<p>Cullen's closing couplet — after a meditation on God's mysterious ways — packs enormous meaning. To be Black AND a poet in America in 1925 was to be placed in an impossible position: expected to sing for a culture that didn't fully accept you. The marvel isn't God's power — it's the irony of the situation.</p>`,
+          cultural: `The Harlem Renaissance was also a period of intense debate about what Black art SHOULD be. W.E.B. Du Bois believed art should serve political and social uplift. Langston Hughes pushed back — he wanted to celebrate ordinary Black life, the "low-down folks" who drank and danced, not just respectable middle-class achievement. This debate about art's purpose versus its authenticity never fully resolved. It continues today in every community that produces art under the weight of representation.`,
+          quiz: [
+            { q: "The Great Migration contributed to the Harlem Renaissance by:", choices: ["Sending Black artists to study in Paris", "Concentrating Black talent and population in northern cities, especially Harlem", "Creating new funding for Black arts from the federal government", "Ending Jim Crow laws in the South, freeing up creative energy"], a: 1, fun: "At its peak, Harlem had a higher concentration of Black talent per block than anywhere on Earth. Duke Ellington, Louis Armstrong, Langston Hughes, Zora Neale Hurston — all in one neighborhood at the same time. Geography + density = cultural explosion. 🎷" },
+            { q: "W.E.B. Du Bois's concept of 'double consciousness' describes:", choices: ["The ability to write in two different literary styles simultaneously", "African Americans seeing themselves through both their own perspective AND through the prejudiced eyes of white society", "Having both African and American cultural identities equally", "A psychological disorder caused by racial discrimination"], a: 1, fun: "Du Bois wrote this in 'The Souls of Black Folk' (1903). 'Double consciousness' is still one of the most cited concepts in African American studies and sociology. How does it feel to be BOTH yourself AND someone else's projection? That's the question. 🧠" },
+            { q: "Countee Cullen's 'Yet Do I Marvel' ends with irony because:", choices: ["God is revealed not to exist in the poem's final lines", "Being asked to be a poet while Black in America is presented as one of God's mysterious, almost cruel paradoxes", "The poem begins as a love poem and ends as political protest", "Cullen reveals he has lost his religious faith"], a: 1, fun: "The whole poem is a list of God's mysterious acts — making the blind see, Sisyphus rolling his boulder forever. Then the gut-punch: making a Black poet is God's strangest act. The form (traditional sonnet) vs. content (racial protest) creates tension that IS the poem. ✨" },
+            { q: "Langston Hughes's poetry often incorporated:", choices: ["Strict traditional poetic forms like the Petrarchan sonnet", "Jazz and blues rhythms and the vernacular speech of Black urban life", "Classical Greek and Roman mythological references", "Nature imagery in the tradition of the Romantics"], a: 1, fun: "Hughes said his writing came from 'the tom-tom of joy and laughter, and pain swallowed in a smile.' He broke from the polished, formal poetry that was considered 'acceptable' — he wanted his poems to sound like the music playing down the block. Revolutionary! 🎵" },
+          ]
+        },
+        {
+          id: 'u1l3', day: 'Week 2, Day 1',
+          title: 'Literary Devices: The Toolkit',
+          objectives: [
+            'Define and identify core literary devices: metaphor, simile, symbolism, irony, motif',
+            'Practice identifying devices in context with American literary examples',
+            'Understand how devices create meaning beyond literal language'
+          ],
+          content: `
+<p>Literary devices are the tools writers use to say more than the literal words on the page. Mastering these terms is essential not because exams ask about them, but because they are the vocabulary for talking precisely about how literature creates meaning and effect.</p>
+<div class="text-block">
+  <h5>Core Literary Devices</h5>
+  <div class="term"><strong>Metaphor</strong><span>Direct comparison without "like" or "as" — "Life is a rollercoaster"</span></div>
+  <div class="term"><strong>Simile</strong><span>Comparison using "like" or "as" — "Life is like a rollercoaster"</span></div>
+  <div class="term"><strong>Symbolism</strong><span>An object/person/place represents something beyond its literal meaning — Gatsby's green light = the American Dream</span></div>
+  <div class="term"><strong>Irony (verbal)</strong><span>Saying the opposite of what you mean — "Oh great, another Monday"</span></div>
+  <div class="term"><strong>Irony (dramatic)</strong><span>Audience knows something a character doesn't — we know Juliet is only sleeping</span></div>
+  <div class="term"><strong>Irony (situational)</strong><span>What happens is the opposite of what's expected — a fire station burns down</span></div>
+  <div class="term"><strong>Motif</strong><span>Recurring element (image, idea, phrase) with symbolic significance — rain appearing whenever danger approaches</span></div>
+  <div class="term"><strong>Allusion</strong><span>Reference to another work, person, event, or place outside the text — "He was a real Romeo"</span></div>
+  <div class="term"><strong>Personification</strong><span>Giving human qualities to non-human things — "The trees whispered their secrets"</span></div>
+  <div class="term"><strong>Foreshadowing</strong><span>Hints at what's to come — Chekhov's gun: if a gun appears in Act 1, it must go off by Act 3</span></div>
+</div>
+<p>The key principle: good writers don't use devices randomly. Every metaphor, every symbol, every recurring motif is intentional and serves the work's larger meaning. When you identify a literary device, the analysis doesn't end there — it begins. The question is always: <strong>what effect does this create, and why does it matter?</strong></p>
+<div class="quote-block">
+  <p>"So we beat on, boats against the current, borne back ceaselessly into the past."</p>
+  <div class="attribution">— F. Scott Fitzgerald, The Great Gatsby (final line)</div>
+</div>
+<p>This one sentence contains: a <em>metaphor</em> (humans are boats), a <em>motif</em> (struggle against forces larger than us, which runs through the whole novel), and a statement of <em>theme</em> (we are all trapped by our pasts). Literary devices compress meaning. One sentence. Entire novel contained.</p>`,
+          cultural: `Anton Chekhov (1860–1904), the Russian playwright and master of the short story, gave us "Chekhov's Gun": if you show a loaded gun in Act 1, it must be fired by Act 3. Everything in a story should be necessary. This principle — which every writing student learns — came from a playwright in Czarist Russia and became foundational to American literary education. Literature is genuinely international even when the content is specifically American.`,
+          quiz: [
+            { q: "In Fitzgerald's final line 'So we beat on, boats against the current...', the primary literary device is:", choices: ["Simile — comparing humans to boats using 'like'", "Metaphor — directly equating humans with boats without 'like' or 'as'", "Personification — giving the current human qualities", "Allusion — referencing a famous boat journey"], a: 1, fun: "Metaphor because there's no 'like' or 'as.' Simile says 'we are LIKE boats'; metaphor says 'we ARE boats.' The identification matters for your analysis — but both point to the same human truth about struggling against forces larger than ourselves. 🚣" },
+            { q: "The green light at the end of Daisy's dock in 'The Great Gatsby' is best analyzed as:", choices: ["A literal safety light for boats on the water", "A symbol — representing the American Dream, Daisy, and the impossibility of recapturing the past", "A motif — a recurring color that means nothing specific", "An allusion to the green flag at horse racing events"], a: 1, fun: "Fitzgerald tells us directly: Nick observes Gatsby reaching toward the green light. Later he connects it to the American Dream: 'the orgastic future that year by year recedes before us.' The green light IS the Dream — visible, beckoning, always just out of reach. 💚" },
+            { q: "Dramatic irony occurs when:", choices: ["A character says something they don't mean", "The outcome of a story is the opposite of what characters expected", "The audience knows information that a character in the story does not", "Two characters hold opposing viewpoints on a subject"], a: 2, fun: "Romeo & Juliet: we KNOW Juliet is sleeping when Romeo thinks she's dead. The whole tragedy depends on our knowledge vs. his. Horror movies use this constantly — we see the killer; the character doesn't. Our knowledge creates agonizing suspense. 😱" },
+            { q: "A 'motif' differs from a 'symbol' in that:", choices: ["Motifs are always about nature; symbols can be anything", "A motif recurs throughout the work (multiple instances); a symbol can appear once", "Symbols are visual only; motifs can be words or ideas", "There is no meaningful difference between the two terms"], a: 1, fun: "In Macbeth, blood appears over and over — that's a motif. The first bloody dagger might be symbolism; by the 20th appearance of blood imagery, it's clearly a motif about guilt and violence being unavoidable. Repetition is what makes a motif a motif. 🩸" },
+          ]
+        },
+        {
+          id: 'u1l4', day: 'Week 2, Day 3',
+          title: 'Point of View & Narrative Voice',
+          objectives: [
+            'Distinguish first, second, and third-person points of view',
+            'Understand how point of view shapes what we know and how we feel',
+            'Identify the unreliable narrator and its effects'
+          ],
+          content: `
+<p>Point of view is one of the most powerful decisions a writer makes. The same events told by different narrators become completely different stories. Who is telling the story — and what are their limitations, biases, and interests — shapes everything the reader knows.</p>
+<div class="text-block">
+  <h5>Narrative Points of View</h5>
+  <div class="term"><strong>First Person (I/we)</strong><span>Narrator is a character in the story; we only know what they know; intimate but limited. "I walked into the room and saw him standing there."</span></div>
+  <div class="term"><strong>Second Person (you)</strong><span>Rare; addresses the reader as "you"; creates unusual intimacy or disorientation. Used in choose-your-own-adventure and some literary fiction.</span></div>
+  <div class="term"><strong>Third Person Limited</strong><span>Narrator is outside the story but follows one character's perspective; knows only what that character knows. "She walked into the room and saw him standing there."</span></div>
+  <div class="term"><strong>Third Person Omniscient</strong><span>All-knowing narrator; can access any character's thoughts; can describe events nobody witnessed. "Meanwhile, across the city, James was also feeling afraid."</span></div>
+</div>
+<p>The most interesting POV question is the <strong>unreliable narrator</strong> — a narrator whose account we cannot fully trust because of their bias, mental state, limited knowledge, or self-deception. Nick Carraway in The Great Gatsby tells us at the start that he's "one of the few honest people" he's ever known — which should make us immediately suspicious.</p>
+<div class="cultural-note">
+  <div class="cn-label">The Unreliable Narrator in American Fiction</div>
+  <p>American literature has a particularly rich tradition of unreliable narrators: Nick Carraway (Gatsby), Holden Caulfield (The Catcher in the Rye), Stevens (The Remains of the Day), Chief Bromden (One Flew Over the Cuckoo's Nest). Each narrator's unreliability reveals something about American culture: the tendency to mythologize, to self-deception, to the gap between how we see ourselves and how others see us.</p>
+</div>
+<p>Reading a first-person narrator well requires reading two things simultaneously: what the narrator tells us AND what the narrator reveals about themselves without meaning to. The gap between those two things is often where the real story lives.</p>`,
+          cultural: `Henry James — master of the psychological novel — developed the concept of the "center of consciousness": a technique where the story is filtered through one character's perception even in third-person narration. This influenced virtually every major American novelist after him. The question of whose perspective we inhabit is always also a question of whose experience the culture considers important enough to center.`,
+          quiz: [
+            { q: "Nick Carraway in 'The Great Gatsby' is considered an unreliable narrator because:", choices: ["He is revealed to be lying about his identity in the final chapter", "He claims to be uniquely honest while clearly being biased, complicit in events, and limited in perspective", "He is drunk throughout most of the novel", "The author Fitzgerald stated explicitly that Nick cannot be trusted"], a: 1, fun: "Nick tells us he's honest — but he covers up Gatsby's criminal activities, idealizes Gatsby while condemning Tom, and is clearly in love with Gatsby in some sense. He's telling us his version. The question is: what IS the version he's not aware he's telling? 🔍" },
+            { q: "Third-person omniscient narration differs from third-person limited in that:", choices: ["Omniscient uses 'she/he/they'; limited uses 'I'", "Omniscient narrators can access any character's thoughts and describe events no character witnessed; limited stays with one character's perspective", "Limited narration is more common in contemporary fiction", "There is no difference — both are third-person"], a: 1, fun: "Tolstoy's 'War and Peace' is omniscient — the narrator slides from Napoleon's thoughts to a Russian peasant's in the same chapter. Most contemporary literary fiction uses limited — we stay with one person's head. The choice determines everything about what the reader can know. 🌍" },
+            { q: "Second-person narration ('you walked into the room') creates which effect?", choices: ["Emotional distance — the 'you' creates objectivity", "Unusual intimacy or disorientation — the reader becomes the character", "Traditional, formal storytelling tone", "Reliability — the 'you' narrator is always trustworthy"], a: 1, fun: "Lorrie Moore's 'How to Be an Other Woman' uses second person brilliantly — 'You meet a man at a party.' It makes the reader complicit in the narrator's choices. Junot Díaz uses it in 'The Brief Wondrous Life of Oscar Wao.' Rare but powerful when done well. 🫵" },
+            { q: "The 'gap' between what a narrator tells us and what they reveal about themselves is important because:", choices: ["It indicates writing errors the author made", "It is where the real story often lives — the unconscious self-revelation beneath the conscious account", "It only matters in detective fiction", "It shows the reader that the author doesn't fully control the narrator"], a: 1, fun: "This is the most sophisticated thing to look for in first-person fiction. What does Nick not say about Gatsby that reveals how much he admires him? What does Holden's contempt for 'phonies' reveal about his own insecurities? The gap is the secret the narrator keeps from themselves. 🔑" },
+          ]
+        },
+        {
+          id: 'u1l5', day: 'Week 3, Day 1',
+          title: 'Symbolism & Motif in American Literature',
+          objectives: [
+            'Analyze extended symbolism in The Great Gatsby',
+            'Trace a motif through a longer text',
+            'Write a symbol analysis with textual evidence'
+          ],
+          content: `
+<p>Fitzgerald packs The Great Gatsby with symbols so dense and interrelated that entire books have been written unpacking them. This lesson focuses on the three most important and how they connect to the novel's central themes.</p>
+<div class="text-block">
+  <h5>The Great Gatsby's Major Symbols</h5>
+  <div class="term"><strong>The Green Light</strong><span>At the end of Daisy's dock; Gatsby reaches toward it; = the American Dream, Daisy, the unreachable future; explicitly connected to the dream of America by Nick in the final pages</span></div>
+  <div class="term"><strong>The Valley of Ashes</strong><span>Industrial wasteland between the Eggs and Manhattan; where the workers (Wilson, Myrtle) live; = the hidden cost of the wealthy's glamour; moral and physical decay beneath the surface</span></div>
+  <div class="term"><strong>The Eyes of Doctor T.J. Eckleburg</strong><span>Billboard over the Valley of Ashes; faded blue eyes behind enormous spectacles; = God's judgment (or the death of God); a blind watching over a morally corrupt world; Wilson says "God sees everything" while looking at them</span></div>
+</div>
+<p>Notice how these three symbols work as a system. The green light = the dream, visible from East Egg (old money). The Valley of Ashes = the people crushed under the dream's weight. The Eyes of Eckleburg = the absence of moral judgment on the people doing the crushing. Together, they constitute Fitzgerald's critique of the American Dream: it requires victims, it lacks conscience, and it can never be grasped.</p>
+<div class="quote-block">
+  <p>"But his eyes, dimmed a little by many paintless days under sun and rain, brood on over the solemn dumping ground."</p>
+  <div class="attribution">— F. Scott Fitzgerald, The Great Gatsby (describing Eckleburg's billboard)</div>
+</div>
+<p>Fitzgerald tells us the eyes are faded, dimmed — the moral watcher is deteriorating alongside the waste beneath them. This is deliberate. An all-seeing moral authority would be one thing; a deteriorating, failing one is much more frightening and much more pointed as social criticism.</p>`,
+          cultural: `Fitzgerald wrote The Great Gatsby in 1925 while living in Great Neck, New York — which he used as the model for West Egg (new money). His neighbors were actual millionaires throwing parties. He was simultaneously a participant in and horrified observer of the culture he critiqued. This insider-outsider position — being part of something while being unable to stop analyzing it — is very common among American writers of his generation and extremely common in American literature generally.`,
+          quiz: [
+            { q: "The Valley of Ashes in 'The Great Gatsby' represents:", choices: ["The natural beauty of the American landscape before industrialization", "The poverty and moral decay hidden beneath the wealth of East and West Egg — the human cost of the American Dream", "A literal place where wealthy characters go to escape their lives", "The spiritual wasteland caused by the prohibition of alcohol"], a: 1, fun: "The Valley of Ashes is where working-class people live — the ones doing actual labor to support the parties at the Eggs. Fitzgerald places it between the wealthy parties and New York City — you HAVE to pass through it, but the wealthy characters barely notice it. Brilliant geography as social commentary. 🏭" },
+            { q: "The Eyes of Doctor T.J. Eckleburg function as a symbol of:", choices: ["The optimistic future of American capitalism", "Moral judgment (or its absence/decay) — an all-seeing eye that watches the corrupt world without intervening", "The importance of advertising in the Jazz Age economy", "Nick's profession as a bond salesman"], a: 1, fun: "George Wilson, in his grief after Myrtle's death, looks at the billboard and says 'God sees everything.' He's pointing at an advertisement for an eye doctor. Fitzgerald is suggesting God has been replaced by commerce in America. Dark? Yes. Accurate? You decide. 👁️" },
+            { q: "Fitzgerald's three major symbols (green light, Valley of Ashes, Eckleburg's eyes) work together to:", choices: ["Create a beautiful poetic atmosphere without deeper meaning", "Constitute a systematic critique of the American Dream — its costs, its corruption, and the absence of moral accountability", "Reference the three major social classes in Long Island society", "Represent Gatsby, Daisy, and Tom respectively"], a: 1, fun: "Literary symbols rarely stand alone — the best ones form systems where each element illuminates the others. Green light (the dream) → Valley of Ashes (who pays for it) → Eckleburg (nobody's watching, nobody cares). The critique is complete and devastating. 💡" },
+            { q: "Analyzing a symbol requires MORE than just identifying it. The next step is to:", choices: ["List every place it appears in the text", "Ask what effect the symbol creates and WHY the author uses it — what meaning does it generate?", "Find a quote from the author confirming the symbol was intentional", "Compare it to symbols in other novels from the same period"], a: 1, fun: "Identifying the green light = a symbol is the starting point. The ANALYSIS is: what does it mean for the entire novel that Gatsby reaches toward something beautiful and unattainable? What does Fitzgerald say about human desire through this one image? THAT is literary analysis. 🎯" },
+          ]
+        },
+      ]
+    },
+    {
+      id: 'u2', emoji: '🎤', name: 'Rhetoric & Argument',
+      weeks: 'Weeks 6–9',
+      lessons: [
+        {
+          id: 'u2l1', day: 'Week 6, Day 1',
+          title: 'Ethos, Pathos, Logos',
+          objectives: [
+            'Define and distinguish the three rhetorical appeals',
+            'Identify appeals in famous American speeches',
+            'Understand how effective arguments combine all three'
+          ],
+          content: `
+<p>Rhetoric — the art of persuasion — is one of the oldest disciplines in human history. Aristotle identified its three core elements over 2,300 years ago, and they remain the fundamental tools of every effective argument you've ever encountered.</p>
+<div class="text-block">
+  <h5>The Three Rhetorical Appeals</h5>
+  <div class="term"><strong>Ethos (credibility)</strong><span>An appeal to the speaker's character, authority, or trustworthiness. "As a doctor of 30 years, I can tell you..." The audience trusts the source.</span></div>
+  <div class="term"><strong>Pathos (emotion)</strong><span>An appeal to the audience's emotions — fear, hope, grief, pride, outrage. A devastating personal story before arguing for policy change. Connects the issue to human experience.</span></div>
+  <div class="term"><strong>Logos (logic)</strong><span>An appeal to reason, evidence, data, and logical argument. Statistics, studies, logical cause-and-effect chains. "The data shows that..." appeals to logos.</span></div>
+</div>
+<div class="quote-block">
+  <p>"I am not unmindful that some of you have come here out of great trials and tribulations. Some of you have come fresh from narrow jail cells. And some of you have come from areas where your quest — quest for freedom left you battered by the storms of persecution and staggered by the winds of police brutality."</p>
+  <div class="attribution">— Martin Luther King Jr., "I Have a Dream" (1963)</div>
+</div>
+<p>This passage is primarily <em>pathos</em> — King acknowledges the suffering of the people standing before him. But notice what else is happening: by acknowledging their sacrifice, he's also building <em>ethos</em> (showing he knows who they are and what they've endured). The best rhetoric layers multiple appeals simultaneously. A pure data dump is boring. Pure emotional manipulation is weak. The most powerful arguments combine all three.</p>
+<p>Also essential: <strong>Kairos</strong> — the right moment. A speech about emergency preparedness lands differently right after a hurricane. King's speech on the steps of the Lincoln Memorial, 100 years after emancipation, was extraordinary kairos. The time, the place, the anniversary — all amplified the message.</p>`,
+          cultural: `Aristotle's rhetorical theory was developed in ancient Athens for use in democratic assemblies. The United States, as a democracy, inherited this tradition. But rhetoric also has a troubling history: the same tools that make arguments persuasive can be used to manipulate. Every demagogue in history has been skilled at rhetoric — particularly pathos. Understanding rhetoric is partly about being able to identify when you're being manipulated, not just when you're being persuaded.`,
+          quiz: [
+            { q: "When a pharmaceutical commercial shows a doctor in a lab coat recommending a medication, it is primarily using:", choices: ["Pathos — the doctor's appearance creates emotional trust", "Ethos — the doctor's credentials create an appeal to authority and credibility", "Logos — the visual evidence of the lab coat proves the medicine works", "Kairos — timing the ad for when people feel most sick"], a: 1, fun: "Ethos can be borrowed — celebrities endorse products to transfer their credibility to the brand. This is why you should always ask: is this person actually an expert, or are they performing expertise? Lab coats and jargon can simulate ethos without actually having it. 🥼" },
+            { q: "A speech that begins with a devastating personal story before arguing for gun control legislation is primarily using:", choices: ["Logos — the story provides a data point", "Ethos — the personal story establishes the speaker's character", "Pathos — the emotional story connects the abstract policy issue to human suffering", "Kairos — timing the speech after a tragic event"], a: 2, fun: "Politicians almost always begin speeches with a personal story ('I'd like to tell you about Maria, a nurse from Ohio...') before presenting policy. This isn't manipulation — well, not purely. Connecting abstract issues to specific human experiences makes them real. Pathos humanizes logos. 💔" },
+            { q: "Lincoln's Gettysburg Address was only 272 words. Its rhetorical power came from:", choices: ["Its length — short speeches are always more powerful", "Its use of kairos (100th anniversary of the founding), elevated language, and connecting the Civil War to the nation's founding principles (logos + pathos combined)", "Its purely logical argument about the legality of the Civil War", "Its extensive use of data about Civil War casualties"], a: 1, fun: "Edward Everett spoke for TWO HOURS before Lincoln. He later wrote Lincoln: 'I wish I could flatter myself that I'd come as near to the central idea of the occasion in two hours as you did in two minutes.' Less is more when the kairos, ethos, and pathos are perfectly calibrated. 🎯" },
+            { q: "Kairos in rhetoric specifically refers to:", choices: ["A credibility appeal based on expertise", "Data and logical reasoning supporting an argument", "The right or opportune moment — timing an argument for maximum effectiveness", "An emotional appeal using personal narrative"], a: 2, fun: "Kairos = the Greek god of opportunity, shown as a young man with winged feet and a long forelock (so you can grab him from the front but not the back — opportunity passes). In rhetoric, timing is everything. The same speech at the wrong moment falls flat. ⏱️" },
+          ]
+        },
+        {
+          id: 'u2l2', day: 'Week 6, Day 3',
+          title: 'MLK & the Rhetoric of the Civil Rights Movement',
+          objectives: [
+            'Analyze rhetorical strategies in "I Have a Dream" and "Letter from Birmingham Jail"',
+            'Understand how King uses allusion, anaphora, and biblical language',
+            'Connect rhetorical choices to historical context'
+          ],
+          content: `
+<p>Martin Luther King Jr. was one of the greatest rhetoricians in American history. His power came not just from his moral position but from his extraordinary ability to use language — specifically, the language his audience already knew and loved — to make his argument irresistible.</p>
+<div class="text-block">
+  <h5>King's Key Rhetorical Strategies</h5>
+  <div class="term"><strong>Anaphora</strong><span>Repetition of phrases at the start of successive sentences — "I have a dream that..."; "We will not be satisfied until..." Creates rhythm, builds intensity, becomes prophetic and chant-like</span></div>
+  <div class="term"><strong>Biblical & Constitutional Allusion</strong><span>King constantly references the Bible and the founding documents — texts his audience already revered — to argue that his cause IS their values, not a challenge to them</span></div>
+  <div class="term"><strong>Prophetic Voice</strong><span>King adopts the tone of an Old Testament prophet: "No, no, we are not satisfied, and we will not be satisfied until 'justice rolls down like waters and righteousness like a mighty stream.'" (Amos 5:24)</span></div>
+  <div class="term"><strong>Inclusion of the Opponent</strong><span>King explicitly addresses white moderates and calls in his Letter that they are "the great stumbling block" — not the KKK but those who prefer order to justice</span></div>
+</div>
+<div class="quote-block">
+  <p>"One day even the state of Mississippi, a state sweltering with the heat of injustice, sweltering with the heat of oppression, will be transformed into an oasis of freedom and justice."</p>
+  <div class="attribution">— Martin Luther King Jr., "I Have a Dream" (1963)</div>
+</div>
+<p>Notice the metaphor (oppression = desert heat → freedom = oasis), the alliteration ("sweltering"/"sweltering"), the geographical specificity (Mississippi = the most resistant state), and the prophetic future tense. This is not a paragraph — it is a musical composition in words. Every choice is deliberate.</p>
+<div class="cultural-note">
+  <div class="cn-label">The Letter from Birmingham Jail</div>
+  <p>Written in the margins of a newspaper in 1963 while King was incarcerated for civil rights protests, the Letter is addressed to white moderate clergymen who had criticized King's tactics as "unwise and untimely." It is one of the great works of American prose — part argument, part autobiography, part biblical meditation. King directly engages his critics' arguments and dismantles them one by one. It is a masterclass in meeting the audience where they are.</p>
+</div>`,
+          cultural: `King's rhetorical genius was partly his ability to use the language of white America AGAINST segregation. By quoting the Declaration of Independence, the Constitution, and the Bible — all texts that white Southern conservatives revered — he forced them to either acknowledge the hypocrisy of their position or explicitly reject the founding documents they claimed to honor. This is called "internal critique" — using a system's own values to expose its failures. It's one of the most powerful forms of argument.`,
+          quiz: [
+            { q: "Anaphora in 'I Have a Dream' serves to:", choices: ["Create logical structure by organizing King's main points", "Create rhythmic intensity through repetition, building toward a prophetic climax that becomes impossible to ignore", "Allow King to address multiple different audiences with different messages", "Show King's inability to find new ways to express his ideas"], a: 1, fun: "The 'I have a dream' section was actually improvised — Mahalia Jackson, the gospel singer, shouted from behind King 'Tell them about the dream!' He put down his prepared remarks and delivered it. The most famous speech in American history was partly unscripted. 🎵" },
+            { q: "King's extensive use of Biblical and Constitutional quotations in his speeches served to:", choices: ["Show off his education at Boston University", "Use texts his audience already revered to argue that the civil rights cause WAS their own values — forcing them to acknowledge the hypocrisy of their position", "Avoid copyright infringement by citing his sources", "Appeal only to Christian and patriotic audiences"], a: 1, fun: "This is internal critique — using a system's own values against its failures. King didn't argue from outside American ideals; he argued that America was betraying its own ideals. Much harder to dismiss than an outsider critique. 🇺🇸" },
+            { q: "In 'Letter from Birmingham Jail,' King's primary audience is:", choices: ["The Birmingham police department that arrested him", "National television audiences watching the civil rights protests", "White moderate clergymen who supported civil rights in principle but criticized King's methods as 'unwise and untimely'", "President Kennedy and the federal government"], a: 2, fun: "King explicitly addresses the Letter to fellow clergymen who had published a statement calling his protests 'unwise and untimely.' His line that 'the white moderate... is the great stumbling block' is a devastating rhetorical move — he's saying polite inaction is as harmful as active opposition. 📝" },
+            { q: "The prophetic voice King adopts in his speeches is effective because:", choices: ["It reminds audiences that King was an ordained minister with religious authority", "It connects his message to a long tradition of speaking moral truth to power, giving his words historical weight beyond the immediate moment", "It makes audiences believe King has supernatural insight into the future", "It is legally protected as religious speech under the First Amendment"], a: 1, fun: "The prophetic tradition — Amos, Isaiah, Jeremiah — involves speaking uncomfortable truth to power, often at personal cost. King knew this tradition and knew his audience knew it. By adopting this voice, he wasn't just making an argument; he was placing himself in a historical lineage. 🔥" },
+          ]
+        },
+        {
+          id: 'u2l3', day: 'Week 7, Day 1',
+          title: 'Logical Fallacies',
+          objectives: [
+            'Identify 10 common logical fallacies',
+            'Understand why fallacies are persuasive despite being logically flawed',
+            'Apply fallacy identification to real arguments'
+          ],
+          content: `
+<p>A logical fallacy is an error in reasoning that makes an argument invalid — even if the conclusion might happen to be true. Understanding fallacies is the most practical thing you can learn in this course, because fallacies are everywhere: in political speeches, advertising, social media, and everyday conversation.</p>
+<div class="text-block">
+  <h5>Essential Logical Fallacies</h5>
+  <div class="term"><strong>Ad Hominem</strong><span>Attack the person rather than the argument. "You can't trust her opinion on climate change — she drives an SUV." Her car doesn't determine whether her climate science is correct.</span></div>
+  <div class="term"><strong>Straw Man</strong><span>Misrepresent the opponent's argument to make it easier to attack. "She wants stricter gun regulations — she wants to take everyone's guns away!" Easier to argue against the extreme version.</span></div>
+  <div class="term"><strong>False Dichotomy</strong><span>Present only two options when more exist. "You're either with us or against us." Almost every complex issue has more than two positions.</span></div>
+  <div class="term"><strong>Slippery Slope</strong><span>Claim one event will inevitably lead to extreme consequences without justification. "If we allow same-sex marriage, soon people will want to marry animals."</span></div>
+  <div class="term"><strong>Appeal to Authority</strong><span>Citing an authority figure who isn't actually an expert in the relevant field. A celebrity endorsing a medical treatment.</span></div>
+  <div class="term"><strong>Post Hoc</strong><span>"After this, therefore because of this" — assuming causation from sequence. "I wore my lucky socks; we won the game. The socks caused the win."</span></div>
+  <div class="term"><strong>Bandwagon (Ad Populum)</strong><span>Something must be good/true because many people believe it. "Everyone agrees that..." Popularity doesn't determine truth.</span></div>
+  <div class="term"><strong>Circular Reasoning</strong><span>Using the conclusion as a premise. "The Bible is true because it says so in the Bible." The premise and conclusion are the same claim.</span></div>
+</div>
+<p>Why do fallacies work despite being illogical? Because they tap into psychological shortcuts (cognitive biases) that evolved to help us make fast decisions. Ad hominem works because source credibility IS sometimes relevant. Slippery slope works because some slopes ARE slippery. The fallacy isn't that the concern is impossible — it's that the conclusion doesn't follow without additional evidence.</p>`,
+          cultural: `The study of logical fallacies goes back to Aristotle's "Sophistical Refutations" (350 BCE) — written specifically to identify the tricks used by sophists (professional debaters who would argue any side for pay). Aristotle was essentially writing the first fact-checking manual. In the age of social media, where fallacious arguments spread in seconds, this 2,300-year-old knowledge has never been more practical. Media literacy IS ancient philosophy applied.`,
+          quiz: [
+            { q: "'You can't listen to her argument about healthcare — she's not even a doctor.' This is an example of:", choices: ["Appeal to authority", "Ad hominem — attacking the person rather than the argument itself", "Straw man — misrepresenting her position", "False dichotomy — implying only doctors can discuss healthcare"], a: 1, fun: "Ad hominem doesn't always mean insult — it means redirecting from the argument to the person. Even if her qualifications ARE relevant, the way to handle that is to address the argument on its merits, then note the credibility question separately. Personal attacks don't refute ideas. 🚫" },
+            { q: "'If we allow students to redo failed tests, soon they'll expect to redo every assignment forever.' This fallacy is:", choices: ["Ad hominem","Appeal to authority","Slippery slope — claiming one policy inevitably leads to extreme outcomes without justification","Post hoc — assuming causation from sequence"], a: 2, fun: "Slippery slope becomes reasonable argument when you can demonstrate the mechanism that makes the slope slippery. 'If we reduce penalties, enforcement data shows violations increase' is evidence-based. 'If we do X, everything will fall apart' without evidence is a fallacy. The slope isn't always slippery! 🎿" },
+            { q: "'I wore my lucky jersey and my team won three games in a row. My jersey is causing the wins.' This is:", choices: ["Circular reasoning","Post hoc ergo propter hoc — assuming causation from sequence without evidence","False dichotomy","Bandwagon fallacy"], a: 1, fun: "Post hoc (Latin: 'after this, therefore because of this') is one of the most common human cognitive errors. We pattern-match obsessively — if B follows A, we assume A caused B. But correlation ≠ causation. The jersey thing is funny; vaccine/autism claims follow this same fallacious logic. 🧦" },
+            { q: "A 'straw man' fallacy involves:", choices: ["Using very weak evidence to support an argument", "Misrepresenting an opponent's position in an exaggerated or simplified form to make it easier to attack", "Attacking the character of the opponent instead of their argument", "Using false data to support a true conclusion"], a: 1, fun: "Straw man is everywhere in political debate. 'Democrats want open borders' (straw man for 'immigration reform') or 'Republicans want dirty air' (straw man for 'fewer regulations'). Steelmanning is the opposite: address the STRONGEST version of your opponent's argument. Much harder, but much more intellectually honest. 🌾" },
+          ]
+        },
+      ]
+    },
+    {
+      id: 'u3', emoji: '🎭', name: 'American Drama',
+      weeks: 'Weeks 10–14',
+      lessons: [
+        {
+          id: 'u3l1', day: 'Week 10, Day 1',
+          title: 'The Crucible — Historical Context & Act I',
+          objectives: [
+            'Understand the historical context: Salem 1692 and McCarthyism 1950s',
+            'Read and analyze Act I of The Crucible',
+            'Identify how Miller uses historical allegory'
+          ],
+          content: `
+<p>Arthur Miller wrote The Crucible in 1953 — not primarily about the Salem witch trials of 1692, but about his own moment: the McCarthy era, when Senator Joseph McCarthy led investigations accusing hundreds of Americans of being communists, destroying careers based on rumor, political pressure, and the willingness to name names.</p>
+<div class="cultural-note">
+  <div class="cn-label">Historical Background: Salem 1692</div>
+  <p>In 1692, a group of young women in Salem, Massachusetts began accusing neighbors of witchcraft. The accusations spread into a mass hysteria resulting in 19 people hanged and one man pressed to death under heavy stones. Modern historians believe the causes included: religious anxiety, land disputes, genuine terror of the unknown, and the social dynamics of a community that had no outlets for expressing grievance except through religious channels.</p>
+</div>
+<div class="cultural-note">
+  <div class="cn-label">The McCarthy Parallel</div>
+  <p>In 1953, Miller was living through his own witch hunt. HUAC (House Un-American Activities Committee) was holding hearings accusing people of communist sympathies. Being named — even without evidence — could end a career. Some cooperated and named colleagues. Others refused and were blacklisted. Miller was called before HUAC in 1956 and refused to name names. He was convicted of contempt of Congress (later overturned). He knew the price of Proctor's choice from the inside.</p>
+</div>
+<p>The power of allegory is that it lets us see a contemporary situation with fresh eyes by displacing it into the past. Miller couldn't write a play literally about HUAC — the censors and cultural climate made that impossible. By setting his story in 1692, he could say everything he needed to say about 1953, and audiences understood him perfectly.</p>`,
+          cultural: `Miller wrote The Crucible after being inspired by visiting Salem and reading the original trial transcripts. He said the real people were more damned than the fictional ones he created. Abigail Williams was actually 11 years old in the historical record, not the teenager Miller portrays. He changed details to serve the drama — which raises interesting questions about historical fiction's responsibility to fact vs. the truth of the larger story it tells.`,
+          quiz: [
+            { q: "Miller's primary purpose in writing 'The Crucible' in 1953 was:", choices: ["To accurately document the historical Salem witch trials for an educational audience", "To use the Salem witch trials as an allegory criticizing McCarthyism — the anti-communist hysteria destroying innocent people in his own time", "To write a horror play about supernatural events in colonial Massachusetts", "To argue that the accused in Salem were actually guilty of witchcraft"], a: 1, fun: "Miller was called before HUAC himself in 1956. He refused to name names — just like Proctor refuses to sign his confession. The biography and the play are inseparable. When Proctor says 'How may I live without my name?' Miller is speaking from his own experience. ✊" },
+            { q: "The Salem witch trials and McCarthyism share which central dynamic?", choices: ["Both involved actual evidence of supernatural or subversive activity", "Both involved mass hysteria where accusation became equivalent to guilt, and survival required naming others or confessing to something false", "Both were ultimately justified by the discoveries made through investigation", "Both took place in the same geographic region of New England"], a: 1, fun: "The key parallel: in both cases, the ONLY way to survive was to confess (to witchcraft/communism) AND name other people. Innocent people were destroyed by accusations alone. The social pressure to conform was enormous. The few who refused — like Miller — paid dearly. 😔" },
+            { q: "Abigail Williams's primary motivation in 'The Crucible' is:", choices: ["Genuine religious belief that witchcraft threatened her community", "Jealousy over Elizabeth Proctor and desire for John Proctor, combined with the discovery that accusations give her power in a society where she has none", "A desire to protect her younger friends from punishment for their dancing in the woods", "Political ambition to become a prominent figure in Salem's Puritan community"], a: 1, fun: "Abigail has essentially no power in Puritan Salem — she's an orphan servant girl. The witch accusations give her unprecedented power: magistrates listen to her, grown men fear her. Miller is saying something important about what happens when powerless people find a way to exercise power through accusation. 🕯️" },
+            { q: "Historical allegory works by:", choices: ["Telling a historical story accurately without drawing any contemporary parallels", "Displacing a contemporary situation into a historical setting, allowing audiences to see the present through the perspective of the past", "Inventing fictional historical periods to avoid accusations of inaccuracy", "Only addressing the historical period without any relevance to contemporary audiences"], a: 1, fun: "George Orwell's Animal Farm (1945) used animals and a farm to critique Stalinist communism. Miller used 1692 to critique 1953. Shakespeare used ancient Rome to discuss Elizabethan power. Allegory lets writers say true things about their moment that couldn't be said directly. Smart audiences always ask: what is this REALLY about? 🐷" },
+          ]
+        },
+      ]
+    },
+    {
+      id: 'u4', emoji: '📗', name: 'The American Novel',
+      weeks: 'Weeks 15–18 + S2 Wks 1–3',
+      lessons: [
+        {
+          id: 'u4l1', day: 'Week 15, Day 1',
+          title: 'The Great Gatsby — Overview & The American Dream',
+          objectives: [
+            'Understand the novel\'s setting, characters, and themes',
+            'Define "the American Dream" and its critique in Fitzgerald',
+            'Connect the novel to the historical context of the 1920s'
+          ],
+          content: `
+<p>Published in 1925, The Great Gatsby is Fitzgerald's brilliant, melancholy critique of the American Dream — not a rejection of it, but a diagnosis of its essential lie. The novel shows us people who believe in the dream completely, and it shows us what happens to them.</p>
+<div class="text-block">
+  <h5>Characters & Their Relationship to the Dream</h5>
+  <div class="term"><strong>Jay Gatsby</strong><span>New money; invented himself from nothing; the dream embodied — he genuinely believes wealth and romantic love are achievable through will and effort</span></div>
+  <div class="term"><strong>Daisy Buchanan</strong><span>Old money; beautiful, careless; represents the glamour of the dream — Nick says "her voice is full of money"</span></div>
+  <div class="term"><strong>Tom Buchanan</strong><span>Old money; brutal, racist, careless; represents what the dream becomes once achieved — hollow entitlement</span></div>
+  <div class="term"><strong>Nick Carraway</strong><span>Narrator; neither very wealthy nor very poor; observer; morally compromised by his proximity to Gatsby's world</span></div>
+  <div class="term"><strong>George & Myrtle Wilson</strong><span>Working class; Valley of Ashes; what the dream destroys — the people who pay the cost of the wealthy's carelessness</span></div>
+</div>
+<div class="quote-block">
+  <p>"Can't repeat the past? Why of course you can!"</p>
+  <div class="attribution">— Jay Gatsby, The Great Gatsby</div>
+</div>
+<p>This line is Gatsby's tragic flaw stated explicitly. The entire novel is Gatsby's attempt to repeat the past — to recapture Daisy, to undo his humble origins, to make himself permanently wealthy and permanently loved. Nick understands by the end: Gatsby's dream was never about Daisy specifically. It was about the moment of pure possibility when everything seemed achievable. That moment is, by definition, irretrievable.</p>`,
+          cultural: `Fitzgerald said the novel was about "the loss of those illusions that give such color to the world that you don't care whether things are true or false as long as they partake of the magical glory." He and his wife Zelda lived the Jazz Age world he critiques. He died at 44, largely forgotten. Zelda died in a mental hospital fire. The Great Gatsby was considered a commercial failure when published. It became the canonical American novel in the 1960s when it was added to high school curricula. Success, like the American Dream, often arrives too late to help anyone.`,
+          quiz: [
+            { q: "Nick says Daisy's voice is 'full of money.' This suggests:", choices: ["Daisy speaks very quickly, like coins jingling", "Daisy's attractiveness and charm are inseparable from — and perhaps entirely constituted by — her wealth and class position", "Nick is commenting on how Daisy talks about money constantly", "Daisy works as a bank teller"], a: 1, fun: "Jordan Baker confirms it: 'It was full of money — that was the inexhaustible charm that rose and fell in it, the jingle of it, the cymbals' song of it.' This is Fitzgerald's most devastating insight: what Gatsby loves about Daisy is inseparable from what she represents socially. He's in love with the dream, not the person. 💰" },
+            { q: "Gatsby's insistence that 'you can repeat the past' reveals:", choices: ["His extraordinary optimism that makes him admirable and worth following", "His tragic flaw — an inability to accept that time moves forward and the past is unretrievable; his dream is literally impossible", "A correct insight — Nick helps him successfully reconnect with Daisy", "Miller's belief that the American Dream is achievable through perseverance"], a: 1, fun: "The green light is beautiful as a symbol of the future precisely because it can never be reached. The moment Gatsby and Daisy reunite, Nick notices: the green light has lost some of its magical quality. When the dream is achieved, even partially, it disappoints — because the dream was never really about the thing desired. 🌊" },
+            { q: "The Wilsons (George and Myrtle) function in the novel to:", choices: ["Provide comic relief from the tension between Gatsby and Tom", "Represent the working-class people who bear the human cost of the wealthy characters' carelessness", "Show that the American Dream is achievable for people of any class", "Contrast with Gatsby as examples of people who never tried to improve their lives"], a: 1, fun: "Myrtle is killed by Daisy's car (driven by Gatsby, covered up by both). George (wrongly blaming Gatsby) kills Gatsby then himself. Three working-class people dead as a direct result of wealthy people's carelessness. Tom and Daisy? They 'smashed up things and creatures and then retreated back into their money.' Not even guilty about it. 😔" },
+            { q: "Fitzgerald's critique of the American Dream in 'Gatsby' is best characterized as:", choices: ["A complete rejection — he argues the dream is a lie and no one believes it genuinely", "A nuanced diagnosis: the dream is genuinely powerful and seductive, but it requires victims, breeds corruption, and is inherently unachievable — which is also what makes it beautiful", "An endorsement — Gatsby is presented as heroic for pursuing his dream", "A political argument that capitalism must be replaced with socialism"], a: 1, fun: "This is what makes Gatsby endure — Fitzgerald isn't simply anti-Dream. He finds it beautiful AND tragic simultaneously. 'So we beat on, boats against the current, borne back ceaselessly into the past.' That final sentence holds both the beauty of striving and the impossibility of arrival in one image. 🚣" },
+          ]
+        },
+      ]
+    },
+    {
+      id: 'u5', emoji: '📖', name: 'Short Fiction',
+      weeks: 'Weeks 4–8, Semester 2',
+      lessons: [
+        {
+          id: 'u5l1', day: 'S2, Week 4, Day 1',
+          title: 'Southern Gothic: Flannery O\'Connor',
+          objectives: [
+            'Define Southern Gothic as a literary subgenre',
+            'Read and analyze "A Good Man Is Hard to Find"',
+            'Understand O\'Connor\'s use of violence as grace'
+          ],
+          content: `
+<p>Southern Gothic is a subgenre that uses Gothic conventions — grotesque characters, decaying settings, dark secrets, the past haunting the present — to explore distinctly Southern American concerns: the legacy of slavery, religious obsession, family dysfunction, and the peculiar relationship between violence and salvation.</p>
+<div class="text-block">
+  <h5>Southern Gothic Characteristics</h5>
+  <div class="term"><strong>Grotesque characters</strong><span>Physically or mentally "different" characters whose oddity serves symbolic or thematic purposes</span></div>
+  <div class="term"><strong>Decaying settings</strong><span>Old plantations, Gothic mansions, small dying towns — the physical environment reflects moral or spiritual decay</span></div>
+  <div class="term"><strong>Dark family secrets</strong><span>The past's crimes haunting the present; skeletons in literal and metaphorical closets</span></div>
+  <div class="term"><strong>Religious themes</strong><span>Often featuring characters with distorted, extreme, or absent faith — and violent confrontations with grace</span></div>
+</div>
+<div class="quote-block">
+  <p>"She would have been a good woman if it had been somebody there to shoot her every minute of her life."</p>
+  <div class="attribution">— The Misfit, in O'Connor's "A Good Man Is Hard to Find" (1953)</div>
+</div>
+<p>Flannery O'Connor was a devout Catholic who believed violence could be a vehicle for divine grace. In "A Good Man Is Hard to Find," the Grandmother — a vain, manipulative woman full of superficial religion — only achieves a moment of genuine compassion and grace in the instant before her death. O'Connor wrote: "For the rest of us who do not feel the hand of grace, she would have felt it for a lifetime." The violence isn't gratuitous — it's sacramental.</p>
+<div class="cultural-note">
+  <div class="cn-label">O'Connor's Catholic Worldview</div>
+  <p>O'Connor wrote about the grotesque so powerfully because she believed God was present in the broken, the ugly, and the violent — not in the comfortable and refined. She said she had to "make things large" for a secular audience that could no longer recognize grace when it appeared in normal guise. Her work is difficult partly because it operates by a theology most readers don't share — which is itself a kind of lesson about interpretation.</p>
+</div>`,
+          cultural: `O'Connor was diagnosed with lupus at 25 and spent most of her adult life on her mother's farm in Milledgeville, Georgia, raising peacocks. Serious illness and rural isolation might have narrowed her world; instead, it seemed to deepen her vision. Her letters (collected as "The Habit of Being") reveal a wickedly funny, intellectually voracious woman utterly at odds with the dark, violent fiction she produced. Writers are always more complicated than their work suggests.`,
+          quiz: [
+            { q: "The Southern Gothic genre uses grotesque and disturbing elements to:", choices: ["Simply shock readers who enjoy horror fiction", "Explore the moral, spiritual, and historical darkness lurking beneath the surface of Southern American life", "Document actual historical events in the American South", "Celebrate Southern culture and heritage through dramatic storytelling"], a: 1, fun: "The 'Gothic' in Southern Gothic comes from European Gothic fiction (Poe, who was from the South, is a bridge figure). But Southern Gothic has specific concerns: the legacy of slavery, religious extremism, family corruption. The grotesque isn't decoration — it's the truth of what these histories produce. 🕯️" },
+            { q: "O'Connor's use of violence in 'A Good Man Is Hard to Find' is best understood as:", choices: ["Gratuitous shock value designed to disturb readers unnecessarily", "A vehicle for grace — the moment of extreme violence forces the Grandmother into authentic compassion that her ordinary comfortable life never produced", "A realistic depiction of crime in the American South", "A critique of Southern culture's tolerance for violence"], a: 1, fun: "O'Connor wrote: 'Grace must wound before it can heal.' The Grandmother is only truly human — truly compassionate — in her final moment. 'Why you're one of my babies. You're one of my own children!' she says to the Misfit. Violence as the only thing that can crack open her selfishness. 🙏" },
+            { q: "The Misfit's line 'She would have been a good woman if it had been somebody there to shoot her every minute of her life' is ironic because:", choices: ["It shows the Misfit is mentally ill and doesn't understand what he's saying", "It's ironically accurate — the Grandmother only becomes genuinely good at the moment of her death; comfort and safety prevented her from achieving authentic virtue earlier", "The Misfit is complimenting the Grandmother sarcastically", "It shows the Misfit secretly admires the Grandmother and wishes she had lived"], a: 1, fun: "O'Connor agreed with the Misfit here. She wrote that this was 'the most significant line in the story.' Extreme situation strips away pretense — the Grandmother finally sees the Misfit as a fellow human being, as her 'own child.' The irony IS the meaning: grace requires crisis. 😮" },
+            { q: "Flannery O'Connor wrote about spiritual themes using grotesque and violent imagery because:", choices: ["She personally enjoyed horror fiction and wanted to write in that genre", "She believed a secular modern audience needed extreme, unsettling situations to recognize moments of grace they'd miss in ordinary guise", "She thought Southern Gothic violence would sell better than gentle religious fiction", "She had experienced personal violence that she processed through her writing"], a: 1, fun: "O'Connor said: 'To the hard of hearing you shout, and for the almost-blind you draw large and startling figures.' Her audience didn't share her Catholic framework, so she had to make grace undeniable by making it catastrophic. It's a communication strategy for a spiritual reality others couldn't see. 📢" },
+          ]
+        },
+      ]
+    },
+    {
+      id: 'u6', emoji: '📝', name: 'Nonfiction & Memoir',
+      weeks: 'Weeks 9–13, Semester 2',
+      lessons: [
+        {
+          id: 'u6l1', day: 'S2, Week 9, Day 1',
+          title: 'James Baldwin & the Essay as Art Form',
+          objectives: [
+            'Understand Baldwin\'s place in American literary history',
+            'Analyze the essay as a literary form',
+            'Read excerpts from "Notes of a Native Son"'
+          ],
+          content: `
+<p>James Baldwin (1924–1987) was a novelist, playwright, essayist, and one of the most essential voices in American literature. His essays — combining rigorous intellectual analysis with autobiographical intimacy and prophetic urgency — expanded what the essay could be and what American literature was willing to say about race.</p>
+<div class="quote-block">
+  <p>"Not everything that is faced can be changed, but nothing can be changed until it is faced."</p>
+  <div class="attribution">— James Baldwin</div>
+</div>
+<div class="text-block">
+  <h5>Baldwin's Major Essay Collections</h5>
+  <div class="term"><strong>Notes of a Native Son (1955)</strong><span>Baldwin's first essay collection; combines personal memoir with analysis of race in America; "Notes" deliberately echoes Richard Wright's novel "Native Son" (1940)</span></div>
+  <div class="term"><strong>The Fire Next Time (1963)</strong><span>Two long essays on race, religion, and the crisis of American democracy; written at the height of the Civil Rights Movement; "Letter to My Nephew"</span></div>
+  <div class="term"><strong>No Name in the Street (1972)</strong><span>Meditates on the assassinations of King, Malcolm X, and Robert Kennedy; more angry, more despairing than earlier work</span></div>
+</div>
+<p>Baldwin's essay "Notes of a Native Son" begins with two facts: his father died on the same day his last child was born, and the same day a race riot broke out in Harlem. Baldwin meditates on his complicated relationship with his father — a bitter, frightened man destroyed by America's racism — and arrives at a devastating insight: he must hold simultaneously the knowledge of injustice AND the refusal of bitterness, because bitterness destroys the person who holds it, not the thing it's directed at.</p>`,
+          cultural: `Baldwin spent much of his adult life in France — he left America partly because he couldn't write about it while inside it. The distance gave him perspective. He returned repeatedly, always with the eye of an outsider looking in. This outsider-insider position — being deeply American while living abroad, loving America while condemning its racism — gives his work a particular tension and clarity that purely domestic writers rarely achieve. Exile, voluntary or forced, has produced some of the greatest American literature.`,
+          quiz: [
+            { q: "Baldwin's essay style is distinctive because it:", choices: ["Avoids personal experience to maintain journalistic objectivity", "Combines autobiography, intellectual analysis, and moral urgency — using personal experience as the lens through which to understand social and political reality", "Uses only historical data and statistics to make arguments about race", "Deliberately imitates Richard Wright's novelistic approach in essay form"], a: 1, fun: "Baldwin said the essay was his most natural form — it could hold thinking and feeling simultaneously. His essays don't argue from outside experience; they start with his own body, his own father, his own fear, and move outward to national and historical analysis. Personal → political. ✍️" },
+            { q: "The title 'Notes of a Native Son' alludes to Richard Wright's 'Native Son' (1940). This allusion suggests:", choices: ["Baldwin is plagiarizing Wright's work for the title", "Baldwin is positioning himself in conversation with Wright — both as tribute and implicit critique of Wright's approach", "The two books are companion volumes meant to be read together", "Baldwin was Wright's student and is acknowledging his teacher"], a: 1, fun: "Baldwin explicitly criticized 'Native Son' — he felt Wright's character Bigger Thomas was a prisoner of sociology, not a full human being. By echoing the title in 'Notes of a Native Son,' Baldwin is saying: I too am a native son, but here is a fuller account of that experience. Literary debate conducted through titles. 📚" },
+            { q: "In 'Notes of a Native Son,' Baldwin's central insight about bitterness is:", choices: ["Bitterness is a justified and necessary response to racial injustice", "Bitterness must be held simultaneously with an understanding that it ultimately destroys the one who holds it — not the injustice it's directed at", "Bitterness should be transformed entirely into love without acknowledging the injustice that caused it", "Bitterness is a uniquely African American experience that white Americans cannot understand"], a: 1, fun: "This is one of the most painful insights in American literature. Baldwin loves his father AND understands what America did to him AND refuses to let that become his own destruction. He has to hold all three things simultaneously. The complexity is the truth. 💔" },
+            { q: "Baldwin's experience of living in France affected his writing about America by:", choices: ["Making him more positive about American society through comparison with Europe", "Giving him the perspective of an outsider looking in — allowing him to see American racism with a clarity difficult to achieve while immersed in it", "Distancing him from the Civil Rights Movement in America so he became less engaged", "Exposing him to French existentialist philosophy which replaced his earlier concerns with race"], a: 1, fun: "Baldwin said he went to France to save his life — he feared he'd be destroyed by America's racism before he could write. In Paris, he could see America from outside and write 'Go Tell It on the Mountain' about Harlem. Distance = perspective. Many of the greatest American writers wrote ABOUT America from somewhere else. 🗼" },
+          ]
+        },
+      ]
+    },
+    {
+      id: 'u7', emoji: '👁️', name: 'Dystopian Literature',
+      weeks: 'Weeks 14–18, Semester 2',
+      lessons: [
+        {
+          id: 'u7l1', day: 'S2, Week 14, Day 1',
+          title: '1984 — Orwell\'s Warning',
+          objectives: [
+            'Understand the historical context of 1984 (WWII, Stalinist USSR)',
+            'Analyze doublethink, Newspeak, and the Party\'s mechanisms of control',
+            'Connect Orwellian concepts to contemporary surveillance and language'
+          ],
+          content: `
+<p>George Orwell published Nineteen Eighty-Four in 1949, dying of tuberculosis just months later. He was writing from direct experience: he had fought in the Spanish Civil War, watched Stalinist communists betray their own allies, and spent WWII watching totalitarian propaganda from both the Soviet Union and Nazi Germany. He was not making predictions — he was describing systems he had seen.</p>
+<div class="text-block">
+  <h5>Key Orwellian Concepts</h5>
+  <div class="term"><strong>Doublethink</strong><span>Holding two contradictory beliefs simultaneously and accepting both. "War is Peace. Freedom is Slavery. Ignorance is Strength." The Party requires you to believe contradictions.</span></div>
+  <div class="term"><strong>Newspeak</strong><span>A deliberately simplified and restricted language designed to make thoughtcrime literally impossible — if you don't have the word for "freedom," you cannot think the concept</span></div>
+  <div class="term"><strong>Thoughtcrime</strong><span>Having thoughts that oppose the Party — itself a crime, even before action. The Thought Police enforce this through constant surveillance.</span></div>
+  <div class="term"><strong>Memory Hole</strong><span>An apparatus for destroying documents and rewriting the historical record. "He who controls the past controls the future; he who controls the present controls the past."</span></div>
+  <div class="term"><strong>Room 101</strong><span>The torture chamber containing each individual's worst personal fear — the Party's tool for completely breaking the self</span></div>
+</div>
+<p>Orwell's most terrifying insight is about language. If Newspeak eliminates the vocabulary for rebellion, rebellion becomes literally unthinkable. This is why authoritarian governments have always fought over language: what gets named, what gets defined, what words are allowed. "Pro-choice" vs. "pro-abortion." "Undocumented immigrants" vs. "illegal aliens." Language wars are power wars.</p>
+<div class="quote-block">
+  <p>"The Party told you to reject the evidence of your eyes and ears. It was their final, most essential command."</p>
+  <div class="attribution">— George Orwell, Nineteen Eighty-Four (1949)</div>
+</div>`,
+          cultural: `Orwell wrote "Politics and the English Language" (1946) three years before 1984 as a companion piece. His argument: vague, pompous language is not just bad style — it enables dishonest thinking. Clear thinking requires clear language. He made six rules, including: "If it is possible to cut a word out, always cut it out." Both essays together form a complete theory about the relationship between language, thought, and power. It is still the best piece of advice ever written for any writer.`,
+          quiz: [
+            { q: "Orwell coined the term 'doublethink' to describe:", choices: ["The ability to think about two different subjects simultaneously", "Holding two contradictory beliefs and accepting both as true — a mental discipline the Party requires of its members", "A type of propaganda that presents only two options when more exist", "The gap between what politicians say and what they do"], a: 1, fun: "'War is Peace' — if you're always at war, you're always mobilized, always afraid, always controllable. The genius of the Party's slogans is that they're impossible to disprove if you've been trained to accept contradiction as truth. Orwell watched Stalin do this in real time. 🤯" },
+            { q: "Orwell's concept of 'Newspeak' argues that:", choices: ["Language evolves naturally toward greater simplicity over time", "A deliberately impoverished vocabulary makes certain thoughts literally impossible to formulate — controlling language controls thought", "New words should be invented to keep language fresh and relevant", "Political language should be simplified so ordinary people can understand it"], a: 1, fun: "This is Orwell's most philosophically radical insight. Can you think a concept you have no words for? Philosophers debate this — but even if you can think it vaguely, you can't COMMUNICATE it without words. The Party doesn't need to prevent every rebel thought; it just needs to make rebellion impossible to organize through language. 💬" },
+            { q: "Orwell based 'Nineteen Eighty-Four' on his experiences with:", choices: ["Predictions about future technology made by scientists of his era", "Stalinist USSR, Nazi Germany, and wartime propaganda he had directly witnessed and analyzed", "His imagined extrapolation of capitalism's future development", "A nightmare he had during his illness that he elaborated into a novel"], a: 1, fun: "Orwell fought against Franco's fascism in Spain, watched Stalin's show trials, worked for the BBC during WWII creating propaganda, and wrote essays on totalitarian language. He was a political journalist before a novelist. 1984 is political analysis in fictional form, not science fiction speculation. 📰" },
+            { q: "The novel's final line — 'He loved Big Brother' — represents:", choices: ["Winston's successful resistance ending in a genuine change of heart", "The Party's complete and terrifying victory — Winston's self has been entirely destroyed, not merely broken", "A hopeful sign that Winston is pretending compliance while secretly resistant", "Orwell's ambiguous ending that could be interpreted as either victory or defeat"], a: 1, fun: "There is no hope in this ending. No resistance. No secret rebellion. The 'ultimate weapon' the Party uses — Room 101, your personal worst fear — doesn't break you into compliance while preserving your self. It destroys the self that could be non-compliant. It is the most devastating ending in 20th-century fiction. 💔" },
+          ]
+        },
+      ]
+    },
+  ]
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const KEY = 'ela3_course';
+let state = JSON.parse(localStorage.getItem(KEY) || '{}');
+// state = { 'u1l1': { score: 85, answers: {...} }, ... }
+
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+function totalLessons() { return COURSE.units.reduce((s,u)=>s+u.lessons.length,0); }
+function doneLessons() { return Object.keys(state).length; }
+function avgScore() {
+  const vals = Object.values(state).map(v=>v.score).filter(v=>v!=null);
+  return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+}
+function getLessonById(id) {
+  for (const u of COURSE.units) for (const l of u.lessons) if (l.id===id) return { unit: u, lesson: l };
+  return null;
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────────────────────────
+function buildSidebar() {
+  const nav = document.getElementById('unit-nav');
+  nav.innerHTML = '';
+  COURSE.units.forEach((unit, ui) => {
+    const doneInUnit = unit.lessons.filter(l => state[l.id]).length;
+    const allDone = doneInUnit === unit.lessons.length;
+
+    const head = document.createElement('div');
+    head.className = 'unit-head';
+    head.textContent = `Unit ${ui+1}`;
+    nav.appendChild(head);
+
+    const btn = document.createElement('button');
+    btn.className = 'unit-btn' + (allDone ? ' completed' : '');
+    btn.innerHTML = `<span class="u-emoji">${unit.emoji}</span><span class="u-name">${unit.name}</span><span class="u-check">${allDone ? '✓' : doneInUnit > 0 ? doneInUnit+'/'+unit.lessons.length : ''}</span>`;
+    btn.onclick = () => toggleLessonList(unit.id);
+    nav.appendChild(btn);
+
+    const list = document.createElement('div');
+    list.className = 'lesson-list'; list.id = 'll_'+unit.id;
+    unit.lessons.forEach((lesson, li) => {
+      const done = state[lesson.id];
+      const lb = document.createElement('button');
+      lb.className = 'lesson-btn' + (done ? ' done' : '');
+      lb.innerHTML = `<span>Day ${li+1}: ${lesson.title.substring(0,28)}${lesson.title.length>28?'…':''}</span>${done ? `<span class="l-score">${done.score}%</span>` : ''}`;
+      lb.onclick = () => showLesson(unit.id, lesson.id);
+      list.appendChild(lb);
+    });
+    nav.appendChild(list);
+  });
+
+  document.getElementById('stat-done').textContent = doneLessons()+'/'+totalLessons();
+  const avg = avgScore();
+  document.getElementById('stat-score').textContent = avg !== null ? avg+'%' : '—';
+  document.getElementById('prog-pill').textContent = doneLessons()+' / '+totalLessons();
+}
+
+function toggleLessonList(uid) {
+  const list = document.getElementById('ll_'+uid);
+  list.classList.toggle('open');
+}
+
+// ── WELCOME ───────────────────────────────────────────────────────────────────
+function showWelcome() {
+  document.getElementById('topbar-title').textContent = 'English III — American Literature & Composition';
+  document.getElementById('topbar-crumb').textContent = '11th Grade · Full Year · 1.0 Credit · NC ELA Standards';
+
+  let cards = COURSE.units.map((u,ui) => {
+    const done = u.lessons.filter(l=>state[l.id]).length;
+    const pct = Math.round(done/u.lessons.length*100);
+    return `<div class="unit-card" onclick="showLesson('${u.id}','${u.lessons[0].id}')">
+      <div class="uc-emoji">${u.emoji}</div>
+      <div class="uc-name">${u.name}</div>
+      <div class="uc-weeks">${u.weeks} · ${u.lessons.length} lesson${u.lessons.length!==1?'s':''}</div>
+      <div class="uc-progress"><div class="uc-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="welcome">
+      <div class="hero-tag">Calming Minds Day School · 2026–2027</div>
+      <h2>English III<br>American Literature<br>& Composition</h2>
+      <p class="intro">From the Harlem Renaissance to Orwell's dystopia — a full year reading the voices that shaped American literature, and learning to read critically, write clearly, and think precisely.</p>
+      <div class="unit-cards">${cards}</div>
+    </div>`;
+}
+
+// ── LESSON ────────────────────────────────────────────────────────────────────
+let curUid = null, curLid = null, quizAnswers = {}, quizSubmitted = false;
+
+function showLesson(uid, lid) {
+  const found = getLessonById(lid);
+  if (!found) return;
+  const { unit, lesson } = found;
+  curUid = uid; curLid = lid;
+  quizAnswers = {}; quizSubmitted = false;
+
+  // Open lesson list
+  document.querySelectorAll('.lesson-list').forEach(el => el.classList.remove('open'));
+  const ll = document.getElementById('ll_'+uid);
+  if (ll) ll.classList.add('open');
+
+  document.getElementById('topbar-title').textContent = lesson.title;
+  document.getElementById('topbar-crumb').textContent = `${unit.name} · ${lesson.day} · ${unit.weeks}`;
+
+  const saved = state[lid];
+  const quizHTML = buildQuizHTML(lesson, saved);
+
+  // Find prev/next
+  const allLessons = COURSE.units.flatMap(u => u.lessons.map(l => ({uid:u.id, lid:l.id})));
+  const idx = allLessons.findIndex(x => x.lid === lid);
+  const prev = idx > 0 ? allLessons[idx-1] : null;
+  const next = idx < allLessons.length-1 ? allLessons[idx+1] : null;
+
+  const navHTML = `<div class="lesson-nav">
+    ${prev ? `<button class="nav-btn prev" onclick="showLesson('${prev.uid}','${prev.lid}')">← Previous</button>` : ''}
+    ${next ? `<button class="nav-btn next-lesson" onclick="showLesson('${next.uid}','${next.lid}')">Next Lesson →</button>` : ''}
+  </div>`;
+
+  document.getElementById('content').innerHTML = `
+    <div class="lesson-header">
+      <div class="unit-tag">${unit.emoji} ${unit.name} · ${unit.weeks}</div>
+      <h2>${lesson.title}</h2>
+      <div class="day-meta">${lesson.day} · Calming Minds Day School · 11th Grade</div>
+    </div>
+    <div class="objectives">
+      <h4>Today's Objectives</h4>
+      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="section">
+      <div class="section-title">Reading & Notes</div>
+      <div class="reading-body">${lesson.content}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Cultural Context</div>
+      <div class="cultural-note"><div class="cn-label">Context</div><p>${lesson.cultural}</p></div>
+    </div>
+    ${quizHTML}
+    ${navHTML}`;
+
+  if (saved) renderPrevAnswers(lesson, saved);
+  window.scrollTo(0,0);
+}
+
+function buildQuizHTML(lesson, saved) {
+  const letters = ['A','B','C','D'];
+  let qHTML = lesson.quiz.map((q,qi) => `
+    <div class="q-card" id="qc${qi}">
+      <div class="q-num">Question ${qi+1} of ${lesson.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.choices.map((c,ci)=>`<button class="choice" id="ch${qi}_${ci}" onclick="pickAnswer(${qi},${ci})">
+        <span class="choice-letter">${letters[ci]}</span><span>${c}</span>
+      </button>`).join('')}
+      <div class="feedback" id="fb${qi}"></div>
+    </div>`).join('');
+
+  const score = saved ? `<div class="score-banner show" id="score-banner"><div class="score-big">${saved.score}%</div><div class="score-msg">${getMsg(saved.score)}</div></div>` :
+    `<div class="score-banner" id="score-banner"><div class="score-big" id="score-big">—</div><div class="score-msg" id="score-msg"></div></div>`;
+
+  return `<div class="quiz-section">
+    <h4>Lesson Quiz</h4>
+    <div class="quiz-sub">${lesson.quiz.length} questions · Submit to save your score</div>
+    ${score}
+    ${qHTML}
+    <button class="check-btn" id="check-btn" onclick="submitQuiz()" ${saved?'disabled':''}>
+      ${saved ? 'Already submitted ✓' : 'Check My Answers ✓'}
+    </button>
+  </div>`;
+}
+
+function renderPrevAnswers(lesson, saved) {
+  quizSubmitted = true;
+  lesson.quiz.forEach((q,qi) => {
+    const sel = saved.answers ? saved.answers[qi] : null;
+    if (sel !== null && sel !== undefined) {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add(sel === q.a ? 'correct' : 'wrong');
+      if (sel !== q.a) document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      const fb = document.getElementById(`fb${qi}`);
+      if (fb) {
+        fb.className = `feedback ${sel===q.a?'ok':'bad'} show`;
+        fb.innerHTML = sel===q.a ? `🎉 Correct! ${q.fun?`<div class="fun-tag">💡 ${q.fun}</div>`:''}` :
+          `The answer is <strong>${['A','B','C','D'][q.a]}. ${q.choices[q.a]}</strong>${q.fun?`<div class="fun-tag">💡 ${q.fun}</div>`:''}`;
+      }
+    }
+  });
+}
+
+function pickAnswer(qi, ci) {
+  if (quizSubmitted) return;
+  document.querySelectorAll(`[id^="ch${qi}_"]`).forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`ch${qi}_${ci}`).classList.add('selected');
+  quizAnswers[qi] = ci;
+}
+
+function submitQuiz() {
+  const found = getLessonById(curLid);
+  if (!found) return;
+  const { lesson } = found;
+  quizSubmitted = true;
+
+  let correct = 0;
+  const answers = {};
+  lesson.quiz.forEach((q,qi) => {
+    const sel = quizAnswers[qi];
+    answers[qi] = sel !== undefined ? sel : null;
+    const fb = document.getElementById(`fb${qi}`);
+
+    if (sel === undefined) {
+      if (fb) { fb.className='feedback bad show'; fb.textContent='No answer — correct: '+['A','B','C','D'][q.a]+'. '+q.choices[q.a]; }
+    } else if (sel === q.a) {
+      correct++;
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('correct');
+      if (fb) { fb.className='feedback ok show'; fb.innerHTML='🎉 Correct!' + (q.fun ? `<div class="fun-tag">💡 ${q.fun}</div>` : ''); }
+    } else {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('wrong');
+      document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      if (fb) { fb.className='feedback bad show'; fb.innerHTML=`Answer: <strong>${['A','B','C','D'][q.a]}. ${q.choices[q.a]}</strong>${q.fun?` <div class="fun-tag">💡 ${q.fun}</div>`:''}`; }
+    }
+  });
+
+  const score = Math.round(correct/lesson.quiz.length*100);
+  state[curLid] = { score, answers };
+  save();
+
+  const banner = document.getElementById('score-banner');
+  if (banner) {
+    banner.className = 'score-banner show';
+    banner.innerHTML = `<div class="score-big">${score}%</div><div class="score-msg">${getMsg(score)}</div>`;
+  }
+  const btn = document.getElementById('check-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitted ✓'; }
+
+  buildSidebar();
+}
+
+function getMsg(s) {
+  if (s===100) return '🏆 Perfect score!';
+  if (s>=90) return '⭐ Outstanding work!';
+  if (s>=80) return '👍 Great job!';
+  if (s>=70) return '📖 Good — review the misses';
+  return '💪 Keep reading and retry!';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildSidebar();
+showWelcome();
+</script>
+</body>
+</html>

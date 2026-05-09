@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>U.S. History II — Calming Minds Day School</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f1ec;
+  --surface: #ffffff;
+  --ink: #1c1c1c;
+  --red: #b22234;
+  --red-light: #f5e8ea;
+  --red-mid: #d4a0a6;
+  --navy: #1a2744;
+  --navy-light: #e8eaf2;
+  --tan: #c8b99a;
+  --tan-light: #f0ece3;
+  --sidebar-w: 276px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── SIDEBAR ──────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--navy);
+  position: fixed; top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column;
+  overflow-y: auto; z-index: 10;
+}
+.sidebar-brand {
+  padding: 26px 20px 18px;
+  border-bottom: 2px solid var(--red);
+  background: linear-gradient(180deg, #0e1a33 0%, var(--navy) 100%);
+}
+.course-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 7px; font-weight: 500;
+}
+.sidebar-brand h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px; color: #fff; font-weight: 700;
+  line-height: 1.2; letter-spacing: .02em;
+}
+.sidebar-brand .school {
+  font-size: 11px; color: rgba(255,255,255,.38);
+  margin-top: 5px; font-family: 'Lora', serif; font-style: italic;
+}
+
+.sidebar-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.stat-cell {
+  padding: 12px 14px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-val {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px; font-weight: 600; color: #e8c44a;
+}
+.stat-lbl { font-size: 9px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .1em; margin-top: 2px; }
+
+.unit-nav { padding: 6px 0 24px; flex: 1; }
+.unit-section-head {
+  font-family: 'Oswald', sans-serif;
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.25); padding: 10px 18px 3px;
+  font-weight: 500;
+}
+.unit-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 8px 18px; color: rgba(255,255,255,.6);
+  font-family: 'Lora', serif; font-size: 12.5px;
+  display: flex; align-items: center; gap: 10px;
+  transition: background .15s, color .15s;
+  border-left: 3px solid transparent;
+}
+.unit-btn:hover { background: rgba(255,255,255,.04); color: rgba(255,255,255,.9); }
+.unit-btn.active { background: rgba(178,34,52,.15); color: #f4a4ad; border-left-color: var(--red); }
+.unit-btn.done { color: rgba(255,255,255,.38); }
+.u-emoji { font-size: 14px; flex-shrink: 0; }
+.u-name { flex: 1; line-height: 1.3; }
+.u-badge {
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px; font-weight: 600; color: #e8c44a;
+}
+
+.lesson-list { display: none; }
+.lesson-list.open { display: block; }
+.lesson-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 5px 18px 5px 42px; color: rgba(255,255,255,.38);
+  font-size: 11px; font-family: 'Lora', serif;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: color .15s, background .15s;
+}
+.lesson-btn:hover { color: rgba(255,255,255,.75); background: rgba(255,255,255,.03); }
+.lesson-btn.active { color: #e8c44a; }
+.lesson-btn.done { color: rgba(255,255,255,.32); }
+.l-score { font-family: 'Oswald', sans-serif; font-size: 10px; color: #6abf69; }
+
+/* ── MAIN ──────────────────────────────────── */
+.main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  background: var(--navy);
+  padding: 14px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 5;
+  border-bottom: 3px solid var(--red);
+}
+.topbar h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px; color: #fff; font-weight: 600; letter-spacing: .03em;
+}
+.topbar .crumb { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 2px; font-style: italic; }
+.prog-badge {
+  font-family: 'Oswald', sans-serif;
+  background: var(--red); color: #fff;
+  padding: 5px 14px; border-radius: 4px; font-size: 13px; font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.content-area { flex: 1; padding: 36px 40px; max-width: 880px; }
+
+/* ── WELCOME ──────────────────────────────────── */
+.welcome-hero {
+  background: var(--navy);
+  border-radius: 12px; padding: 36px 40px; margin-bottom: 28px;
+  position: relative; overflow: hidden;
+}
+.welcome-hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 30px,
+    rgba(255,255,255,.012) 30px, rgba(255,255,255,.012) 31px
+  );
+}
+.welcome-hero .hero-tag {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: .25em; color: var(--red); text-transform: uppercase;
+  margin-bottom: 12px; position: relative;
+}
+.welcome-hero h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 40px; color: #fff; font-weight: 700;
+  line-height: 1.1; letter-spacing: .02em; margin-bottom: 12px; position: relative;
+}
+.welcome-hero .hero-sub {
+  font-size: 15px; color: rgba(255,255,255,.55); font-style: italic;
+  line-height: 1.6; max-width: 520px; position: relative;
+}
+.unit-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.unit-card {
+  background: var(--surface); border: 1px solid #e0d8ce;
+  border-top: 3px solid var(--red);
+  border-radius: 8px; padding: 16px 18px; cursor: pointer;
+  transition: transform .15s, box-shadow .2s, border-top-color .2s;
+}
+.unit-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,39,68,.12); }
+.unit-card:nth-child(even) { border-top-color: var(--navy); }
+.uc-emoji { font-size: 20px; margin-bottom: 7px; }
+.uc-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px;
+  letter-spacing: .02em;
+}
+.uc-weeks { font-size: 11px; color: #888; font-style: italic; }
+.uc-bar { height: 3px; background: #e8e0d4; border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.uc-fill { height: 100%; background: var(--red); transition: width .4s; }
+
+/* ── LESSON ──────────────────────────────────── */
+.lesson-header {
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 18px; margin-bottom: 26px;
+}
+.unit-tag {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 8px; font-weight: 500;
+}
+.lesson-header h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px; color: var(--ink); font-weight: 700;
+  line-height: 1.15; letter-spacing: .02em;
+}
+.day-meta { font-size: 12px; color: #888; margin-top: 5px; font-style: italic; }
+
+.objectives-box {
+  background: var(--navy-light);
+  border-left: 4px solid var(--navy);
+  border-radius: 0 8px 8px 0;
+  padding: 15px 20px; margin-bottom: 26px;
+}
+.obj-head {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--navy); margin-bottom: 10px; font-weight: 600;
+}
+.objectives-box ul { list-style: none; }
+.objectives-box li {
+  font-size: 14px; color: #334; padding: 3px 0;
+  display: flex; gap: 9px; align-items: flex-start;
+}
+.objectives-box li::before { content: "▸"; color: var(--navy); font-size: 10px; margin-top: 4px; flex-shrink: 0; }
+
+.section { margin-bottom: 30px; }
+.sec-head {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--red); font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--red-mid); opacity: .5; }
+
+.body-text { font-size: 15.5px; line-height: 1.85; color: #2a2a2a; }
+.body-text p { margin-bottom: 14px; }
+.body-text strong { color: var(--ink); font-weight: 600; }
+
+.info-table {
+  background: var(--surface); border: 1px solid #ddd6ca;
+  border-radius: 8px; overflow: hidden; margin-bottom: 16px;
+}
+.info-table-head {
+  background: var(--navy); padding: 10px 16px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px; color: #fff; font-weight: 600; letter-spacing: .04em;
+}
+.info-row {
+  display: flex; border-bottom: 1px solid #eee7de;
+  font-size: 14px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-row:nth-child(even) { background: var(--tan-light); }
+.info-key {
+  width: 200px; min-width: 200px; padding: 9px 14px;
+  font-weight: 600; color: var(--navy); border-right: 1px solid #e8ded0;
+  font-size: 13px;
+}
+.info-val { padding: 9px 14px; color: #333; flex: 1; line-height: 1.5; }
+
+.primary-source {
+  background: var(--tan-light);
+  border: 1px solid var(--tan);
+  border-left: 4px solid var(--navy);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px; margin: 14px 0;
+}
+.ps-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 9px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--navy); margin-bottom: 8px; font-weight: 600;
+}
+.primary-source blockquote {
+  font-size: 15px; line-height: 1.7; color: #2a2a2a;
+  font-style: italic; border: none; padding: 0;
+}
+.primary-source .ps-attr {
+  font-size: 12px; color: #666; margin-top: 8px; font-style: normal;
+}
+
+.context-box {
+  background: #f0ece3;
+  border: 1px solid #cfc6b4;
+  border-radius: 8px; padding: 16px 20px; margin: 14px 0;
+}
+.context-box .ctx-head {
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--red); font-weight: 600; margin-bottom: 8px;
+}
+.context-box p { font-size: 14px; line-height: 1.7; color: #3a3020; }
+
+.timeline {
+  border-left: 3px solid var(--red);
+  margin: 16px 0 16px 10px; padding-left: 20px;
+}
+.timeline-item { position: relative; margin-bottom: 14px; }
+.timeline-item::before {
+  content: '';
+  position: absolute; left: -26px; top: 6px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red);
+}
+.timeline-year {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px; color: var(--red); font-weight: 600; letter-spacing: .05em;
+}
+.timeline-event { font-size: 14px; color: #333; margin-top: 2px; line-height: 1.5; }
+
+/* ── QUIZ ──────────────────────────────────── */
+.quiz-wrap {
+  background: var(--navy);
+  border-radius: 12px; padding: 26px 30px; margin-top: 10px;
+}
+.quiz-wrap h4 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px; color: #e8c44a; letter-spacing: .05em; margin-bottom: 4px;
+}
+.quiz-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 22px; font-style: italic; }
+
+.score-banner {
+  background: rgba(178,34,52,.2); border: 1px solid rgba(178,34,52,.4);
+  border-radius: 8px; padding: 16px; text-align: center;
+  display: none; margin-bottom: 18px;
+}
+.score-banner.show { display: block; }
+.score-big {
+  font-family: 'Oswald', sans-serif;
+  font-size: 46px; color: #e8c44a; font-weight: 700;
+}
+.score-msg { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 3px; }
+.next-lesson-btn {
+  background: none; border: 1.5px solid #e8c44a; color: #e8c44a;
+  padding: 7px 20px; border-radius: 6px; font-size: 12px; cursor: pointer;
+  margin-top: 10px; font-family: 'Oswald', sans-serif; font-weight: 600;
+  letter-spacing: .05em; transition: background .2s, color .2s;
+}
+.next-lesson-btn:hover { background: #e8c44a; color: var(--navy); }
+
+.q-card {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 8px; padding: 18px; margin-bottom: 14px;
+}
+.q-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(232,196,74,.6); margin-bottom: 8px;
+}
+.q-text {
+  font-size: 15px; color: #fff; line-height: 1.5; margin-bottom: 13px;
+  font-family: 'Lora', serif;
+}
+.choice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 13px; border-radius: 6px;
+  border: 1.5px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.03);
+  cursor: pointer; margin-bottom: 6px;
+  font-size: 13.5px; color: rgba(255,255,255,.75);
+  transition: border-color .15s, background .15s;
+  text-align: left; width: 100%;
+  font-family: 'Lora', serif;
+}
+.choice:hover { border-color: #e8c44a; background: rgba(232,196,74,.08); }
+.choice.selected { border-color: #e8c44a; background: rgba(232,196,74,.1); color: #fff; }
+.choice.correct { border-color: #6abf69 !important; background: rgba(106,191,105,.12) !important; color: #c8f0c7; }
+.choice.wrong { border-color: #ef9a9a !important; background: rgba(239,154,154,.1) !important; color: #ffd0d0; }
+.c-letter {
+  width: 22px; height: 22px; border-radius: 4px; flex-shrink: 0;
+  background: rgba(232,196,74,.15); color: #e8c44a;
+  font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.correct .c-letter { background: #6abf69; color: #fff; }
+.wrong .c-letter { background: #ef9a9a; color: #fff; }
+
+.feedback {
+  border-radius: 6px; padding: 9px 13px; margin-top: 8px;
+  font-size: 13px; line-height: 1.55; display: none;
+  font-family: 'Lora', serif;
+}
+.feedback.show { display: block; }
+.feedback.ok { background: rgba(106,191,105,.1); color: #b9f0b8; border: 1px solid rgba(106,191,105,.25); }
+.feedback.bad { background: rgba(239,154,154,.1); color: #ffd0d0; border: 1px solid rgba(239,154,154,.2); }
+.fun-note { font-size: 12px; margin-top: 5px; opacity: .8; font-style: italic; }
+
+.submit-btn {
+  background: var(--red); color: #fff; border: none;
+  padding: 11px 26px; border-radius: 6px;
+  font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 600;
+  letter-spacing: .06em; cursor: pointer; margin-top: 6px;
+  transition: opacity .2s, transform .15s;
+}
+.submit-btn:hover { opacity: .88; transform: translateY(-1px); }
+.submit-btn:disabled { opacity: .3; cursor: default; transform: none; }
+
+.lesson-nav {
+  display: flex; gap: 10px; margin-top: 30px; padding-top: 22px;
+  border-top: 1px solid #ddd4c4;
+}
+.nav-btn {
+  padding: 9px 20px; border-radius: 6px; font-size: 13px;
+  cursor: pointer; transition: .15s; font-family: 'Oswald', sans-serif;
+  font-weight: 600; letter-spacing: .04em;
+}
+.nav-prev { background: #fff; border: 1.5px solid #ccc; color: #666; }
+.nav-prev:hover { border-color: var(--navy); color: var(--navy); }
+.nav-next { background: var(--navy); border: none; color: #e8c44a; }
+.nav-next:hover { background: #243358; }
+
+@media(max-width:800px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.unit-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="course-label">Course 2 of 7</div>
+    <h1>U.S. History II</h1>
+    <div class="school">Calming Minds Day School · 2026–27</div>
+  </div>
+  <div class="sidebar-stats">
+    <div class="stat-cell"><div class="stat-val" id="stat-done">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat-cell"><div class="stat-val" id="stat-avg">—</div><div class="stat-lbl">Avg Score</div></div>
+  </div>
+  <nav class="unit-nav" id="unit-nav"></nav>
+</nav>
+
+<main class="main">
+  <header class="topbar">
+    <div>
+      <h2 id="topbar-title">United States History II</h2>
+      <div class="crumb" id="topbar-crumb">11th Grade · Full Year · 1.0 Credit · NC American History Standards</div>
+    </div>
+    <div class="prog-badge" id="prog-badge">0 / 40</div>
+  </header>
+  <div class="content-area" id="content"></div>
+</main>
+
+<script>
+const COURSE = { units: [
+
+// ══════════════════════════════════════════════
+// UNIT 1: RECONSTRUCTION
+// ══════════════════════════════════════════════
+{id:'u1',emoji:'🔨',name:'Reconstruction',weeks:'Weeks 1–4',lessons:[
+{id:'u1l1',day:'Week 1, Day 1',title:'Reconstruction: Promises and Betrayal',
+objectives:['Explain the competing visions for Reconstruction','Analyze the 13th, 14th, and 15th Amendments','Understand what was achieved and why it ended'],
+content:`<div class="body-text">
+<p>The Civil War ended in April 1865. Four million enslaved people were free. The question that consumed the next twelve years — and in many ways the next century — was: what does "free" actually mean, and who gets to decide?</p>
+<div class="info-table">
+  <div class="info-table-head">The Three Reconstruction Amendments</div>
+  <div class="info-row"><div class="info-key">13th (1865)</div><div class="info-val">Abolished slavery — except as punishment for crime. That exception remains in the Constitution today and is at the center of ongoing debates about prison labor.</div></div>
+  <div class="info-row"><div class="info-key">14th (1868)</div><div class="info-val">Guaranteed citizenship and equal protection of the laws for all persons born or naturalized in the US. One of the most-litigated amendments today — used to challenge segregation, extend civil rights, and settle presidential elections.</div></div>
+  <div class="info-row"><div class="info-key">15th (1869)</div><div class="info-val">Prohibited denying the right to vote based on race, color, or previous condition of servitude. Systematically undermined by literacy tests, poll taxes, and violence for the next century.</div></div>
+</div>
+<p>There were two competing visions for how the South should return to the Union. <strong>Presidential Reconstruction</strong> (Lincoln's plan, then Johnson's) was relatively lenient — quick re-admission, minimal conditions. <strong>Radical Reconstruction</strong> (Congressional Republicans) insisted on real protections for formerly enslaved people before re-admission. The Radicals briefly won, but their gains were systematically dismantled after the Compromise of 1877 removed federal troops from the South.</p>
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-year">1865</div><div class="timeline-event">13th Amendment ratified · Freedmen's Bureau established · Lincoln assassinated; Johnson becomes president</div></div>
+  <div class="timeline-item"><div class="timeline-year">1866–67</div><div class="timeline-event">Congress passes Civil Rights Act over Johnson's veto · Radical Reconstruction begins · Military districts established in South</div></div>
+  <div class="timeline-item"><div class="timeline-year">1868</div><div class="timeline-event">14th Amendment ratified · Johnson impeached (acquitted by one vote) · Ulysses Grant elected</div></div>
+  <div class="timeline-item"><div class="timeline-year">1870</div><div class="timeline-event">15th Amendment ratified · 16 Black men serve in Congress during Reconstruction era</div></div>
+  <div class="timeline-item"><div class="timeline-year">1877</div><div class="timeline-event">Compromise of 1877 ends Reconstruction · Federal troops withdrawn · Jim Crow era begins</div></div>
+</div>
+<p>The Freedmen's Bureau, established in 1865, provided food, clothing, medical care, and legal assistance to formerly enslaved people and poor white Southerners. It established over 1,000 schools and many of America's historically Black colleges trace their origins to this period. But the Bureau was chronically underfunded, politically opposed, and shut down by 1872.</p>
+<p>The real promise of Reconstruction — land redistribution — was never fulfilled. Thaddeus Stevens pushed for "40 acres and a mule" to give freedpeople genuine economic independence. It was defeated. Without economic independence, political freedom remained fragile. Within a generation, sharecropping and debt peonage created conditions barely distinguishable from slavery.</p>
+</div>`,
+cultural:`The phrase "Reconstruction" has two meanings that matter: the political Reconstruction period (1865–1877) and the ongoing reconstruction of the historical memory of that period. For most of the 20th century, mainstream historical accounts portrayed Reconstruction as a failure caused by incompetent or corrupt Black politicians and vindictive Radical Republicans — a narrative directly descended from white Southern propaganda. The actual historical record, reconstructed by scholars like W.E.B. Du Bois ("Black Reconstruction," 1935) and later generations of historians, shows the opposite: Reconstruction was one of the most democratic periods in American history, and it was destroyed not by its failures but by violent white supremacist resistance.`,
+quiz:[
+  {q:"The 14th Amendment (1868) is still considered one of the most important today because:",choices:["It was the last amendment added to the Constitution","Its equal protection and due process clauses have been used in landmark cases from desegregation to same-sex marriage to presidential elections","It directly abolished slavery throughout the United States","It was the first amendment passed after the founding era"],a:1,fun:"Brown v. Board (1954), Roe v. Wade (1973), Obergefell v. Hodges (2015), Bush v. Gore (2000) — all rely on the 14th Amendment. It was written for formerly enslaved people in 1868 and has since been applied to virtually every major civil rights question in American history. ⚖️"},
+  {q:"The Compromise of 1877 effectively ended Reconstruction by:",choices:["Passing a constitutional amendment removing federal protections for Black Americans","Withdrawing federal troops from the South as part of a backroom deal settling the disputed 1876 presidential election","Electing a Southern Democrat as president who immediately reversed Reconstruction policies","Declaring the Civil War amendments unconstitutional in a Supreme Court ruling"],a:1,fun:"The 1876 election between Hayes (R) and Tilden (D) was disputed in three states. The backroom deal: Republicans get the White House; Democrats get federal troops withdrawn from the South. Black Americans had no seat at the table. Their political gains were immediately dismantled once federal protection was gone. 🤝"},
+  {q:"'Black Codes' passed after the Civil War were designed to:",choices:["Provide formerly enslaved people with legal protection and economic opportunity","Restrict the freedom of Black Americans and effectively recreate labor conditions similar to slavery through criminal penalties for 'vagrancy' and forced labor contracts","Allow Black Americans to vote but not hold public office","Integrate formerly enslaved people into Southern society gradually over 25 years"],a:1,fun:"Black Codes required Black workers to sign yearly contracts; those without contracts could be arrested for 'vagrancy' and their labor sold. They were essentially slavery with different paperwork. Federal Reconstruction legislation struck them down — temporarily. Once troops left, Jim Crow laws served the same function. ⛓️"},
+  {q:"Thaddeus Stevens's push for '40 acres and a mule' was significant because:",choices:["It would have given formerly enslaved people a symbolic gesture of reconciliation","It would have provided genuine economic independence, making political freedom sustainable — its defeat left freedpeople economically vulnerable to planter class control","It was the only Reconstruction measure that actually passed and was implemented","It was intended to humiliate Confederate landowners rather than help freedpeople"],a:1,fun:"Without economic independence, political rights are fragile. You can't vote freely when your landlord controls your livelihood. Stevens understood that land reform was the only way to make freedom real. His vision was defeated — and the consequence was generations of debt peonage, sharecropping, and economic subjugation that lasted well into the 20th century. 🌱"}
+]},
+
+{id:'u1l2',day:'Week 2, Day 1',title:'The Rise of Jim Crow',
+objectives:['Explain the mechanisms of Jim Crow segregation','Analyze Plessy v. Ferguson and its "separate but equal" doctrine','Understand how Ida B. Wells fought back through journalism'],
+content:`<div class="body-text">
+<p>After the withdrawal of federal troops in 1877, Southern states systematically dismantled Black political power and built a comprehensive system of racial segregation and terror. Jim Crow — named after a minstrel show character — was not just a set of laws. It was a total social system enforced by law, economic coercion, and the constant threat of violence.</p>
+<div class="info-table">
+  <div class="info-table-head">Mechanisms of Jim Crow</div>
+  <div class="info-row"><div class="info-key">Segregation laws</div><div class="info-val">Separate schools, hospitals, parks, restaurants, transportation, water fountains, restrooms — inferior facilities everywhere</div></div>
+  <div class="info-row"><div class="info-key">Voting suppression</div><div class="info-val">Literacy tests (applied selectively), poll taxes, grandfather clauses, white primaries — effectively disenfranchising Black voters despite the 15th Amendment</div></div>
+  <div class="info-row"><div class="info-key">Economic coercion</div><div class="info-val">Sharecropping and debt peonage kept Black farmers tied to white-owned land; Black business owners faced discrimination and violence</div></div>
+  <div class="info-row"><div class="info-key">Lynching</div><div class="info-val">Over 4,000 documented racial terror lynchings in the South between 1877–1950; used to terrorize communities and enforce social control</div></div>
+</div>
+<p>In 1896, the Supreme Court's ruling in <strong>Plessy v. Ferguson</strong> gave constitutional blessing to segregation. Homer Plessy — who was 1/8 Black and deliberately sat in a whites-only train car to challenge the law — was arrested. The Court ruled 7-1 that "separate but equal" facilities were constitutional. Justice John Marshall Harlan's lone dissent is one of the greatest in Supreme Court history: "Our Constitution is color-blind and neither knows nor tolerates classes among citizens."</p>
+<div class="primary-source">
+  <div class="ps-label">Primary Source — Ida B. Wells, "Southern Horrors" (1892)</div>
+  <blockquote>"The way to right wrongs is to turn the light of truth upon them."</blockquote>
+  <div class="ps-attr">Wells documented hundreds of lynchings and statistically disproved the rape justifications routinely given. She was so effective that a mob destroyed her newspaper office. She continued writing from the North.</div>
+</div>
+<p>Ida B. Wells was one of the most important journalists and activists of her era. When a mob destroyed her Memphis newspaper office in 1892 after she published articles exposing lynching, she moved to the North and continued her anti-lynching crusade. She co-founded the NAACP (1909) and spent decades campaigning for federal anti-lynching legislation — which Congress did not pass until 2022.</p>
+</div>`,
+cultural:`Plessy v. Ferguson stood as constitutional law for 58 years. The man whose lone dissent was proven right — Justice John Marshall Harlan — was himself a former slaveholder from Kentucky who had initially opposed the Civil War amendments. He changed his mind. His dissent was quoted extensively when the Supreme Court finally overturned Plessy in Brown v. Board of Education (1954). Sometimes the right position loses for decades before history vindicates it. Harlan never saw that vindication.`,
+quiz:[
+  {q:"Plessy v. Ferguson (1896) established which doctrine that governed American law until 1954?",choices:["Separate but equal — racial segregation is constitutional as long as facilities are theoretically equal","Strict scrutiny — any racial classification must have a compelling government interest","Colorblindness — the Constitution forbids all racial classifications","Separate and unequal — the Court acknowledged inequality but allowed it temporarily"],a:0,fun:"Homer Plessy was arrested for sitting in a whites-only train car — a deliberate act of civil disobedience planned by civil rights organizations. He lost. Justice Harlan's lone dissent correctly predicted how history would judge the ruling. It took 58 years to overturn. ⚖️"},
+  {q:"Ida B. Wells's anti-lynching journalism was significant because:",choices:["She was the first woman to win a Pulitzer Prize for investigative reporting","She statistically documented that the rape justification routinely given for lynching was false — the real motives were economic competition and racial intimidation — destroying the main public justification","She successfully lobbied Congress to pass anti-lynching legislation in the 1890s","She worked within the system by filing lawsuits in Southern courts to challenge lynching"],a:1,fun:"Wells counted. She documented case after case. She showed that in most lynchings, the 'crime' either didn't happen or was a commercial dispute, a personal disagreement, or simply 'acting too big.' The propaganda that lynching protected white women was exposed as a lie. Her newspaper office was burned down. She kept writing. 💪"},
+  {q:"Voting suppression under Jim Crow was effective despite the 15th Amendment because:",choices:["The Supreme Court ruled the 15th Amendment only applied to federal elections","Mechanisms like literacy tests, poll taxes, and grandfather clauses were facially race-neutral but applied selectively to disenfranchise Black voters — and were upheld by courts","The 15th Amendment was repealed by Southern states after Reconstruction ended","Black voters chose not to vote due to economic concerns rather than legal barriers"],a:1,fun:"The grandfather clause was especially cynical: you could vote without paying the poll tax or passing the literacy test if your grandfather had been eligible to vote before 1867 — i.e., before formerly enslaved people could vote. Perfectly 'race-neutral.' Perfectly effective at disenfranchisement. 🗳️"},
+  {q:"The 'separate but equal' doctrine in practice meant:",choices:["Genuinely equal facilities that happened to be physically separate","Separate and systematically inferior — Black schools, hospitals, and public facilities received a fraction of the funding of white ones","Equal funding but different curriculum reflecting cultural differences","Separate facilities only in certain states that chose to implement the policy"],a:1,fun:"There was never any attempt to make the facilities equal. Black schools in the South received a small fraction of per-pupil funding compared to white schools. The whole point of 'separate but equal' was to provide legal cover for inequality. Brown v. Board finally said the obvious: separate is inherently unequal. 📚"}
+]},
+
+{id:'u1l3',day:'Week 3, Day 1',title:'Frederick Douglass and the Black Intellectual Tradition',
+objectives:['Understand Frederick Douglass\'s life and arguments','Analyze Booker T. Washington vs. W.E.B. Du Bois debate','Connect the Black intellectual tradition to Reconstruction and its aftermath'],
+content:`<div class="body-text">
+<p>The period from 1865 to 1920 produced some of the most important thinkers in American history, wrestling with the foundational question of what freedom means for people who had been legally enslaved and were now legally free but still systematically oppressed.</p>
+<div class="info-table">
+  <div class="info-table-head">Three Giants of the Black Intellectual Tradition</div>
+  <div class="info-row"><div class="info-key">Frederick Douglass (1818–1895)</div><div class="info-val">Escaped slavery; orator and writer; demanded immediate full political and civil equality; "If there is no struggle, there is no progress." Advised Lincoln; US Marshal under Hayes.</div></div>
+  <div class="info-row"><div class="info-key">Booker T. Washington (1856–1915)</div><div class="info-val">Born enslaved; founded Tuskegee Institute; advocated vocational education and economic self-sufficiency before political rights — controversial "Atlanta Compromise" (1895) accepted segregation temporarily</div></div>
+  <div class="info-row"><div class="info-key">W.E.B. Du Bois (1868–1963)</div><div class="info-val">First Black Harvard PhD; founded NAACP; "Talented Tenth" — the educated elite should lead; criticized Washington's accommodation; "double consciousness"; "Black Reconstruction" (1935)</div></div>
+</div>
+<div class="primary-source">
+  <div class="ps-label">Primary Source — Frederick Douglass, "What to the Slave Is the Fourth of July?" (1852)</div>
+  <blockquote>"What, to the American slave, is your Fourth of July? I answer: a day that reveals to him, more than all other days in the year, the gross injustice and cruelty to which he is the constant victim."</blockquote>
+  <div class="ps-attr">Delivered in Rochester, NY, 1852. Douglass was invited to speak at a Fourth of July celebration. He used the occasion to deliver one of the most powerful antislavery speeches in American history — using the ideals of the holiday against those who celebrated it while tolerating slavery.</div>
+</div>
+<p>The Washington-Du Bois debate was not simply about strategy — it was about human dignity. Washington argued: given the current power reality, demand too much and get nothing; build economic power first and political power will follow. Du Bois argued: accepting second-class citizenship even temporarily teaches a people to accept permanent inferiority; civil and political rights are not luxuries that come after economic security — they are prerequisites for it.</p>
+<p>History has largely vindicated Du Bois. Washington's approach, however practical it seemed, did not produce the political equality he promised would follow economic progress. What produced that was the Civil Rights Movement — mass mobilization demanding the rights that could not be earned gradually.</p>
+</div>`,
+cultural:`Du Bois's concept of "double consciousness" — from "The Souls of Black Folk" (1903) — describes the experience of "always looking at one's self through the eyes of others, of measuring one's soul by the tape of a world that looks on in amused contempt and pity." It is one of the most cited concepts in African American studies and remains deeply relevant. Du Bois lived to 95 and became increasingly radical. He joined the Communist Party at age 93, renounced his US citizenship, and moved to Ghana, where he died the day before the March on Washington in 1963 — the day before MLK's speech. The timing felt like history.`,
+quiz:[
+  {q:"Douglass's speech 'What to the Slave Is the Fourth of July?' was rhetorically effective because:",choices:["He avoided confrontation by praising American ideals without criticizing slavery","He used America's own founding ideals — freedom, equality, liberty — to expose the hypocrisy of celebrating those ideals while tolerating slavery","He made a purely emotional appeal without logical argument","He focused only on the economic costs of slavery rather than its moral dimensions"],a:1,fun:"This is internal critique at its most powerful. Douglass didn't argue from outside American values — he argued that America was violating its own values. Much harder to dismiss. He delivered it on July 5th (not the 4th) — the day after the celebration. That choice was also deliberate. 🇺🇸"},
+  {q:"The Washington-Du Bois debate centered on whether:",choices:["Black Americans should seek integration or separate nationhood","Black Americans should prioritize economic self-sufficiency before political rights (Washington) OR demand full civil and political equality immediately (Du Bois)","Reconstruction had been a success or failure","Black Americans should emigrate to Africa or remain in the United States"],a:1,fun:"This debate echoes through every civil rights movement: incremental pragmatism vs. demanding full rights immediately. Washington had the ear of white philanthropists and presidents. Du Bois had the moral high ground. The Civil Rights Movement ultimately followed Du Bois's approach — mass action demanding full rights, not gradual accommodation. 🔥"},
+  {q:"Du Bois's 'double consciousness' concept describes:",choices:["The tension between African cultural heritage and American cultural assimilation","Always seeing yourself through the eyes of others — specifically, the experience of Black Americans measuring themselves against a society that views them with contempt","A psychological condition requiring treatment","The difference between African American urban and rural experience"],a:1,fun:"'One ever feels his two-ness — an American, a Negro; two souls, two thoughts, two unreconciled strivings.' 1903. This concept is 120+ years old and sociologists still cite it because the experience it describes hasn't fully changed. That's either the greatness of the concept or an indictment of American society. Probably both. 🧠"},
+  {q:"History has largely vindicated Du Bois over Washington because:",choices:["Washington's Tuskegee Institute was not educationally successful","Economic progress under Washington's approach did not produce the political equality he predicted would follow — political rights required direct demands, not gradual accommodation","Du Bois was personally more admirable than Washington","Washington explicitly endorsed segregation as permanently desirable"],a:1,fun:"Black Americans made significant economic progress in some areas during Washington's era — and still faced systematic political exclusion and racial terror. The Civil Rights Movement that finally produced the Civil Rights Act was Du Boisian: demand full rights now, not later. Washington's strategy, however strategically sophisticated, ultimately required accepting a dignity that couldn't be accepted. ⚖️"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 2: GILDED AGE & PROGRESSIVISM
+// ══════════════════════════════════════════════
+{id:'u2',emoji:'🏭',name:'Gilded Age & Progressivism',weeks:'Weeks 5–8',lessons:[
+{id:'u2l1',day:'Week 5, Day 1',title:'Industrialization and the Robber Barons',
+objectives:['Explain the causes and effects of rapid industrialization','Analyze the rise of monopoly capitalism and its critics','Evaluate the robber baron vs. captain of industry debate'],
+content:`<div class="body-text">
+<p>Between 1870 and 1900, the United States transformed from a largely agricultural economy into the world's leading industrial power. This transformation created enormous wealth — and enormous inequality, labor exploitation, and environmental destruction.</p>
+<div class="info-table">
+  <div class="info-table-head">The Industrial Giants</div>
+  <div class="info-row"><div class="info-key">Andrew Carnegie (steel)</div><div class="info-val">Built US Steel through vertical integration; "Gospel of Wealth" — rich have duty to give back; also brutally suppressed the Homestead Strike. Gave away 90% of his fortune — about $65 billion today.</div></div>
+  <div class="info-row"><div class="info-key">John D. Rockefeller (oil)</div><div class="info-val">Standard Oil controlled 90% of US oil refining; used horizontal integration and predatory pricing to eliminate competitors; broken up under Sherman Antitrust Act (1911)</div></div>
+  <div class="info-row"><div class="info-key">J.P. Morgan (banking/finance)</div><div class="info-val">Financed the reorganization of railroads and US Steel; so powerful he personally bailed out the US government during the Panic of 1893; essentially ran a private Federal Reserve</div></div>
+  <div class="info-row"><div class="info-key">Cornelius Vanderbilt (railroads)</div><div class="info-val">Consolidated railroad networks; cut rates and services; "What do I care about the law? Hain't I got the power?"</div></div>
+</div>
+<p>Mark Twain coined the term "Gilded Age" — gilded means gold on the surface, with something less appealing underneath. The era's glittering wealth concealed brutal working conditions: 12-hour days, six-day weeks, child labor, dangerous factories, no safety regulations, no unions (or crushed unions), and no social safety net. Industrial accidents killed and maimed tens of thousands of workers annually.</p>
+<div class="context-box">
+  <div class="ctx-head">Social Darwinism</div>
+  <p>Herbert Spencer (not Charles Darwin) coined "survival of the fittest" and applied evolutionary theory to economics: the rich are wealthy because they are naturally superior; poverty is natural selection; helping the poor "interferes with nature." Carnegie initially believed this. Most Gilded Age industrialists used it to justify their position. It is bad science weaponized as moral philosophy — a pattern that recurs throughout history.</p>
+</div>
+<p>The Sherman Antitrust Act (1890) was passed to prevent monopolies from eliminating competition, but it was barely enforced until Theodore Roosevelt used it aggressively in the early 1900s, breaking up Standard Oil, US Steel, and 44 other monopolies. Roosevelt earned the nickname "Trust Buster" — the first president to seriously challenge corporate power.</p>
+</div>`,
+cultural:`The debate over whether Gilded Age industrialists were "robber barons" (exploiters) or "captains of industry" (builders) is still alive. Carnegie's Gospel of Wealth, his 2,500 public libraries, and his insistence that the wealthy have a duty to give back sounds progressive — until you remember the Homestead Strike of 1892, when he hired Pinkerton agents to attack striking workers, killing nine, while he vacationed in Scotland and blamed his manager. The same person can fund libraries and crush workers. Complexity isn't an excuse — it's a description of how power actually operates.`,
+quiz:[
+  {q:"Mark Twain's term 'Gilded Age' described Gilded Age society as:",choices:["A golden era of American prosperity and equality","Glittering on the surface while concealing serious social problems — inequality, labor exploitation, and corruption — underneath","A period when gold rushes created widespread prosperity in the West","An era of enlightened business leadership that built America's industrial power"],a:1,fun:"Gilded = gold plated, not solid gold. The wealth was real but so was the poverty, the child labor, the 12-hour days, the industrial deaths. The image and the reality were radically different. Twain saw through it. He usually did. ✨"},
+  {q:"The Sherman Antitrust Act (1890) was originally passed to address:",choices:["Corruption in the railroad industry specifically","Monopolies that eliminated competition and harmed consumers — though it was barely enforced until Theodore Roosevelt used it aggressively","Immigration competition threatening American workers","The railroads' refusal to transport agricultural products at fair prices"],a:1,fun:"The Act sat on the books for a decade with little enforcement. Teddy Roosevelt changed this dramatically — he sued 44 companies in 7 years. The Standard Oil breakup (1911) split Rockefeller's monopoly into 34 companies. Several of those companies eventually merged into... ExxonMobil. History is circular. 🔄"},
+  {q:"Social Darwinism was problematic as an economic philosophy because:",choices:["It correctly applied Darwin's biological theories to economic competition","It misapplied evolutionary biology to justify economic inequality — using 'survival of the fittest' to argue that poverty is natural and helping the poor interferes with nature","It was only held by a small minority of businessmen and had little real influence","It promoted government regulation of business, which was bad for economic growth"],a:1,fun:"Darwin's theory described how species evolve through natural selection over millennia. Spencer applied it to individuals within a single generation in an industrial economy — a completely different context with completely different mechanisms. Bad science + convenient ideology = Social Darwinism. It justified every cruelty as 'nature.' 🧬"},
+  {q:"The Homestead Strike of 1892 demonstrated that:",choices:["Unions could successfully negotiate with major industrial corporations through peaceful means","Gilded Age industrialists would use private hired security and state violence to crush organized labor — Carnegie ordered Pinkerton agents who killed striking workers","The federal government supported workers' rights to organize and strike","Industrial workers had sufficient political power to win significant concessions"],a:1,fun:"300 Pinkerton agents arrived by barge. An actual battle: 9 strikers and 7 Pinkertons killed. The governor sent 8,500 state militia. Labor lost. Carnegie, vacationing in Scotland, blamed his manager Henry Clay Frick. He'd actually authorized the strategy. Same person who gave away 2,500 libraries. 🥊"}
+]},
+
+{id:'u2l2',day:'Week 6, Day 1',title:'The Progressive Era and Reform',
+objectives:['Explain the causes and goals of the Progressive movement','Analyze the role of muckrakers in exposing social problems','Evaluate key Progressive reforms and their limitations'],
+content:`<div class="body-text">
+<p>By 1900, the excesses of the Gilded Age had created a powerful reform movement: Progressivism. Progressives were a diverse coalition — middle-class reformers, journalists, settlement house workers, and labor activists — united by the belief that industrial capitalism's problems required active government solutions.</p>
+<div class="info-table">
+  <div class="info-table-head">The Muckrakers</div>
+  <div class="info-row"><div class="info-key">Upton Sinclair — The Jungle (1906)</div><div class="info-val">Exposed brutal working conditions in Chicago meatpacking industry. Sinclair wanted sympathy for workers; readers wanted to know what was in their food. Led directly to the Pure Food and Drug Act (1906) — the origin of the FDA.</div></div>
+  <div class="info-row"><div class="info-key">Ida Tarbell — Standard Oil (1904)</div><div class="info-val">19-part magazine series documenting Rockefeller's predatory business practices; one of the most important pieces of investigative journalism in American history; contributed to Standard Oil's breakup</div></div>
+  <div class="info-row"><div class="info-key">Jacob Riis — How the Other Half Lives (1890)</div><div class="info-val">Photographs and text documenting New York City tenement conditions; shocked middle-class readers; helped drive tenement reform legislation</div></div>
+  <div class="info-row"><div class="info-key">Lincoln Steffens — The Shame of the Cities (1904)</div><div class="info-val">Exposed political corruption in American cities; showed that corruption was systemic, not the result of a few bad individuals</div></div>
+</div>
+<p>Theodore Roosevelt coined the term "muckraker" — from a character in Pilgrim's Progress who only looks down at the muck, never upward. He meant it as criticism, but the journalists embraced the label. Sinclair's most famous line captures the unintended consequence: "I aimed at the public's heart, and by accident I hit it in the stomach." He wanted labor reform; he got food safety regulations instead.</p>
+<div class="info-table">
+  <div class="info-table-head">Key Progressive Reforms</div>
+  <div class="info-row"><div class="info-key">16th Amendment (1913)</div><div class="info-val">Authorized federal income tax — essential for funding expanded government programs</div></div>
+  <div class="info-row"><div class="info-key">17th Amendment (1913)</div><div class="info-val">Direct election of senators (previously chosen by state legislatures, which were easily corrupted)</div></div>
+  <div class="info-row"><div class="info-key">18th Amendment (1919)</div><div class="info-val">Prohibition — banned manufacture and sale of alcohol; created organized crime; repealed by 21st Amendment (1933)</div></div>
+  <div class="info-row"><div class="info-key">19th Amendment (1920)</div><div class="info-val">Women's suffrage — after a 72-year campaign from Seneca Falls (1848) to ratification</div></div>
+  <div class="info-row"><div class="info-key">Clayton Antitrust Act (1914)</div><div class="info-val">Strengthened antitrust law; Labor's Magna Carta — limited use of injunctions against strikes</div></div>
+</div>
+<p>Progressive reform had real limitations. Most Progressives were white and middle-class; many were explicitly racist. The movement largely ignored racial injustice. Woodrow Wilson — who signed major Progressive legislation — re-segregated the federal government after decades of integration. Progressivism reformed capitalism; it did not challenge the fundamental racial hierarchy of American society.</p>
+</div>`,
+cultural:`The Triangle Shirtwaist Factory fire of March 25, 1911, killed 146 garment workers — mostly young immigrant women — when exits were found locked (the owners locked them to prevent unauthorized breaks). The owners were acquitted of manslaughter. But the fire transformed labor politics: it radicalized a generation of workers, directly led to 36 new labor laws in New York, and is often called the event that built the modern labor movement. 146 deaths produced decades of workplace safety law. Public outrage, properly organized, can change history.`,
+quiz:[
+  {q:"Upton Sinclair said 'I aimed at the public's heart and by accident hit it in the stomach.' This means:",choices:["The Jungle was primarily about food safety rather than labor conditions","Sinclair intended to create sympathy for exploited immigrant workers, but readers focused on the disgusting food safety revelations instead, which led to food regulation rather than the labor reform Sinclair wanted","The book caused physical illness in readers who were disgusted by its content","Sinclair miscalculated the emotional impact of his writing"],a:1,fun:"Sinclair was a socialist who wanted to expose capitalism's exploitation of workers. He got the FDA. The immigrant workers he wrote about remained in terrible conditions. This is a lesson about how reform works: the public determines what gets acted on, not the reformer. The lesson isn't that The Jungle failed — it's that reform rarely lands where you aimed. 🥩"},
+  {q:"The muckrakers were significant because:",choices:["They were the first journalists to report on political events in American history","Their investigative reporting exposed specific, documented abuses that moved middle-class public opinion toward supporting regulation and reform","They worked directly for Theodore Roosevelt's administration to develop Progressive legislation","They primarily advocated for racial equality alongside economic reform"],a:1,fun:"Roosevelt called them muckrakers to criticize them — people who only look at the dirt. The label stuck, became a badge of honor, and describes a tradition of investigative journalism still vital today. Tarbell vs. Rockefeller in 1904 is not entirely unlike investigative reporters vs. major corporations today. 📰"},
+  {q:"The 19th Amendment (1920) is notable because:",choices:["It was the first constitutional amendment passed in the 20th century","It concluded a 72-year campaign for women's suffrage that began at the Seneca Falls Convention in 1848 — some founders of the movement never lived to vote","It was the only constitutional amendment ratified without going through the state legislature process","It granted women the right to vote in federal elections only, not state elections"],a:1,fun:"Elizabeth Cady Stanton and Lucretia Mott organized Seneca Falls in 1848. Stanton died in 1902 — 18 years before the 19th Amendment. Their granddaughters cast ballots in 1920. Movements work on generational timescales. The people who start them often don't see them completed. 🗳️"},
+  {q:"The main limitation of the Progressive movement was:",choices:["It failed to pass any significant legislation due to congressional opposition","Most Progressives were white middle-class reformers who focused on economic reform while largely ignoring or actively supporting racial segregation — the movement reformed capitalism without challenging racial hierarchy","It was too radical in its demands and alienated moderate voters","It was primarily a Southern phenomenon with little national impact"],a:1,fun:"Woodrow Wilson — a Progressive who signed the Federal Reserve Act and Clayton Antitrust Act — also screened 'Birth of a Nation' at the White House, praised it, and re-segregated the federal civil service. The Progressive movement shows that economic progressivism and racial progressivism do not automatically go together. They require separate struggles. 😔"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 3: WWI, 1920s, GREAT DEPRESSION
+// ══════════════════════════════════════════════
+{id:'u3',emoji:'🌧️',name:'WWI, 1920s & Depression',weeks:'Weeks 9–13',lessons:[
+{id:'u3l1',day:'Week 9, Day 1',title:'World War I and American Entry',
+objectives:['Explain the causes of WWI and reasons for US neutrality','Analyze why the US entered WWI in 1917','Evaluate the consequences of the Treaty of Versailles'],
+content:`<div class="body-text">
+<p>When war erupted in Europe in August 1914, President Woodrow Wilson declared American neutrality. The United States had a long tradition of staying out of European conflicts (Washington's Farewell Address warned against "entangling alliances"), and large portions of the immigrant population had ties to both sides. Wilson won re-election in 1916 with the slogan "He kept us out of war." Then he asked Congress to declare war in April 1917.</p>
+<div class="info-table">
+  <div class="info-table-head">Why America Entered WWI (1917)</div>
+  <div class="info-row"><div class="info-key">Unrestricted submarine warfare</div><div class="info-val">Germany's decision to sink any ship, including neutral US ships, traveling to Allied ports — directly killed American citizens</div></div>
+  <div class="info-row"><div class="info-key">Zimmermann Telegram (1917)</div><div class="info-val">British intelligence intercepted a German diplomatic telegram proposing that Mexico attack the US in exchange for help recovering Texas, New Mexico, and Arizona. Published in American newspapers — public outrage was immediate.</div></div>
+  <div class="info-row"><div class="info-key">Economic ties to Allies</div><div class="info-val">US banks had lent $2.3 billion to Britain and France; an Allied defeat would mean financial catastrophe — US interests were not neutral</div></div>
+  <div class="info-row"><div class="info-key">Ideology</div><div class="info-val">Wilson's framing: make the world "safe for democracy" — a war to end all wars, fought on moral grounds</div></div>
+</div>
+<div class="primary-source">
+  <div class="ps-label">Primary Source — Wilson's Fourteen Points (January 1918)</div>
+  <blockquote>"What we demand in this war is nothing peculiar to ourselves. It is that the world be made fit and safe to live in; and particularly that it be made safe for every peace-loving nation..."</blockquote>
+  <div class="ps-attr">Wilson outlined 14 principles for a post-war peace: open diplomacy, freedom of the seas, national self-determination, and — most importantly — a League of Nations. He won the Nobel Peace Prize. The Senate rejected the League. He suffered a stroke while campaigning for it and died believing he had failed.</div>
+</div>
+<p>The Treaty of Versailles (1919) imposed harsh terms on Germany: $33 billion in reparations, loss of territory, military restrictions, and the humiliating "war guilt clause" assigning Germany sole responsibility for the war. Almost every historian now believes the Treaty's harshness directly contributed to the economic collapse and political instability that made Hitler's rise possible. The peace was not a peace — it was a twenty-year armistice.</p>
+</div>`,
+cultural:`John Maynard Keynes, the British economist who attended the Paris Peace Conference, predicted immediately that the Versailles terms would lead to disaster — he resigned from the delegation and published "The Economic Consequences of the Peace" (1919), arguing the reparations were so punishing that Germany would either collapse or seek revenge. He was right. The book is still taught in economics courses as an example of correct prediction based on rigorous analysis. Being right doesn't always change policy in time.`,
+quiz:[
+  {q:"The Zimmermann Telegram was significant in bringing the US into WWI because:",choices:["It proved Germany had spies operating inside the US government","It proposed a military alliance between Germany and Mexico against the US — promising to help Mexico reclaim Texas, New Mexico, and Arizona — outranging American public opinion","It revealed Germany's plans to use chemical weapons against American ships","It showed Germany was planning a direct military attack on American cities"],a:1,fun:"Germany sent this diplomatic telegram to Mexico in January 1917. British intelligence intercepted and decoded it, then strategically timed its release to American media. Can you imagine the American reaction to Germany promising Mexico three US states? Public opinion shifted dramatically. 📨"},
+  {q:"The Treaty of Versailles's most destructive long-term consequence was:",choices:["It failed to end the fighting between Germany and the Allied powers","Its harsh terms — massive reparations, territory loss, the war guilt clause — created the economic collapse and national humiliation that contributed directly to Hitler's rise","It gave Germany too much land, creating future conflict over borders","It failed to address the Ottoman Empire's collapse, causing Middle East instability"],a:1,fun:"Keynes predicted this in 1919. 'If we aim deliberately at the impoverishment of Central Europe, vengeance, I dare predict, will not limp.' Fourteen years later, Hitler was Chancellor of Germany, elected largely on a platform of reversing Versailles. The failed peace caused the next war. ⚠️"},
+  {q:"Wilson's League of Nations was rejected by the US Senate because:",choices:["American public opinion strongly opposed any peace agreement with Germany","Republican senators, led by Henry Cabot Lodge, feared it would entangle the US in future European conflicts and compromise American sovereignty","The League was poorly designed and all major nations rejected it simultaneously","Wilson refused to negotiate any changes to the League's charter"],a:1,fun:"The irony: Wilson created the League of Nations, won the Nobel Peace Prize for it — and the US never joined. Article X of the League Covenant, which committed members to protect each other's territory, was the sticking point. Republicans called it an unconstitutional surrender of Congress's war-declaring power. Wilson refused to compromise. The League existed without its creator. 🌍"},
+  {q:"America's 'neutrality' before 1917 was never truly neutral because:",choices:["Wilson secretly sent troops to France before the declaration of war","US banks had lent $2.3 billion to Britain and France — an Allied loss would have been an American financial catastrophe, creating structural economic incentive to support the Allied side","Most Americans were recent immigrants from Germany and Austria who supported the Central Powers","American neutrality was genuine; the Zimmermann Telegram alone changed everything"],a:1,fun:"When you've lent $2.3 billion to one side, you are not a neutral party — you have an enormous financial stake in their victory. The Wilson administration could declare neutrality; it could not neutralize the economic reality. This is still true in 21st-century geopolitics: follow the money to find the real alliances. 💰"}
+]},
+
+{id:'u3l2',day:'Week 10, Day 1',title:'The Roaring Twenties and the Harlem Renaissance',
+objectives:['Describe the cultural changes of the 1920s','Analyze the Harlem Renaissance as a cultural movement','Explain the contradictions of 1920s prosperity'],
+content:`<div class="body-text">
+<p>The 1920s roared for some Americans — but not all. The decade saw extraordinary cultural change: jazz, the flapper, radio, movies, mass consumerism, and prohibition-era speakeasies. It also saw the Ku Klux Klan reach its peak membership (4–5 million), the Tulsa Race Massacre (1921), and systematic exclusion of Black Americans from the economic boom.</p>
+<div class="context-box">
+  <div class="ctx-head">The Roaring Twenties — What Was Roaring?</div>
+  <p>The 1920s economic boom was real but uneven. Urban white Americans with jobs enjoyed rising wages, consumer credit, and new technologies (cars, radios, refrigerators). Rural Americans and farmers were struggling throughout the decade — agricultural prices collapsed after WWI. Black Americans were largely excluded from prosperity through housing discrimination, job discrimination, and violence. The "roaring" roared mostly for a specific demographic.</p>
+</div>
+<div class="info-table">
+  <div class="info-table-head">The Harlem Renaissance (1920s–1930s)</div>
+  <div class="info-row"><div class="info-key">Why Harlem?</div><div class="info-val">Great Migration brought Black Americans north; Harlem became the cultural capital of Black America; concentration of talent in one neighborhood created a creative explosion</div></div>
+  <div class="info-row"><div class="info-key">Key Figures</div><div class="info-val">Langston Hughes (poetry), Zora Neale Hurston (fiction/anthropology), Duke Ellington (jazz), Louis Armstrong (jazz), Aaron Douglas (visual art), Paul Robeson (performance)</div></div>
+  <div class="info-row"><div class="info-key">Cultural Impact</div><div class="info-val">Permanently transformed American music, literature, and art; provided foundation for Civil Rights Movement; asserted Black humanity, dignity, and creative brilliance to a mainstream culture that denied all three</div></div>
+  <div class="info-row"><div class="info-key">Internal debates</div><div class="info-val">Du Bois wanted "uplifting" art; Hughes wanted authentic street-level Black life; Hurston used Black Southern dialect; tension over what Black art should be — political tool or free expression?</div></div>
+</div>
+<p>Prohibition (18th Amendment, 1919–1933) was supposed to reduce crime, improve family life, and uplift morality. Instead, it created organized crime on an industrial scale. Al Capone earned an estimated $60 million annually — about $1 billion today — from bootlegging in Chicago. The Prohibition era essentially built the American mob, which simply pivoted to other businesses when Prohibition ended.</p>
+</div>`,
+cultural:`The Tulsa Race Massacre of May 31–June 1, 1921, destroyed the prosperous Greenwood District — known as "Black Wall Street" — in Tulsa, Oklahoma. White mobs, some deputized by local officials, burned 35 city blocks, killed an estimated 300 people, and left 10,000 Black residents homeless. It was one of the worst incidents of racial violence in American history. It was covered up and rarely taught for most of the 20th century — many survivors didn't tell their own children. Full documentation began only in the 1990s. History that is suppressed doesn't disappear; it waits.`,
+quiz:[
+  {q:"The 'Roaring Twenties' prosperity was limited because:",choices:["The decade's economic growth was actually very modest compared to other periods","Most Americans lived on farms that were experiencing declining agricultural prices throughout the decade, and Black Americans were largely excluded from urban prosperity through systematic discrimination","The prosperity only lasted the first half of the decade before economic decline began","All economic gains went exclusively to Wall Street investors"],a:1,fun:"1920s prosperity is often taught as universal, but rural America was in depression throughout the decade (farmers never recovered from WWI's price collapse), and Black Americans were systematically excluded. The Roaring Twenties roared for specific people in specific places. Context always matters. 📊"},
+  {q:"Prohibition's main unintended consequence was:",choices:["Significantly reducing alcohol consumption and improving public health","Creating the infrastructure of organized crime in America — bootlegging built criminal enterprises that continued operating after Prohibition ended","Making Americans more religious by removing alcohol from society","Causing the stock market crash of 1929 through alcohol-related economic disruption"],a:1,fun:"Al Capone made more money in a year than most American corporations. When Prohibition ended, the criminal organizations didn't disappear — they diversified into gambling, prostitution, labor racketeering, and later drugs. The government accidentally created and funded organized crime. 🥃"},
+  {q:"The Harlem Renaissance challenged racism primarily by:",choices:["Organizing political campaigns to vote out racist politicians","Producing extraordinary art, literature, and music that asserted Black humanity, intellectual depth, and creative brilliance — difficult to maintain claims of Black inferiority against the evidence of the Harlem Renaissance","Encouraging Black Americans to move to Europe where they faced less discrimination","Documenting racial violence to build legal cases against lynching"],a:1,fun:"Langston Hughes, Zora Neale Hurston, Duke Ellington, Louis Armstrong in one neighborhood in one decade. The cultural explosion was also political: you can't call a people inferior while listening to their music and reading their poetry. The Harlem Renaissance made that argument impossible — though racists still tried. 🎷"},
+  {q:"The internal debate within the Harlem Renaissance about what Black art should be most fundamentally concerned:",choices:["Whether Black artists should use traditional African or American artistic forms","Whether art should serve political uplift by presenting idealized Black figures (Du Bois) or express authentic Black life including its gritty realities (Hughes, Hurston)","Whether Black artists should collaborate with white artists and institutions","Whether the Renaissance should focus on New York or spread to other cities"],a:1,fun:"Du Bois worried that realistic portrayals of Black poverty and struggle gave ammunition to racists. Hughes argued that sanitizing Black life for white approval was itself a kind of self-betrayal. Hurston wrote in Black Southern dialect when most 'respectable' Black writers avoided it. This debate about who art is for never ends. 🎨"}
+]},
+
+{id:'u3l3',day:'Week 11, Day 1',title:'The Great Depression',
+objectives:['Explain the causes of the 1929 stock market crash','Analyze Hoover\'s response vs. FDR\'s New Deal','Understand the human impact of the Depression through primary sources'],
+content:`<div class="body-text">
+<p>The Great Depression was not caused by one event. The stock market crash of October 1929 was a symptom of deeper structural problems that had been building for years — and the government's initial response made things dramatically worse.</p>
+<div class="info-table">
+  <div class="info-table-head">Causes of the Great Depression</div>
+  <div class="info-row"><div class="info-key">Overspeculation / buying on margin</div><div class="info-val">Stocks bought with borrowed money (10% down); when prices fell, margin calls created cascade of selling</div></div>
+  <div class="info-row"><div class="info-key">Overproduction</div><div class="info-val">Factories and farms producing more than consumers could buy; prices falling before the crash</div></div>
+  <div class="info-row"><div class="info-key">Weak banking system</div><div class="info-val">No deposit insurance; bank runs began as people feared collapse; 9,000 banks failed 1930–1933</div></div>
+  <div class="info-row"><div class="info-key">Smoot-Hawley Tariff (1930)</div><div class="info-val">Raised tariffs to protect American industry; other countries retaliated; global trade collapsed 65%</div></div>
+  <div class="info-row"><div class="info-key">Federal Reserve policy</div><div class="info-val">Raised interest rates during the Depression — the opposite of what was needed; deliberately contractionary policy worsened collapse</div></div>
+</div>
+<div class="info-table">
+  <div class="info-table-head">Hoover vs. FDR: Two Approaches</div>
+  <div class="info-row"><div class="info-key">Hoover's philosophy</div><div class="info-val">"Rugged individualism" — believed direct federal relief would destroy self-reliance; relied on voluntary cooperation and trickle-down; "Hoovervilles" (shantytowns) named after him</div></div>
+  <div class="info-row"><div class="info-key">FDR's approach</div><div class="info-val">"Bold, persistent experimentation" — tried different things, kept what worked; direct relief, jobs programs, bank regulation, labor rights, Social Security</div></div>
+  <div class="info-row"><div class="info-key">New Deal key programs</div><div class="info-val">FDIC (bank deposit insurance) · CCC (Civilian Conservation Corps) · PWA/WPA (public works jobs) · Social Security Act (1935) · NLRA (labor rights)</div></div>
+  <div class="info-row"><div class="info-key">Did the New Deal end the Depression?</div><div class="info-val">It reduced unemployment and stabilized the economy but didn't end the Depression — WWII industrial production did that. The New Deal's lasting legacy was the social safety net and government's accepted role in economic management.</div></div>
+</div>
+<p>By 1933, 25% of Americans were unemployed. Banks were closed. Families lost farms and homes. The Dust Bowl (caused by poor farming practices combined with severe drought) drove hundreds of thousands of families — "Okies" — from the Great Plains to California, creating one of the largest internal migrations in American history.</p>
+</div>`,
+cultural:`Dorothea Lange's photographs of Dust Bowl migrants — especially "Migrant Mother" (Florence Owens Thompson, 1936) — became the defining images of the Depression. Lange shot "Migrant Mother" in about ten minutes. Thompson was 32 years old, pea-picking in a migrant camp with seven children. The photo appeared on front pages worldwide. Thompson later said she never received a penny from its use and was angry that Lange published it without her consent. Even documentary photography with genuine social impact raises questions about who benefits from whose suffering.`,
+quiz:[
+  {q:"The Great Depression was caused primarily by:",choices:["The stock market crash of October 1929, which was the sole cause of the economic collapse","Multiple structural factors including overspeculation, buying on margin, overproduction, a weak banking system with no deposit insurance, a disastrously timed tariff increase, and Federal Reserve tightening — the crash triggered a collapse waiting to happen","German reparations from WWI that destabilized the American financial system","Herbert Hoover's tax increases in 1929 that reduced consumer spending"],a:1,fun:"The stock market crash gets all the attention, but it was more trigger than cause. Like a heart attack revealing underlying arterial disease — the blockages were there before the crisis. The Fed's response (raising rates!) turned a serious recession into a decade-long catastrophe. Milton Friedman's analysis of the Fed's role won him a Nobel Prize. 📉"},
+  {q:"Hoover's response to the Depression was criticized primarily because:",choices:["He raised taxes dramatically which reduced government revenue during the crisis","His philosophy of 'rugged individualism' led him to resist direct federal relief, believing economic hardship should be solved by voluntary action and personal responsibility — leaving millions without adequate assistance while 'Hoovervilles' multiplied","He spent too much on government programs and created dangerous deficits","He nationalized major banks and industries, which destroyed business confidence"],a:1,fun:"Hoovervilles — shantytowns built from cardboard and scrap — were named after him sarcastically. People called empty pockets 'Hoover flags' (turned inside out). His name became a synonym for policy failure. He was a genuinely talented administrator (organized relief in WWI Europe) who had the wrong economic philosophy at the worst possible moment. 🏚️"},
+  {q:"The New Deal's most lasting legacy was:",choices:["Ending the Great Depression through government stimulus spending","Creating the social safety net (Social Security, FDIC, unemployment insurance) and establishing the principle that the federal government has responsibility for economic stability and citizen welfare — reshaping the relationship between government and people","Demonstrating that government intervention always worsens economic downturns","Creating the military-industrial complex that eventually ended the Depression through WWII"],a:1,fun:"Social Security (1935) still exists. FDIC (bank deposit insurance) still exists. Labor rights protections still exist. The New Deal didn't end the Depression — WWII did that. But it permanently changed what Americans expected government to do: not just get out of the way, but actively manage economic pain. That's still the debate today. 🏛️"},
+  {q:"The Dust Bowl was caused by:",choices:["Deliberate government land mismanagement that destroyed farming communities","A combination of severe drought and decades of poor farming practices that destroyed the topsoil that native prairie grasses had previously held in place — human decisions amplified a natural disaster","Nuclear testing in the Southwest that contaminated agricultural land","A series of tornadoes that destroyed crops across multiple growing seasons"],a:1,fun:"Farmers plowed up native prairie grasses (which held soil in place for millennia) to plant wheat. When drought hit, there was nothing holding the soil. 'Black blizzards' of dust buried homes to the rooftops. 2.5 million people fled — becoming the Okies of Steinbeck's Grapes of Wrath. Human decisions + natural events = compounded disaster. 🌪️"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 4: WWII & COLD WAR
+// ══════════════════════════════════════════════
+{id:'u4',emoji:'🌍',name:'WWII & Early Cold War',weeks:'Weeks 14–18',lessons:[
+{id:'u4l1',day:'Week 14, Day 1',title:'World War II: From Neutrality to Total War',
+objectives:['Explain America\'s path from neutrality to full involvement in WWII','Analyze key turning points: Pearl Harbor, D-Day, the atomic bomb decision','Evaluate the moral complexity of wartime decisions'],
+content:`<div class="body-text">
+<p>World War II began in Europe in September 1939 with Germany's invasion of Poland. As in WWI, the US declared neutrality — and as in WWI, American neutrality was never economically or ideologically complete. The Lend-Lease Act (1941) allowed the US to supply Britain and eventually the Soviet Union with war materials, officially maintaining neutrality while clearly supporting the Allied side.</p>
+<div class="primary-source">
+  <div class="ps-label">Primary Source — FDR, "Day of Infamy" Speech (December 8, 1941)</div>
+  <blockquote>"Yesterday, December 7th, 1941 — a date which will live in infamy — the United States of America was suddenly and deliberately attacked by naval and air forces of the Empire of Japan."</blockquote>
+  <div class="ps-attr">FDR's speech to Congress the day after Pearl Harbor. Congress declared war on Japan within the hour. Within four days, Germany and Italy declared war on the US — bringing America fully into the European theater.</div>
+</div>
+<div class="info-table">
+  <div class="info-table-head">Key WWII Turning Points</div>
+  <div class="info-row"><div class="info-key">Pearl Harbor (Dec. 7, 1941)</div><div class="info-val">Japanese surprise attack on US Pacific Fleet; brought US into the war; also triggered the forced relocation of 120,000 Japanese Americans into internment camps (Executive Order 9066)</div></div>
+  <div class="info-row"><div class="info-key">Battle of Midway (June 1942)</div><div class="info-val">US destroyed four Japanese aircraft carriers; turned the tide in the Pacific; Japan never recovered this naval superiority</div></div>
+  <div class="info-row"><div class="info-key">D-Day (June 6, 1944)</div><div class="info-val">Allied invasion of Normandy; 156,000 troops; 4,000–9,000 Allied dead on the first day; opened Western Front; began liberation of Western Europe</div></div>
+  <div class="info-row"><div class="info-key">Atomic bombs (Aug. 1945)</div><div class="info-val">Hiroshima (Aug. 6): ~140,000 dead; Nagasaki (Aug. 9): ~70,000 dead; Japan surrendered Aug. 15. Still debated: was this necessary? Could Japan have surrendered without invasion?</div></div>
+</div>
+<div class="context-box">
+  <div class="ctx-head">The Atomic Bomb Decision</div>
+  <p>Truman's stated justification: estimates of 250,000–1,000,000 American casualties in Operation Downfall (planned invasion of Japan). Critics argue: Japan was already near collapse; the Soviet entry into the Pacific war may have been sufficient to force surrender; the decision was partly about deterring the Soviet Union in the emerging Cold War. No consensus exists among historians. The decision remains one of the most debated in American history — a genuine moral question with no clean answer.</p>
+</div>
+</div>`,
+cultural:`Executive Order 9066 authorized the forced relocation of 120,000 Japanese Americans into internment camps — 2/3 of whom were US citizens. The Supreme Court upheld the order in Korematsu v. United States (1944) in a 6-3 decision. Fred Korematsu, who had refused to report for internment, spent his life seeking justice. In 1988, Congress apologized and paid $20,000 reparations to each surviving internee. In 2018, the Supreme Court formally repudiated the Korematsu ruling in the context of the Muslim travel ban case — though by then Korematsu had been dead for 13 years. Justice is often posthumous.`,
+quiz:[
+  {q:"The Japanese attack on Pearl Harbor was strategically aimed at:",choices:["Occupying Hawaii as Japanese territory","Destroying the US Pacific Fleet to give Japan freedom of action in Southeast Asia and the Pacific — though the crucial aircraft carriers happened to be at sea and survived","Drawing the US into a land war in Asia where Japan had overwhelming advantages","Preventing American economic aid to China, which Japan was invading"],a:1,fun:"Japan's strategic goal was Southeast Asian resources (oil, rubber, tin) to fuel their war machine. The US Pacific Fleet was the only force that could stop them. The attack succeeded tactically (battleships sunk) but failed strategically: the carriers weren't there, and the attack unified American public opinion for war overnight. 🚢"},
+  {q:"D-Day (June 6, 1944) was the largest amphibious invasion in history. Its historical significance was:",choices:["It was the decisive battle that ended WWII","It opened the Western Front in Europe, forcing Germany to fight simultaneously against Allied forces from the West and Soviet forces from the East — the two-front war that crushed Germany","It was the first significant Allied victory in Europe","It directly liberated Germany from Nazi control"],a:1,fun:"Eisenhower prepared a speech taking responsibility in case the invasion failed — it stayed in his pocket. After the war he revealed it. The D-Day decision required accepting tens of thousands of certain casualties as the cost of eventual victory. The weight of that decision is almost impossible to comprehend. 🏖️"},
+  {q:"The forced internment of Japanese Americans during WWII demonstrates:",choices:["That the US government acted rationally in response to legitimate security concerns","That even constitutional democracies can commit serious civil liberties violations against ethnic minorities during wartime, especially when driven by racial prejudice and public fear","That wartime emergency powers are always justified when national security is threatened","That Japanese Americans were treated fairly compared to how the US treated German Americans"],a:1,fun:"No German Americans or Italian Americans were interned at comparable scale despite the US also being at war with Germany and Italy. The internment was about race, not security. No Japanese American was ever convicted of espionage or sabotage. The military unit of Japanese American soldiers (442nd Regiment) became the most decorated in US Army history. 😔"},
+  {q:"The debate over the atomic bombing of Japan centers on:",choices:["Whether the bombs were technically functional","Whether they were necessary to end the war — specifically, whether a land invasion would have caused more casualties, whether Japan was already near surrender, and whether geopolitical considerations about the Soviet Union also played a role","Whether President Roosevelt or Truman made the decision","Whether the bombings violated the laws of war, which is legally settled"],a:1,fun:"Estimates for Operation Downfall (planned invasion) ranged from 250,000 to 1,000,000 American casualties. But historical evidence suggests Japan's military council was already fractured, the Emperor was seeking peace through the Soviet Union, and Soviet entry into the Pacific war may have been sufficient to force surrender. There is no consensus. This is what genuine historical complexity looks like. ☢️"}
+]},
+
+{id:'u4l2',day:'Week 16, Day 1',title:'The Cold War Begins',
+objectives:['Explain the origins of the Cold War','Analyze containment policy and its early applications','Understand McCarthyism and its domestic consequences'],
+content:`<div class="body-text">
+<p>The alliance between the US and Soviet Union against Nazi Germany barely survived the end of WWII. By 1947, the two superpowers were in a global ideological competition that would define international politics for the next 45 years. Neither side wanted direct military conflict — both had nuclear weapons — but they fought through proxy wars, economic competition, propaganda, and covert operations on every continent.</p>
+<div class="info-table">
+  <div class="info-table-head">Cold War Architecture</div>
+  <div class="info-row"><div class="info-key">Containment (1947)</div><div class="info-val">Diplomat George Kennan's strategy: don't try to roll back Soviet power, but prevent its expansion. Became the guiding principle of US foreign policy for 40 years — applied in Korea, Vietnam, and dozens of other conflicts.</div></div>
+  <div class="info-row"><div class="info-key">Truman Doctrine (1947)</div><div class="info-val">US will support "free peoples" resisting subjugation anywhere in the world. Asked Congress for $400M to help Greece and Turkey. Kennan later said the doctrine was too broadly stated and would commit the US to fighting communism everywhere globally. He was right.</div></div>
+  <div class="info-row"><div class="info-key">Marshall Plan (1948)</div><div class="info-val">$13 billion in economic aid to rebuild Western Europe. Brilliant strategy: a devastated, hungry Europe is fertile ground for communism; a prosperous Europe is a stable ally. Worked exactly as intended.</div></div>
+  <div class="info-row"><div class="info-key">NATO (1949)</div><div class="info-val">North Atlantic Treaty Organization: first peacetime military alliance in US history; committed US to treating an attack on any NATO member as an attack on the US</div></div>
+  <div class="info-row"><div class="info-key">Korean War (1950–53)</div><div class="info-val">First test of containment: North Korea (Soviet-backed) invaded South Korea; Truman sent troops without declaring war; ended in stalemate at 38th parallel; still technically ongoing (armistice, not peace treaty)</div></div>
+</div>
+<p>McCarthyism — Senator Joseph McCarthy's campaign of accusations against supposed communists in the government, military, and entertainment industry — destroyed careers based on rumor, pressure to name names, and guilt by association. At its peak (1950–54), being accused was nearly equivalent to being convicted. Edward R. Murrow's television broadcasts exposing McCarthy and the Army-McCarthy hearings (1954), where McCarthy's recklessness became nationally visible, finally broke his power. He died in 1957, largely disgraced.</p>
+<div class="primary-source">
+  <div class="ps-label">Primary Source — Joseph Welch to McCarthy, Army-McCarthy Hearings (1954)</div>
+  <blockquote>"Until this moment, Senator, I think I never really gauged your cruelty or your recklessness... Have you no sense of decency?"</blockquote>
+  <div class="ps-attr">Army counsel Joseph Welch's rebuke of McCarthy live on national television. The audience in the hearing room applauded. McCarthy's approval rating, already falling, collapsed. Television exposed what the print media had struggled to convey.</div>
+</div>
+</div>`,
+cultural:`The Berlin Airlift (1948–49) was Cold War strategy at its most elegant. When the Soviet Union blockaded West Berlin, cutting off road and rail access, the US and Britain flew in supplies — at peak, a plane landed every 45 seconds for 11 months. The Soviets eventually lifted the blockade having accomplished nothing. The Airlift was won without a shot fired. It was also brilliant propaganda: the Western democracies were literally feeding a city their former enemy had tried to starve, while the Soviets blockaded civilians. Strategy, logistics, and symbolism in perfect alignment.`,
+quiz:[
+  {q:"George Kennan's containment strategy argued that the US should:",choices:["Roll back Soviet control of Eastern Europe through military force","Not attempt to retake territory already under Soviet control, but prevent further Soviet expansion — accepting existing Soviet power while containing its spread","Negotiate a formal partition of the world into American and Soviet spheres of influence","Use nuclear weapons as a first strike to eliminate the Soviet threat before it could expand"],a:1,fun:"Kennan was a career diplomat who understood Soviet thinking deeply. He never intended containment to mean military intervention everywhere — he meant political, economic, and diplomatic measures. When Truman applied it in Korea and others applied it in Vietnam, Kennan publicly objected. He lived to 101 and spent his later decades criticizing how his own idea had been distorted. 🌍"},
+  {q:"The Marshall Plan (1948) was strategically successful because:",choices:["It demonstrated American generosity and improved the US's global image without any strategic benefit","It correctly identified that economic recovery in Western Europe was the most effective defense against communist political movements, which gain strength in conditions of poverty and desperation","It rebuilt European military capacity needed for NATO","It prevented the Soviet Union from establishing influence in Western Europe through direct military spending"],a:1,fun:"The Marshall Plan is the rare example of a foreign policy decision that worked exactly as designed. Prosperous Western European democracies became stable NATO allies. George Marshall (who proposed it) became the only general to win the Nobel Peace Prize — for post-war economic diplomacy rather than military victory. 🤝"},
+  {q:"McCarthyism is most accurately characterized as:",choices:["A legitimate investigation that correctly identified significant Soviet espionage in the US government","A campaign of accusations, intimidation, and political pressure that destroyed careers based largely on rumor, association, and the refusal to name names — with little concern for evidence or due process","A successful program that made the US significantly safer from Soviet espionage","A minor phenomenon that was quickly stopped by Congress and had limited real impact"],a:1,fun:"McCarthy never proved a single case of communist infiltration. The Hollywood Ten and hundreds of others were blacklisted — unable to work in their industries — based on accusation alone. The question 'Are you now or have you ever been a member of the Communist Party?' destroyed people whether they answered yes, no, or refused to answer. 📺"},
+  {q:"The Korean War (1950–53) ended with:",choices:["A decisive US/UN victory that reunified Korea under a democratic government","A return essentially to the pre-war border at the 38th parallel — a stalemate after 36,000 American deaths, often called 'The Forgotten War' between WWII and Vietnam","A North Korean victory that pushed US forces out of the Korean peninsula","A negotiated partition that gave the US permanent military control of South Korea"],a:1,fun:"The Korean War is still technically ongoing — the armistice (1953) is a ceasefire, not a peace treaty. North and South Korea are technically still at war. 36,000 Americans died to return to approximately the same line where the war started. It's called the Forgotten War partly because neither side clearly won, and Americans had difficulty with that. 🪖"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 5: CIVIL RIGHTS
+// ══════════════════════════════════════════════
+{id:'u5',emoji:'✊',name:'Civil Rights Movement',weeks:'Weeks 1–5, Semester 2',lessons:[
+{id:'u5l1',day:'S2, Week 1, Day 1',title:'The Civil Rights Movement: Strategy and Sacrifice',
+objectives:['Trace the major events of the Civil Rights Movement from 1954–1968','Analyze the strategies of nonviolent direct action','Compare MLK and Malcolm X approaches'],
+content:`<div class="body-text">
+<p>The Civil Rights Movement did not begin in 1954 or 1955 — it was a long struggle with roots in Reconstruction, the NAACP (founded 1909), and decades of legal and political organizing. But the post-WWII period created new conditions: Black veterans returning from fighting for democracy abroad refused to accept second-class citizenship at home; the Cold War made American racism an international embarrassment; and television brought the reality of Southern segregation into northern living rooms.</p>
+<div class="timeline">
+  <div class="timeline-item"><div class="timeline-year">1954</div><div class="timeline-event">Brown v. Board of Education — Supreme Court unanimously overturns Plessy v. Ferguson; separate educational facilities are "inherently unequal"</div></div>
+  <div class="timeline-item"><div class="timeline-year">1955–56</div><div class="timeline-event">Montgomery Bus Boycott — Rosa Parks arrested; 381-day boycott; MLK emerges as national leader; Supreme Court rules bus segregation unconstitutional</div></div>
+  <div class="timeline-item"><div class="timeline-year">1960</div><div class="timeline-event">Greensboro sit-ins — four Black college students sit at a whites-only Woolworth's counter; spark sit-in movement across the South; SNCC founded</div></div>
+  <div class="timeline-item"><div class="timeline-year">1961</div><div class="timeline-event">Freedom Riders — interracial groups rode interstate buses into the South; attacked by mobs; federal government forced to act</div></div>
+  <div class="timeline-item"><div class="timeline-year">1963</div><div class="timeline-event">Birmingham campaign — children's marches; police use fire hoses and dogs; national outrage; March on Washington (250,000); "I Have a Dream"</div></div>
+  <div class="timeline-item"><div class="timeline-year">1964</div><div class="timeline-event">Civil Rights Act — prohibited discrimination in employment and public accommodations; LBJ signs; Freedom Summer in Mississippi</div></div>
+  <div class="timeline-item"><div class="timeline-year">1965</div><div class="timeline-event">Selma to Montgomery marches; "Bloody Sunday"; Voting Rights Act eliminates literacy tests and other discriminatory barriers</div></div>
+  <div class="timeline-item"><div class="timeline-year">1968</div><div class="timeline-event">Martin Luther King Jr. assassinated in Memphis (April 4); uprisings in 100+ cities; Fair Housing Act passed</div></div>
+</div>
+<div class="info-table">
+  <div class="info-table-head">MLK vs. Malcolm X: Comparing Approaches</div>
+  <div class="info-row"><div class="info-key">MLK — nonviolent direct action</div><div class="info-val">Integration; accept suffering without retaliation to expose moral bankruptcy of oppression; appeal to American conscience and founding ideals; targeted at both Black mobilization and winning white moderates</div></div>
+  <div class="info-row"><div class="info-key">Malcolm X — self-determination</div><div class="info-val">Black nationalism; the right to self-defense; skepticism about integration into a fundamentally racist society; later (post-Mecca pilgrimage) moved toward multiracial coalition; assassinated 1965</div></div>
+  <div class="info-row"><div class="info-key">The actual relationship</div><div class="info-val">Both men evolved throughout their lives. They met once, briefly. Each's strategy was shaped by different audiences and different analyses. Both were assassinated. Their contrast is often exaggerated — each needed the other rhetorically, and many civil rights supporters admired elements of both.</div></div>
+</div>
+</div>`,
+cultural:`Rosa Parks was not "just a tired seamstress" who spontaneously refused to give up her seat. She was a trained activist who had attended the Highlander Folk School, had been the NAACP's Secretary in Montgomery, and had been thinking about challenging bus segregation for months. The NAACP had specifically been looking for the right test case. This doesn't make her action less heroic — it makes it more deliberate and more admirable. The "spontaneous" narrative strips agency from a woman who acted with full intention and knowledge of the consequences. History often erases the organizing that makes "spontaneous" moments possible.`,
+quiz:[
+  {q:"Brown v. Board of Education (1954) overturned which previous Supreme Court ruling?",choices:["Dred Scott v. Sandford","McCulloch v. Maryland","Plessy v. Ferguson (1896) — the 'separate but equal' doctrine","Marbury v. Madison"],a:2,fun:"Chief Justice Earl Warren personally lobbied the holdout justices to make the ruling unanimous — he understood that a divided court would be used to undermine desegregation. He succeeded. The ruling was unanimous. Warren wrote the opinion himself. Schools were desegregated... slowly and incompletely. 'With all deliberate speed' turned out to mean 'as slowly as possible.' ⚖️"},
+  {q:"Television's role in the Civil Rights Movement was significant because:",choices:["It was used primarily to broadcast civil rights leaders' speeches nationwide","Images of police violence against peaceful protesters — fire hoses, police dogs, children on the ground — brought the brutal reality of Southern segregation into northern living rooms and shifted national public opinion","It was controlled by civil rights organizations who used it for their messaging","It had little impact since most Americans in the South did not own televisions"],a:1,fun:"LBJ watched the Birmingham footage and said the movement had found its catalyst. The Birmingham Public Safety Commissioner, Bull Connor, was the best friend the Civil Rights Movement had — every time he turned the fire hoses on children, he created thousands of new supporters for civil rights. Oppressors who perform their oppression on camera lose. 📺"},
+  {q:"The Voting Rights Act of 1965 was prompted most directly by:",choices:["The assassination of President Kennedy","Bloody Sunday — March 7, 1965 — when state troopers attacked peaceful marchers on the Edmund Pettus Bridge in Selma, Alabama, on national television","The failure of the Civil Rights Act of 1964 to address voting discrimination","A Supreme Court ruling ordering Congress to protect Black voting rights"],a:1,fun:"LBJ watched 'Bloody Sunday' on television and within days called for the Voting Rights Act. 'There is no Negro problem. There is no Southern problem. There is no Northern problem. There is only an American problem.' The speech before Congress went on: '...and we shall overcome.' LBJ, a Southern Democrat, quoting the civil rights anthem. The moment was extraordinary. 🗳️"},
+  {q:"The relationship between MLK and Malcolm X is most accurately described as:",choices:["Bitter personal enemies who actively worked to undermine each other's organizations","Two leaders with different strategic visions who were often contrasted as foils — but each's approach was shaped by different audiences and analyses, they met only once, and each evolved significantly before being assassinated","Partners who collaborated closely on most major civil rights campaigns","Entirely unconnected figures who operated in completely separate spheres"],a:1,fun:"They met once — briefly, in a Senate hallway in 1964. MLK needed Malcolm X rhetorically: white moderates would support integration as the alternative to Black nationalism. Malcolm X needed MLK: the alternative to respectful petition was radical self-determination. They were both right about different things. Both were killed. 🤝"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 6: VIETNAM & WATERGATE
+// ══════════════════════════════════════════════
+{id:'u6',emoji:'📰',name:'Vietnam Era & Watergate',weeks:'Weeks 6–9, Semester 2',lessons:[
+{id:'u6l1',day:'S2, Week 6, Day 1',title:'Vietnam: Escalation and Protest',
+objectives:['Explain US involvement in Vietnam from Eisenhower through Nixon','Analyze the Gulf of Tonkin Resolution and its consequences','Understand the anti-war movement and its impact'],
+content:`<div class="body-text">
+<p>American involvement in Vietnam grew gradually over two decades from military advisors under Eisenhower, to 16,000 advisors under Kennedy, to full-scale war under Johnson following the Gulf of Tonkin Resolution (1964), to eventual withdrawal under Nixon. 58,000 Americans died. An estimated 2–3 million Vietnamese died. The war divided American society in ways still not fully healed.</p>
+<div class="context-box">
+  <div class="ctx-head">The Gulf of Tonkin Resolution (1964)</div>
+  <p>Congress gave the president authority to use military force in Vietnam after LBJ reported that North Vietnamese forces had attacked US destroyers in the Gulf of Tonkin. The first attack (August 2) was real; the second attack (August 4) likely never happened — NSA and naval officers told LBJ as much in real time. He escalated anyway. The Resolution gave presidents nearly unlimited war-making authority in Vietnam. 500,000 American troops were deployed based partly on an incident that probably didn't happen.</p>
+</div>
+<div class="info-table">
+  <div class="info-table-head">Why the US Failed in Vietnam</div>
+  <div class="info-row"><div class="info-key">Misunderstanding the conflict</div><div class="info-val">US treated it as Cold War containment; Vietnamese experienced it as a war of national independence and anti-colonialism, as they had been fighting foreign occupiers (France, then US) for decades</div></div>
+  <div class="info-row"><div class="info-key">Flawed strategy</div><div class="info-val">Body counts as measure of success; "search and destroy"; no clear political objective; winning battles but not the war — "We had to destroy the village to save it"</div></div>
+  <div class="info-row"><div class="info-key">Tet Offensive (1968)</div><div class="info-val">North Vietnamese/Viet Cong launched simultaneous attacks on 100+ South Vietnamese cities during Tet holiday. Military setback for North Vietnam; psychological victory: proved US public had been lied to about the war's progress</div></div>
+  <div class="info-row"><div class="info-key">Loss of public support</div><div class="info-val">My Lai massacre (1968, revealed 1969); Pentagon Papers (1971) — government deception exposed; Walter Cronkite's editorial calling the war a stalemate; draft-driven anti-war movement</div></div>
+</div>
+<div class="primary-source">
+  <div class="ps-label">Primary Source — Walter Cronkite, CBS News Editorial (February 27, 1968)</div>
+  <blockquote>"For it seems now more certain than ever that the bloody experience of Vietnam is to end in a stalemate."</blockquote>
+  <div class="ps-attr">Cronkite was called "the most trusted man in America." LBJ reportedly said after the broadcast: "If I've lost Cronkite, I've lost Middle America." LBJ announced he would not seek re-election 31 days later. One journalist's opinion shaped presidential politics.</div>
+</div>
+</div>`,
+cultural:`The Pentagon Papers (1971) were 7,000 pages of top-secret Defense Department history showing that the Johnson administration had systematically lied to the public and Congress about the war's progress. Daniel Ellsberg photocopied them using his children to help and leaked them to the New York Times. Nixon tried to block publication — the Supreme Court ruled 6-3 that the government could not engage in prior restraint of a free press. Ellsberg faced 115 years in prison. The charges were dropped because Nixon's operatives broke into Ellsberg's psychiatrist's office looking for compromising material — evidence of the same lawlessness that would bring Nixon down in Watergate.`,
+quiz:[
+  {q:"The Gulf of Tonkin Resolution gave the president authority to:",choices:["Declare war on North Vietnam formally","Use military force in Vietnam without a formal congressional declaration of war — essentially giving the president a blank check for escalation based on disputed incidents","Draft up to 500,000 soldiers annually for service in Vietnam","Negotiate a peace treaty with North Vietnam directly"],a:1,fun:"The second Gulf of Tonkin 'attack' that justified the resolution likely never happened. NSA documents declassified in 2005 confirmed this. 500,000 troops, 58,000 American deaths, millions of Vietnamese deaths — and the escalating justification was partly fabricated. This is why Congress passed the War Powers Resolution (1973) requiring presidential notification and limiting deployments. 📋"},
+  {q:"The Tet Offensive (1968) was paradoxically both a military defeat for North Vietnam AND a political victory because:",choices:["North Vietnam won the military battles but chose to withdraw for political reasons","It proved to the American public that the government had been lying about the war's progress — the simultaneous attacks on 100+ cities demonstrated the 'enemy is about to be defeated' narrative was false","The Viet Cong gained permanent territorial control of South Vietnam's major cities","It caused Nixon to win the presidential election with his 'secret plan' to end the war"],a:1,fun:"Military commanders had been saying victory was imminent. The Tet Offensive showed the Viet Cong could attack simultaneously in 100+ cities, including the US Embassy compound in Saigon. The public saw through the 'credibility gap' between official optimism and reality. LBJ's presidency never recovered. 💣"},
+  {q:"The My Lai Massacre (1968) damaged American support for Vietnam because:",choices:["It was a major military defeat where 500 US soldiers were killed","US soldiers killed over 500 unarmed South Vietnamese civilians — women, children, elderly — and the Army covered it up for a year before journalist Seymour Hersh exposed it, shattering the moral justification for the war","It proved that North Vietnamese forces were capable of defeating American units in conventional battle","The high death toll demonstrated the war was unwinnable through conventional military strategy"],a:1,fun:"Lt. William Calley was convicted of murder and sentenced to life — served 3 years under house arrest. Nixon personally ordered his release. The officer who tried to stop the massacre (Hugh Thompson) was treated as a traitor by many Americans for years. He received the Soldier's Medal 30 years later. The moral accounting took decades. 😔"},
+  {q:"The Pentagon Papers revealed that:",choices:["The US military had plans to use nuclear weapons against North Vietnam","The Johnson administration had systematically deceived Congress and the public about the war's progress and the government's own internal assessments of its prospects","The CIA had conducted unauthorized operations in Vietnam without presidential approval","The Vietnam War had been profitable for US defense contractors beyond any reasonable national security justification"],a:1,fun:"The Papers showed that as early as 1967 the Defense Department privately believed the war was unwinnable — while publicly projecting confidence. Daniel Ellsberg, who helped write them, leaked them because he believed the American public deserved to know. The Supreme Court's ruling protecting publication is one of the most important press freedom decisions in American history. 📑"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 7: REAGAN & END OF COLD WAR
+// ══════════════════════════════════════════════
+{id:'u7',emoji:'🌐',name:'Reagan & End of Cold War',weeks:'Weeks 10–14, Semester 2',lessons:[
+{id:'u7l1',day:'S2, Week 10, Day 1',title:'The Reagan Revolution',
+objectives:['Analyze Reaganomics and supply-side economics','Understand the social and political changes of the 1980s','Evaluate Reagan\'s foreign policy and its consequences'],
+content:`<div class="body-text">
+<p>Ronald Reagan's election in 1980 represented a decisive shift in American politics. After Vietnam, Watergate, the Iran hostage crisis, and stagflation, Reagan offered a simple, confident narrative: government is the problem, not the solution; America can be great again; optimism and strength will defeat communism. His rhetoric was extraordinarily effective. His record was more complicated.</p>
+<div class="info-table">
+  <div class="info-table-head">Reaganomics ("Supply-Side" / "Trickle-Down")</div>
+  <div class="info-row"><div class="info-key">Core argument</div><div class="info-val">Cut taxes (especially for wealthy and corporations) → stimulate investment → create jobs → prosperity flows down to everyone</div></div>
+  <div class="info-row"><div class="info-key">What happened</div><div class="info-val">Top marginal tax rate cut from 70% to 28%; inflation tamed (actually by Fed Chair Volcker); economic growth returned; federal deficit tripled; wealth inequality increased dramatically</div></div>
+  <div class="info-row"><div class="info-key">Still debated</div><div class="info-val">Did tax cuts cause the recovery, or did monetary policy (Volcker's Fed)? Did deregulation help or harm? Did "trickle-down" actually trickle? Economists disagree along predictable lines.</div></div>
+</div>
+<div class="info-table">
+  <div class="info-table-head">Reagan's Complex Legacy</div>
+  <div class="info-row"><div class="info-key">AIDS Crisis</div><div class="info-val">First mentioned AIDS publicly in 1987 — 6 years into the epidemic, after 20,000 Americans had died. Activists from ACT UP staged dramatic protests at the FDA and NIH that forced action. Activism literally saved lives.</div></div>
+  <div class="info-row"><div class="info-key">War on Drugs</div><div class="info-val">Mandatory minimum sentences; crack/powder cocaine disparity (100:1); disproportionate impact on Black communities; prison population tripled during the 1980s</div></div>
+  <div class="info-row"><div class="info-key">Iran-Contra (1986)</div><div class="info-val">Administration secretly sold weapons to Iran (an enemy state under arms embargo) and used profits to fund Contra rebels in Nicaragua, explicitly bypassing a Congressional ban. Constitutional crisis. Reagan said he didn't know.</div></div>
+  <div class="info-row"><div class="info-key">Cold War endgame</div><div class="info-val">Arms race pressure on Soviet economy; Reagan Doctrine (support anti-communist rebels worldwide); 'Tear down this wall' (1987); Gorbachev's reforms (glasnost/perestroika) accelerated Soviet collapse</div></div>
+</div>
+</div>`,
+cultural:`Reagan's communication skills were extraordinary — he was called "the Great Communicator" for good reason. His 1984 "Morning in America" advertisement remains the most effective political commercial in history. But effective communication and accurate communication are not the same thing. Reagan frequently told anecdotes that were factually false (the "welfare queen" story was largely fabricated). He confused movies he had been in with real events he claimed to remember. His rhetorical skill made critical evaluation of his record more difficult — the feeling he produced was more politically powerful than the facts.`,
+quiz:[
+  {q:"'Supply-side economics' or 'Reaganomics' argued that:",choices:["Government spending should increase during recessions to stimulate demand","Cutting taxes on wealthy individuals and corporations would stimulate investment, create jobs, and eventually benefit everyone through economic growth — critics called it 'trickle-down'","The government should directly manage key economic sectors to ensure stable growth","Trade protectionism would restore American manufacturing jobs lost to overseas competition"],a:1,fun:"David Stockman, Reagan's own budget director, called supply-side economics 'a Trojan horse' for cutting taxes for the rich. The deficit tripled during Reagan's presidency despite promised growth. Proponents say it ended stagflation and restored growth; critics say Volcker's Fed deserves credit. The debate continues — in every budget fight, every tax debate. 💸"},
+  {q:"Reagan's delayed response to the AIDS crisis demonstrates:",choices:["That the medical community failed to alert the government to the severity of the epidemic","That political priorities and cultural attitudes (AIDS primarily affected gay men and IV drug users initially) can determine which public health crises receive urgent government attention","That the Reagan administration lacked the bureaucratic capacity to respond to public health emergencies","That AIDS was so new that any administration would have struggled to respond"],a:1,fun:"When Rock Hudson — Reagan's personal friend — died of AIDS in 1985, Reagan reportedly cried. He still didn't mention AIDS publicly for two more years. 20,000 people died while the White House was silent. ACT UP's tactics — showing up at FDA headquarters, dying in the streets — forced policy change. Protest works when polite lobbying fails. 🎗️"},
+  {q:"The Iran-Contra affair was a constitutional crisis because:",choices:["Reagan had violated the War Powers Resolution by deploying troops to Nicaragua without congressional approval","The administration had secretly conducted foreign policy (arms sales to Iran, funding Nicaraguan rebels) specifically designed to circumvent a Congressional ban — the legislature's power of the purse and oversight authority were bypassed","Reagan had illegally negotiated with Iran during the 1980 presidential campaign to delay release of American hostages","The CIA had operated in Central America without any executive authorization"],a:1,fun:"Oliver North shredded documents; CIA Director William Casey conveniently died before testifying; Reagan's 'I don't recall' was used 88 times in depositions. 'Plausible deniability' entered the political vocabulary — the idea that a president can authorize illegal actions while being insulated from accountability. This pattern recurs. 🤫"},
+  {q:"The fall of the Berlin Wall (November 9, 1989) was most directly caused by:",choices:["Reagan's 'Tear Down This Wall' speech which inspired East Germans to revolt","Gorbachev's reforms of glasnost (openness) and perestroika (restructuring) which loosened Soviet control and allowed pent-up popular pressure to produce rapid change — the Wall fell when an East German official mistakenly announced border crossings were open immediately","Direct US military and economic pressure that made maintaining the Wall financially impossible","A planned democratic transition that Soviet and East German leaders had negotiated with the US"],a:1,fun:"The East German official at the press conference didn't know when the crossings would open. He guessed 'immediately, without delay.' Crowds gathered. Guards had no orders. They just... let people through. The most consequential moment of the late 20th century happened partly by mistake, by miscommunication, by a confused bureaucrat. History sometimes works this way. 🧱"}
+]},
+]},
+
+// ══════════════════════════════════════════════
+// UNIT 8: MODERN AMERICA
+// ══════════════════════════════════════════════
+{id:'u8',emoji:'🏙️',name:'Modern America 1991–Present',weeks:'Weeks 15–18, Semester 2',lessons:[
+{id:'u8l1',day:'S2, Week 15, Day 1',title:'America After the Cold War',
+objectives:['Understand the post-Cold War world order and its challenges','Analyze 9/11 and the War on Terror','Evaluate the 2008 financial crisis and its political consequences'],
+content:`<div class="body-text">
+<p>The end of the Cold War left the US as the world's sole superpower — the "unipolar moment." Political scientist Francis Fukuyama famously declared "the end of history" — liberal democracy had won and would spread globally. The 2001 attacks, the Iraq War, the financial crisis of 2008, and the rise of authoritarian nationalism globally suggested that history had not, in fact, ended.</p>
+<div class="info-table">
+  <div class="info-table-head">September 11, 2001 and Its Consequences</div>
+  <div class="info-row"><div class="info-key">The attacks</div><div class="info-val">19 hijackers (15 Saudi, 2 Emirati, 1 Egyptian, 1 Lebanese); al-Qaeda; ~3,000 killed; most destructive terrorist attack on US soil in history</div></div>
+  <div class="info-row"><div class="info-key">Afghanistan (2001–2021)</div><div class="info-val">US invaded to destroy al-Qaeda and remove the Taliban government. Longest war in American history. Taliban retook Afghanistan within days of US withdrawal in 2021. 2,400 Americans killed; $2.3 trillion spent.</div></div>
+  <div class="info-row"><div class="info-key">Iraq (2003–2011)</div><div class="info-val">Invaded on basis of claimed WMDs (not found) and alleged al-Qaeda ties (not proven). 4,500 Americans killed; 100,000+ Iraqi civilians killed; destabilized region; created conditions for ISIS emergence.</div></div>
+  <div class="info-row"><div class="info-key">PATRIOT Act / surveillance</div><div class="info-val">Expanded government surveillance authority; Edward Snowden revelations (2013) showed NSA was collecting metadata on virtually all American phone calls; ongoing tension between security and civil liberties</div></div>
+</div>
+<div class="info-table">
+  <div class="info-table-head">The 2008 Financial Crisis</div>
+  <div class="info-row"><div class="info-key">Cause</div><div class="info-val">Housing bubble built on predatory mortgages bundled into complex financial products (mortgage-backed securities, CDOs) rated as safe by complicit rating agencies; when housing prices fell, the system collapsed</div></div>
+  <div class="info-row"><div class="info-key">Scale</div><div class="info-val">Largest economic contraction since the Great Depression; $13 trillion in household wealth wiped out; 8.7 million jobs lost; millions of foreclosures</div></div>
+  <div class="info-row"><div class="info-key">Response and anger</div><div class="info-val">Banks bailed out; homeowners often not. Anger at this asymmetry fueled both the Tea Party (right) and Occupy Wall Street (left) movements — and arguably contributed to Trump's 2016 victory</div></div>
+</div>
+<p>Barack Obama's election in 2008 was historically extraordinary — the first African American president, 143 years after slavery's abolition, 43 years after the Voting Rights Act. People who had marched across the Edmund Pettus Bridge in 1965 voted for Obama in 2008. His two terms produced the Affordable Care Act, economic recovery from 2008, the killing of bin Laden, and the legalization of same-sex marriage — alongside persistent police violence, racial tension, and the rise of the Tea Party and eventually Trumpism as responses.</p>
+</div>`,
+cultural:`The January 6, 2021 attack on the US Capitol — when a mob attempted to prevent certification of the 2020 presidential election — was the first violent disruption of the peaceful transfer of power in American history since the Civil War. Whether it represents a temporary aberration or a harbinger of deeper democratic dysfunction is a question historians will debate for generations. Teaching "modern history" — events still being litigated politically, legally, and emotionally — requires particular care to distinguish documented fact from contested interpretation.`,
+quiz:[
+  {q:"The US invasion of Iraq in 2003 was primarily justified by the Bush administration on the grounds that:",choices:["Iraq had been proven to be involved in the September 11, 2001 attacks","Iraq possessed weapons of mass destruction (WMDs) — chemical and biological weapons programs — that posed an imminent threat; no WMDs were found","UN weapons inspectors had confirmed Iraqi WMD programs","The invasion was part of the broader War on Terror with no specific Iraqi justification"],a:1,fun:"Chief weapons inspector David Kay concluded there were no active WMD programs. Secretary of State Colin Powell's UN presentation — the public case for war — relied on intelligence that was later discredited. 4,500 Americans and 100,000+ Iraqis died. Whether this was intelligence failure or deliberate deception is still debated. The consequences are still unfolding. 🔍"},
+  {q:"The 2008 financial crisis was primarily caused by:",choices:["Government spending that created unsustainable debt","The collapse of a housing bubble built on risky mortgages bundled into complex financial products that were falsely rated as safe — when housing prices fell, the interconnected financial system collapsed globally","China's economic growth that drew American investment away from domestic markets","Federal Reserve interest rate decisions that made mortgages too expensive for most Americans"],a:1,fun:"The rating agencies (Moody's, S&P) rated toxic mortgage bundles as AAA (safest possible). Banks paid the agencies for ratings. The agencies wanted repeat business. Everybody in the system had incentives to keep the music playing. When housing prices fell 30%, the mathematical models failed everywhere simultaneously. It was a systemic failure enabled by regulatory capture and conflict of interest. 🏠"},
+  {q:"Barack Obama's election in 2008 was historically significant because:",choices:["He won by the largest electoral margin in American history","He became the first African American president — 143 years after slavery's abolition and 43 years after the Voting Rights Act — a milestone that people who had marched for civil rights lived to see","He was the first Democrat to win the South since Jimmy Carter in 1976","He was the first president to win the Nobel Peace Prize before completing a full term"],a:1,fun:"John Lewis, who had been beaten on the Edmund Pettus Bridge in 1965 on Bloody Sunday, voted for Barack Obama in 2008. The linear distance between those events is 43 years. Within a human lifetime. That compression of history — from being beaten for trying to vote to electing a Black president — is extraordinary, and its incompleteness is equally important to acknowledge. 🗳️"},
+  {q:"Political polarization in America since the 1990s has increased primarily because of:",choices:["A constitutional crisis that permanently damaged public trust in government","Multiple reinforcing factors: media fragmentation into ideologically sorted information bubbles, geographic sorting of Americans into politically homogeneous communities, partisan gerrymandering, and social media algorithms that reward outrage","The end of the Cold War which removed the external threat that had unified Americans","Campaign finance changes that gave wealthy donors too much influence over both parties"],a:1,fun:"In 1960, most Americans lived next door to people who voted differently. Today Americans increasingly self-segregate into politically homogeneous communities, consume only agreeable news, and never encounter the other side's best arguments. When you don't know anyone who thinks differently, the other side seems incomprehensible — or evil. This is new, and it's dangerous for democracy. 🗺️"}
+]},
+]},
+]};
+
+// ── STATE ───────────────────────────────────────
+const KEY = 'ush2_course';
+let state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+function totalLessons() { return COURSE.units.reduce((s,u)=>s+u.lessons.length,0); }
+function doneLessons() { return Object.keys(state).length; }
+function avgScore() {
+  const vals = Object.values(state).map(v=>v.score).filter(v=>v!=null);
+  return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+}
+function getLessonById(id) {
+  for (const u of COURSE.units) for (const l of u.lessons) if (l.id===id) return {unit:u,lesson:l};
+  return null;
+}
+
+// ── SIDEBAR ─────────────────────────────────────
+function buildSidebar() {
+  const nav = document.getElementById('unit-nav');
+  nav.innerHTML = '';
+  COURSE.units.forEach((unit, ui) => {
+    const done = unit.lessons.filter(l=>state[l.id]).length;
+    const allDone = done === unit.lessons.length;
+
+    const sh = document.createElement('div');
+    sh.className = 'unit-section-head';
+    sh.textContent = 'Unit '+(ui+1);
+    nav.appendChild(sh);
+
+    const btn = document.createElement('button');
+    btn.className = 'unit-btn' + (allDone ? ' done' : '');
+    btn.innerHTML = `<span class="u-emoji">${unit.emoji}</span><span class="u-name">${unit.name}</span><span class="u-badge">${done>0?(allDone?'✓':done+'/'+unit.lessons.length):''}</span>`;
+    btn.onclick = () => { document.getElementById('ll_'+unit.id)?.classList.toggle('open'); };
+    nav.appendChild(btn);
+
+    const ll = document.createElement('div');
+    ll.className = 'lesson-list'; ll.id = 'll_'+unit.id;
+    unit.lessons.forEach((les, li) => {
+      const d = state[les.id];
+      const lb = document.createElement('button');
+      lb.className = 'lesson-btn' + (d ? ' done' : '');
+      lb.innerHTML = `<span>${les.title.substring(0,32)}${les.title.length>32?'…':''}</span>${d?`<span class="l-score">${d.score}%</span>`:''}`;
+      lb.onclick = () => showLesson(unit.id, les.id);
+      ll.appendChild(lb);
+    });
+    nav.appendChild(ll);
+  });
+
+  document.getElementById('stat-done').textContent = doneLessons()+'/'+totalLessons();
+  const avg = avgScore();
+  document.getElementById('stat-avg').textContent = avg !== null ? avg+'%' : '—';
+  document.getElementById('prog-badge').textContent = doneLessons()+' / '+totalLessons();
+}
+
+// ── WELCOME ─────────────────────────────────────
+function showWelcome() {
+  document.getElementById('topbar-title').textContent = 'United States History II';
+  document.getElementById('topbar-crumb').textContent = '11th Grade · Full Year · 1.0 Credit · NC American History Standards';
+
+  const cards = COURSE.units.map((u,ui) => {
+    const done = u.lessons.filter(l=>state[l.id]).length;
+    const pct = Math.round(done/u.lessons.length*100);
+    return `<div class="unit-card" onclick="showLesson('${u.id}','${u.lessons[0].id}')">
+      <div class="uc-emoji">${u.emoji}</div>
+      <div class="uc-title">Unit ${ui+1}: ${u.name}</div>
+      <div class="uc-weeks">${u.weeks}</div>
+      <div class="uc-bar"><div class="uc-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="welcome-hero">
+      <div class="hero-tag">Calming Minds Day School · 2026–27</div>
+      <h2>United States<br>History II</h2>
+      <div class="hero-sub">From Reconstruction to the present — tracing the arc of American democracy, its promises kept and broken, through primary sources, key events, and the people who shaped them.</div>
+    </div>
+    <div class="unit-grid">${cards}</div>`;
+}
+
+// ── LESSON ──────────────────────────────────────
+let curUid=null, curLid=null, qa={}, submitted=false;
+
+function showLesson(uid, lid) {
+  const found = getLessonById(lid);
+  if (!found) return;
+  const {unit, lesson} = found;
+  curUid=uid; curLid=lid; qa={}; submitted=false;
+
+  // Open lesson list
+  document.querySelectorAll('.lesson-list').forEach(el=>el.classList.remove('open'));
+  document.getElementById('ll_'+uid)?.classList.add('open');
+
+  document.getElementById('topbar-title').textContent = lesson.title;
+  document.getElementById('topbar-crumb').textContent = `${unit.name} · ${lesson.day}`;
+
+  const saved = state[lid];
+  const L = ['A','B','C','D'];
+
+  const qHtml = lesson.quiz.map((q,qi)=>`
+    <div class="q-card">
+      <div class="q-num">Question ${qi+1} of ${lesson.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.choices.map((c,ci)=>`<button class="choice" id="ch${qi}_${ci}" onclick="pick(${qi},${ci})">
+        <span class="c-letter">${L[ci]}</span><span>${c}</span>
+      </button>`).join('')}
+      <div class="feedback" id="fb${qi}"></div>
+    </div>`).join('');
+
+  const banner = saved
+    ? `<div class="score-banner show"><div class="score-big">${saved.score}%</div><div class="score-msg">${getMsg(saved.score)}</div></div>`
+    : `<div class="score-banner" id="score-banner"><div class="score-big"></div></div>`;
+
+  const allLessons = COURSE.units.flatMap(u=>u.lessons.map(l=>({uid:u.id,lid:l.id})));
+  const idx = allLessons.findIndex(x=>x.lid===lid);
+  const prev = idx>0?allLessons[idx-1]:null;
+  const next = idx<allLessons.length-1?allLessons[idx+1]:null;
+
+  document.getElementById('content').innerHTML = `
+    <div class="lesson-header">
+      <div class="unit-tag">${unit.emoji} ${unit.name}</div>
+      <h2>${lesson.title}</h2>
+      <div class="day-meta">${lesson.day} · Calming Minds Day School</div>
+    </div>
+    <div class="objectives-box">
+      <div class="obj-head">Learning Objectives</div>
+      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="section">
+      <div class="sec-head">Lesson Content</div>
+      ${lesson.content}
+    </div>
+    <div class="section">
+      <div class="sec-head">Historical Context</div>
+      <div class="context-box"><div class="ctx-head">Context Note</div><p>${lesson.cultural}</p></div>
+    </div>
+    <div class="quiz-wrap">
+      <h4>LESSON QUIZ</h4>
+      <div class="quiz-sub">${lesson.quiz.length} questions · Submit to record your score</div>
+      ${banner}
+      ${qHtml}
+      <button class="submit-btn" id="sub-btn" onclick="submitQ()" ${saved?'disabled':''}>
+        ${saved?'Already Submitted ✓':'SUBMIT ANSWERS'}
+      </button>
+    </div>
+    <div class="lesson-nav">
+      ${prev?`<button class="nav-btn nav-prev" onclick="showLesson('${prev.uid}','${prev.lid}')">← Previous</button>`:''}
+      ${next?`<button class="nav-btn nav-next" onclick="showLesson('${next.uid}','${next.lid}')">Next Lesson →</button>`:''}
+    </div>`;
+
+  if (saved) showPrev(lesson, saved);
+  window.scrollTo(0,0);
+}
+
+function showPrev(lesson, saved) {
+  submitted = true;
+  const L=['A','B','C','D'];
+  lesson.quiz.forEach((q,qi)=>{
+    const sel = saved.answers ? saved.answers[qi] : null;
+    if (sel !== null && sel !== undefined) {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add(sel===q.a?'correct':'wrong');
+      if (sel!==q.a) document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      const fb = document.getElementById(`fb${qi}`);
+      if (fb) {
+        fb.className=`feedback ${sel===q.a?'ok':'bad'} show`;
+        fb.innerHTML = sel===q.a
+          ? `✅ Correct!${q.fun?` <div class="fun-note">💡 ${q.fun}</div>`:''}`
+          : `The answer is <strong>${L[q.a]}. ${q.choices[q.a]}</strong>${q.fun?` <div class="fun-note">💡 ${q.fun}</div>`:''}`;
+      }
+    }
+  });
+}
+
+function pick(qi,ci) {
+  if (submitted) return;
+  document.querySelectorAll(`[id^="ch${qi}_"]`).forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`ch${qi}_${ci}`)?.classList.add('selected');
+  qa[qi]=ci;
+}
+
+function submitQ() {
+  const found = getLessonById(curLid);
+  if (!found) return;
+  const {lesson} = found;
+  submitted = true;
+  const L=['A','B','C','D'];
+  let correct=0; const answers={};
+
+  lesson.quiz.forEach((q,qi)=>{
+    const sel=qa[qi];
+    answers[qi] = sel !== undefined ? sel : null;
+    const fb = document.getElementById(`fb${qi}`);
+    if (sel===undefined) {
+      if(fb){fb.className='feedback bad show';fb.textContent='No answer. Correct: '+L[q.a]+'. '+q.choices[q.a];}
+    } else if (sel===q.a) {
+      correct++;
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('correct');
+      if(fb){fb.className='feedback ok show';fb.innerHTML='✅ Correct!'+(q.fun?` <div class="fun-note">💡 ${q.fun}</div>`:'');}
+    } else {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('wrong');
+      document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      if(fb){fb.className='feedback bad show';fb.innerHTML=`The answer is <strong>${L[q.a]}. ${q.choices[q.a]}</strong>`+(q.fun?` <div class="fun-note">💡 ${q.fun}</div>`:'');}
+    }
+  });
+
+  const score = Math.round(correct/lesson.quiz.length*100);
+  state[curLid] = {score, answers};
+  save();
+
+  const banner = document.getElementById('score-banner');
+  if (banner) { banner.className='score-banner show'; banner.innerHTML=`<div class="score-big">${score}%</div><div class="score-msg">${getMsg(score)}</div>`; }
+  const btn = document.getElementById('sub-btn');
+  if(btn){btn.disabled=true;btn.textContent='Submitted ✓';}
+  buildSidebar();
+}
+
+function getMsg(s) {
+  if(s===100)return'🏆 Perfect score!';
+  if(s>=90)return'⭐ Excellent work!';
+  if(s>=80)return'👍 Great job!';
+  if(s>=70)return'📖 Good — review the misses';
+  return'💪 Keep going — read and retry!';
+}
+
+// ── INIT ───────────────────────────────────────
+buildSidebar();
+showWelcome();
+</script>
+</body>
+</html>

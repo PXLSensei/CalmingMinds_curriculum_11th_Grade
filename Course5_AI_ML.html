@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI & Machine Learning — Calming Minds Day School</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c14;
+  --s1: #0d1321;
+  --s2: #111827;
+  --s3: #1a2235;
+  --border: #1e2d45;
+  --violet: #7c3aed;
+  --violet-mid: #a855f7;
+  --violet-glow: rgba(124,58,237,.15);
+  --violet-border: rgba(124,58,237,.35);
+  --cyan: #22d3ee;
+  --cyan-dim: rgba(34,211,238,.1);
+  --rose: #f43f5e;
+  --amber: #fbbf24;
+  --green: #10b981;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --dimmer: #3d5068;
+  --sw: 278px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+
+/* ── GRID BACKGROUND ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sw);min-height:100vh;
+  background:var(--s1);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;
+  display:flex;flex-direction:column;overflow-y:auto;z-index:10;
+}
+.brand{
+  padding:22px 18px 16px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(124,58,237,.12) 0%,transparent 100%);
+}
+.brand-tag{
+  font-family:'Space Mono',monospace;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--violet-mid);margin-bottom:7px;
+}
+.brand h1{font-size:16px;font-weight:700;color:var(--text);line-height:1.25;}
+.brand h1 span{color:var(--violet-mid);}
+.brand .school{font-size:11px;color:var(--dimmer);margin-top:4px;font-family:'Space Mono',monospace;}
+
+.s-stats{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+.s-stat{padding:10px 14px;text-align:center;border-right:1px solid var(--border);}
+.s-stat:last-child{border-right:none;}
+.s-val{font-family:'Space Mono',monospace;font-size:19px;font-weight:700;color:var(--violet-mid);}
+.s-lbl{font-size:9px;color:var(--dimmer);text-transform:uppercase;letter-spacing:.1em;margin-top:2px;}
+
+.unit-nav{padding:6px 0 20px;flex:1;}
+.u-section{
+  font-family:'Space Mono',monospace;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dimmer);padding:10px 16px 3px;
+}
+.u-btn{
+  width:100%;text-align:left;background:none;border:none;cursor:pointer;
+  padding:8px 16px;color:var(--dim);font-size:12px;
+  font-family:'Space Grotesk',sans-serif;
+  display:flex;align-items:center;gap:9px;
+  transition:background .14s,color .14s;
+  border-left:2px solid transparent;
+}
+.u-btn:hover{background:var(--s2);color:var(--text);}
+.u-btn.active{background:var(--violet-glow);color:var(--violet-mid);border-left-color:var(--violet);}
+.u-btn.done{color:var(--dimmer);}
+.u-ic{font-size:13px;flex-shrink:0;}
+.u-nm{flex:1;line-height:1.3;font-size:11.5px;}
+.u-ck{font-family:'Space Mono',monospace;font-size:10px;color:var(--amber);}
+
+.lesson-list{display:none;}
+.lesson-list.open{display:block;}
+.l-btn{
+  width:100%;text-align:left;background:none;border:none;cursor:pointer;
+  padding:5px 16px 5px 38px;color:var(--dimmer);font-size:11px;
+  font-family:'Space Grotesk',sans-serif;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:color .14s,background .14s;
+}
+.l-btn:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.l-btn.active{color:var(--amber);}
+.l-btn.done{color:var(--dimmer);}
+.l-sc{font-family:'Space Mono',monospace;font-size:10px;color:var(--green);}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;}
+
+.topbar{
+  background:rgba(13,19,33,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:13px 36px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:5;
+}
+.tb-left h2{font-size:15px;font-weight:600;color:var(--text);}
+.tb-left .crumb{font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);margin-top:2px;}
+.prog-pill{
+  background:var(--violet-glow);border:1px solid var(--violet-border);
+  color:var(--violet-mid);padding:5px 14px;border-radius:20px;
+  font-family:'Space Mono',monospace;font-size:12px;font-weight:700;
+}
+
+.content{flex:1;padding:32px 40px;max-width:920px;}
+
+/* ── WELCOME ── */
+.w-hero{
+  background:linear-gradient(135deg,var(--s1) 0%,rgba(124,58,237,.1) 100%);
+  border:1px solid var(--border);border-radius:14px;
+  padding:36px 40px;margin-bottom:24px;position:relative;overflow:hidden;
+}
+.w-hero::after{
+  content:'AI';position:absolute;right:30px;top:20px;
+  font-size:120px;font-weight:900;color:rgba(124,58,237,.06);
+  font-family:'Space Grotesk',sans-serif;line-height:1;user-select:none;
+}
+.w-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet-mid);margin-bottom:10px;}
+.w-title{font-size:38px;font-weight:700;line-height:1.1;margin-bottom:10px;}
+.w-title span{color:var(--violet-mid);}
+.w-sub{font-size:14px;color:var(--dim);line-height:1.65;max-width:580px;}
+
+.u-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.u-card{
+  background:var(--s1);border:1px solid var(--border);
+  border-top:2px solid var(--violet);
+  border-radius:8px;padding:16px 18px;cursor:pointer;
+  transition:border-color .18s,background .18s,transform .14s;
+}
+.u-card:hover{border-color:var(--violet-mid);background:var(--s2);transform:translateY(-2px);}
+.u-card:nth-child(even){border-top-color:var(--cyan);}
+.u-card:nth-child(even):hover{border-color:var(--cyan);}
+.uc-ic{font-size:18px;margin-bottom:6px;}
+.uc-tt{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.uc-wk{font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);}
+.uc-bar{height:2px;background:var(--border);border-radius:1px;margin-top:10px;overflow:hidden;}
+.uc-fill{height:100%;background:var(--violet);transition:width .4s;}
+
+/* ── LESSON ── */
+.l-header{padding-bottom:18px;margin-bottom:22px;border-bottom:1px solid var(--border);}
+.l-unit-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--violet-mid);margin-bottom:8px;}
+.l-header h2{font-size:26px;font-weight:700;color:var(--text);line-height:1.2;}
+.l-meta{font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);margin-top:5px;}
+
+.obj-box{
+  background:var(--cyan-dim);border:1px solid rgba(34,211,238,.2);
+  border-radius:8px;padding:14px 18px;margin-bottom:22px;
+}
+.obj-head{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;}
+.obj-box ul{list-style:none;}
+.obj-box li{font-size:13.5px;color:#9de8f0;padding:3px 0;display:flex;gap:9px;align-items:flex-start;}
+.obj-box li::before{content:"▸";color:var(--cyan);font-size:10px;margin-top:3px;flex-shrink:0;font-family:'Space Mono',monospace;}
+
+.section{margin-bottom:26px;}
+.sec-head{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--violet-mid);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-head::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.body-text{font-size:15px;line-height:1.82;color:#b8c8dc;}
+.body-text p{margin-bottom:12px;}
+.body-text strong{color:var(--text);font-weight:600;}
+
+/* content blocks */
+.concept-box{
+  background:var(--s2);border:1px solid var(--border);
+  border-left:3px solid var(--violet);
+  border-radius:0 8px 8px 0;padding:16px 20px;margin:14px 0;
+}
+.cb-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet-mid);margin-bottom:10px;}
+
+.def-table{background:var(--s2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:14px 0;}
+.dt-head{background:rgba(124,58,237,.15);padding:9px 14px;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:11px;color:var(--violet-mid);letter-spacing:.08em;}
+.dt-row{display:flex;border-bottom:1px solid var(--border);font-size:13.5px;}
+.dt-row:last-child{border-bottom:none;}
+.dt-row:nth-child(even){background:rgba(255,255,255,.02);}
+.dt-key{width:200px;min-width:200px;padding:9px 14px;font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);border-right:1px solid var(--border);}
+.dt-val{padding:9px 14px;color:var(--dim);flex:1;line-height:1.55;}
+
+.example-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:14px 18px;margin:14px 0;}
+.ex-head{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
+.ex-row{font-size:13.5px;color:#f0d898;line-height:1.7;margin-bottom:5px;display:flex;gap:10px;}
+.ex-row .er-label{font-family:'Space Mono',monospace;color:var(--amber);font-size:11px;min-width:70px;margin-top:2px;flex-shrink:0;}
+.ex-row .er-text{flex:1;}
+.ex-row code{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--amber);background:rgba(251,191,36,.08);padding:1px 6px;border-radius:3px;}
+
+.insight-box{background:var(--violet-glow);border:1px solid var(--violet-border);border-radius:8px;padding:14px 18px;margin:14px 0;}
+.ib-head{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet-mid);margin-bottom:8px;}
+.insight-box p{font-size:13.5px;color:#c4b5fd;line-height:1.7;}
+
+.ethics-box{background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:14px 18px;margin:14px 0;}
+.et-head{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;}
+.ethics-box p{font-size:13.5px;color:#fda4af;line-height:1.7;}
+
+/* ── QUIZ ── */
+.quiz-wrap{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-top:8px;}
+.quiz-wrap h4{font-family:'Space Mono',monospace;font-size:13px;color:var(--violet-mid);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.quiz-sub{font-size:12px;color:var(--dimmer);margin-bottom:20px;font-family:'Space Mono',monospace;}
+
+.score-banner{background:rgba(124,58,237,.1);border:1px solid var(--violet-border);border-radius:8px;padding:16px;text-align:center;display:none;margin-bottom:18px;}
+.score-banner.show{display:block;}
+.score-big{font-family:'Space Mono',monospace;font-size:44px;color:var(--violet-mid);font-weight:700;}
+.score-msg{font-size:12px;color:var(--dim);margin-top:4px;font-family:'Space Mono',monospace;}
+
+.q-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:17px;margin-bottom:13px;}
+.q-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(168,85,247,.5);margin-bottom:7px;}
+.q-text{font-size:14.5px;color:var(--text);line-height:1.55;margin-bottom:13px;font-weight:500;}
+
+.choice{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 13px;border-radius:6px;border:1px solid var(--border);
+  background:rgba(255,255,255,.02);cursor:pointer;margin-bottom:6px;
+  font-size:13px;color:var(--dim);
+  transition:border-color .13s,background .13s;
+  text-align:left;width:100%;font-family:'Space Grotesk',sans-serif;
+}
+.choice:hover{border-color:var(--violet);background:var(--violet-glow);color:var(--text);}
+.choice.selected{border-color:var(--violet);background:var(--violet-glow);color:var(--text);}
+.choice.correct{border-color:var(--green)!important;background:rgba(16,185,129,.12)!important;color:#6ee7b7;}
+.choice.wrong{border-color:var(--rose)!important;background:rgba(244,63,94,.1)!important;color:#fda4af;}
+.c-ltr{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;min-width:18px;color:var(--violet-mid);flex-shrink:0;margin-top:1px;}
+.correct .c-ltr{color:var(--green);}
+.wrong .c-ltr{color:var(--rose);}
+
+.feedback{border-radius:6px;padding:9px 13px;margin-top:8px;font-size:12.5px;line-height:1.55;display:none;font-family:'Space Grotesk',sans-serif;}
+.feedback.show{display:block;}
+.feedback.ok{background:rgba(16,185,129,.08);color:#6ee7b7;border:1px solid rgba(16,185,129,.2);}
+.feedback.bad{background:rgba(244,63,94,.08);color:#fda4af;border:1px solid rgba(244,63,94,.2);}
+.fun-n{font-size:11.5px;margin-top:5px;opacity:.8;font-family:'Space Mono',monospace;}
+
+.sub-btn{
+  background:var(--violet);color:#fff;border:none;
+  padding:10px 24px;border-radius:6px;
+  font-family:'Space Mono',monospace;font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;margin-top:6px;transition:opacity .18s,transform .14s;
+}
+.sub-btn:hover{opacity:.85;transform:translateY(-1px);}
+.sub-btn:disabled{opacity:.25;cursor:default;transform:none;}
+
+.lesson-nav{display:flex;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);}
+.nav-btn{padding:9px 20px;border-radius:6px;font-size:12px;cursor:pointer;transition:.14s;font-family:'Space Mono',monospace;font-weight:700;letter-spacing:.06em;}
+.nav-prev{background:none;border:1px solid var(--border);color:var(--dim);}
+.nav-prev:hover{border-color:var(--dim);color:var(--text);}
+.nav-next{background:var(--violet);border:none;color:#fff;}
+.nav-next:hover{opacity:.85;}
+
+@media(max-width:800px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.u-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="brand">
+    <div class="brand-tag">course_05 / 07</div>
+    <h1>AI & <span>Machine Learning</span></h1>
+    <div class="school">calming_minds · 2026–27</div>
+  </div>
+  <div class="s-stats">
+    <div class="s-stat"><div class="s-val" id="stat-done">0</div><div class="s-lbl">done</div></div>
+    <div class="s-stat"><div class="s-val" id="stat-avg">—</div><div class="s-lbl">score</div></div>
+  </div>
+  <nav class="unit-nav" id="unit-nav"></nav>
+</nav>
+
+<main class="main">
+  <header class="topbar">
+    <div class="tb-left">
+      <h2 id="tb-title">AI & Machine Learning Fundamentals</h2>
+      <div class="crumb" id="tb-crumb">course_05 · cte_elective · full_year · 1.0_credit</div>
+    </div>
+    <div class="prog-pill" id="prog-pill">0 / 42</div>
+  </header>
+  <div class="content" id="content"></div>
+</main>
+
+<script>
+const COURSE={units:[
+
+// ═══════════════════════════════════════
+// UNIT 1: WHAT IS AI?
+// ═══════════════════════════════════════
+{id:'u1',emoji:'🤖',name:'What Is AI?',weeks:'weeks_01–04',lessons:[
+{id:'u1l1',day:'week_01 · day_01',title:'History and Foundations of Artificial Intelligence',
+objectives:['Define AI and distinguish narrow vs. general AI','Trace key milestones in AI history from Turing to today','Understand why AI is accelerating now'],
+content:`<div class="body-text">
+<p>Artificial intelligence is the attempt to build machines that can perform tasks that, when performed by humans, require intelligence. That definition sounds simple — but "intelligence" is one of the most contested concepts in science and philosophy. Before diving into how AI works, it helps to understand where it came from and why it matters now.</p>
+<div class="def-table">
+  <div class="dt-head">Key Distinctions</div>
+  <div class="dt-row"><div class="dt-key">Narrow AI (ANI)</div><div class="dt-val">AI that excels at one specific task — playing chess, recognizing faces, translating text. Every AI you've used is narrow AI. It fails completely outside its domain.</div></div>
+  <div class="dt-row"><div class="dt-key">General AI (AGI)</div><div class="dt-val">AI that could perform any intellectual task a human can. Does not yet exist. Active research area. Timelines debated: 5 years to never, depending on who you ask.</div></div>
+  <div class="dt-row"><div class="dt-key">Machine Learning</div><div class="dt-val">A subset of AI where systems learn from data rather than following explicit programmed rules. The dominant approach today.</div></div>
+  <div class="dt-row"><div class="dt-key">Deep Learning</div><div class="dt-val">A subset of ML using neural networks with many layers. Responsible for most recent breakthroughs in vision, language, and games.</div></div>
+</div>
+<div class="concept-box">
+  <div class="cb-title">Major AI Milestones</div>
+  <div style="font-size:13.5px;color:#b8c8dc;line-height:1.8;">
+    <strong style="color:#a855f7">1950</strong> — Alan Turing proposes the Turing Test ("Can machines think?")<br>
+    <strong style="color:#a855f7">1956</strong> — Dartmouth Conference coins "artificial intelligence" as a field<br>
+    <strong style="color:#a855f7">1997</strong> — Deep Blue defeats chess world champion Garry Kasparov<br>
+    <strong style="color:#a855f7">2012</strong> — AlexNet wins ImageNet by a huge margin; deep learning revolution begins<br>
+    <strong style="color:#a855f7">2016</strong> — AlphaGo defeats Lee Sedol at Go — a game vastly more complex than chess<br>
+    <strong style="color:#a855f7">2022</strong> — ChatGPT reaches 1 million users in 5 days; public AI era begins<br>
+    <strong style="color:#a855f7">2024–25</strong> — Multimodal models (vision + text + audio), agentic AI, AI in science
+  </div>
+</div>
+<p>Three things changed to make modern AI possible: <strong>data</strong> (the internet created vast labeled datasets), <strong>compute</strong> (GPUs turned out to be perfect for neural network training), and <strong>algorithms</strong> (deeper networks, better training methods). All three came together around 2012, and AI has been compounding ever since.</p>
+<div class="insight-box">
+  <div class="ib-head">Why It's Accelerating</div>
+  <p>Moore's Law (compute doubles every ~2 years) + exponential data growth + algorithmic improvements = an AI capability curve that is genuinely hard to predict. The gap between GPT-3 (2020) and GPT-4 (2023) was more dramatic than the gap between the first computer and Deep Blue. We are early in this curve.</p>
+</div>
+</div>`,
+cultural:`Alan Turing was one of history's great geniuses — he cracked Nazi Germany's Enigma cipher, arguably shortening WWII by years, and laid the theoretical foundation for modern computing. He was also prosecuted by the British government for being gay, subjected to chemical castration, and died at 41 — officially a suicide, though disputed. In 2013, the British government granted him a posthumous royal pardon. His face now appears on the £50 note. The man who arguably saved Europe and invented computer science was destroyed by the government he served. History is not fair.`,
+quiz:[
+  {q:"The key difference between 'narrow AI' and 'artificial general intelligence' (AGI) is:",choices:["Narrow AI is cheaper to build; AGI requires quantum computers","Narrow AI excels at one specific domain; AGI would perform any intellectual task a human can — AGI does not yet exist","Narrow AI uses machine learning; AGI uses rule-based expert systems","AGI is currently deployed in smartphones; narrow AI is only in research labs"],a:1,fun:"Every AI product you've ever used — Siri, ChatGPT, recommendation algorithms, image classifiers — is narrow AI. Spectacular within its domain, completely helpless outside it. AlphaGo can't fold laundry; your autocorrect can't play Go. AGI remains the field's great unsolved challenge. 🤖"},
+  {q:"The 2012 ImageNet competition was a turning point in AI history because:",choices:["It was the first time a computer solved a problem that humans couldn't","AlexNet's deep learning approach dramatically outperformed all other methods, proving neural networks were the path forward","It demonstrated that AI had surpassed human-level intelligence for the first time","It was when AI was first used in a commercial product"],a:1,fun:"AlexNet cut the error rate almost in half compared to previous best methods — from ~26% to ~15%. Every major AI company immediately pivoted to deep learning. Geoff Hinton (AlexNet's lead researcher) later won the Nobel Prize in Physics (2024) for foundational work on neural networks. 2012 is when the current AI era started. 🏆"},
+  {q:"The three key ingredients that made modern AI possible were:",choices:["Better programming languages, faster internet, and government funding","Data (from the internet), compute (especially GPUs), and improved algorithms — all converging around 2012","Smartphones, cloud computing, and open-source software","Larger research teams, global collaboration, and reduced computing costs"],a:1,fun:"Think of it as a three-legged stool: remove any one leg and it collapses. You could have the algorithm (deep learning existed since the 1980s) but without data and compute it couldn't scale. All three came together simultaneously — the result was a phase transition in AI capability. ⚡"},
+  {q:"Alan Turing's proposed test for machine intelligence asked:",choices:["Whether a machine could solve mathematical problems faster than humans","Whether a machine could, in text conversation, behave in a way indistinguishable from a human","Whether a machine could pass a standardized IQ test","Whether a machine could beat the world chess champion"],a:1,fun:"Turing proposed the 'imitation game' in his 1950 paper 'Computing Machinery and Intelligence.' If a human interrogator can't reliably distinguish the machine from a human in text conversation, the machine 'thinks.' Critics (like John Searle's Chinese Room argument) say this tests behavior, not understanding. The debate continues. 💬"}
+]},
+
+{id:'u1l2',day:'week_02 · day_01',title:'Machine Learning: Learning from Data',
+objectives:['Distinguish supervised, unsupervised, and reinforcement learning','Understand training, testing, and validation','Explain overfitting and the bias-variance tradeoff'],
+content:`<div class="body-text">
+<p>Traditional programming: you write rules, the computer follows them. Machine learning: you show the computer examples, and it figures out the rules. This inversion is what makes ML powerful — and what makes it sometimes unpredictable.</p>
+<div class="def-table">
+  <div class="dt-head">The Three Learning Paradigms</div>
+  <div class="dt-row"><div class="dt-key">Supervised Learning</div><div class="dt-val">Learn from labeled examples (input → correct output). "Here are 10,000 photos labeled cat/not-cat. Learn to classify new photos." Most commercial AI is supervised.</div></div>
+  <div class="dt-row"><div class="dt-key">Unsupervised Learning</div><div class="dt-val">Find hidden structure in unlabeled data. "Here are 1 million customer purchases. Find meaningful groups." No right answer — discovers patterns.</div></div>
+  <div class="dt-row"><div class="dt-key">Reinforcement Learning</div><div class="dt-val">Learn through trial, error, and reward signals. Agent takes actions in environment, receives feedback, improves strategy. How AlphaGo and most game-playing AI works.</div></div>
+</div>
+<div class="concept-box">
+  <div class="cb-title">The ML Workflow</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;margin-bottom:8px;">
+    1. <strong>Collect data</strong> — the quality of your model depends entirely on data quality<br>
+    2. <strong>Split data</strong> — training set (learn), validation set (tune), test set (final evaluation)<br>
+    3. <strong>Train</strong> — model finds patterns in training data by adjusting internal parameters<br>
+    4. <strong>Evaluate</strong> — test set measures real-world performance on data model never saw<br>
+    5. <strong>Deploy</strong> — production; monitor for data drift and performance degradation
+  </p>
+</div>
+<div class="example-box">
+  <div class="ex-head">Overfitting vs. Underfitting</div>
+  <div class="ex-row"><span class="er-label">Underfitting:</span><span class="er-text">Model too simple — misses real patterns. Like a student who barely studied. Fails on both training and test data.</span></div>
+  <div class="ex-row"><span class="er-label">Overfitting:</span><span class="er-text">Model too complex — memorizes training data including noise. Like a student who memorized specific exam questions but can't apply concepts. Works on training, fails on new data.</span></div>
+  <div class="ex-row"><span class="er-label">Sweet spot:</span><span class="er-text">Generalizes — learned the actual pattern, not noise. Performs well on unseen data. The goal of every ML project.</span></div>
+</div>
+<div class="insight-box">
+  <div class="ib-head">Garbage In, Garbage Out</div>
+  <p>The most important principle in ML: your model can't be better than your data. Biased training data → biased model. Missing important categories → blind spots. Mislabeled data → confused model. Data curation is often 80% of the actual work in real ML projects — the "unglamorous" foundation everything else rests on.</p>
+</div>
+</div>`,
+cultural:`Reinforcement learning's breakthrough moment was AlphaGo's Move 37 in Game 2 against Lee Sedol (2016). AlphaGo made a move no human Go player would ever make — a move considered wrong by 3,000 years of Go theory. Lee Sedol had to leave the room for 15 minutes to collect himself. Later analysis showed it was the turning point move that won the game. The AI discovered strategic knowledge that millennia of human play had missed. This is what makes RL both remarkable and unsettling: it can exceed human knowledge in its domain.`,
+quiz:[
+  {q:"Reinforcement learning differs from supervised learning in that:",choices:["RL requires more data than supervised learning","RL learns through trial-and-error with reward signals rather than from labeled examples","RL can only be applied to games, not real-world problems","Supervised learning uses neural networks; RL uses decision trees"],a:1,fun:"RL is how you'd train a dog: do the right thing, get a treat; do the wrong thing, get nothing (or a correction). No labeled dataset of 'correct moves' — the agent tries things and learns from consequences. AlphaGo, robotics, recommendation systems (maximize engagement), and drug discovery all use RL variants. 🎮"},
+  {q:"The purpose of a 'test set' that is kept separate during model development is:",choices:["To give the model extra training examples","To provide an unbiased estimate of how the model will perform on truly new, unseen data","To store the model's parameters after training","To validate the quality of the training data before training begins"],a:1,fun:"If you 'peek' at the test set during development — even indirectly by making decisions based on test performance — you've contaminated it. The test set gives honest performance estimates only if the model has NEVER seen it. Data scientists call accidental test set contamination 'data leakage.' Results look great; real performance is worse. 🙈"},
+  {q:"An overfitted model is like a student who:",choices:["Didn't study enough and fails both practice tests and the real exam","Memorized specific practice exam questions and answers but can't apply concepts to new questions","Learned the concepts deeply and performs well on any version of the exam","Studied the wrong subject entirely"],a:1,fun:"Overfitting = memorizing noise instead of learning signal. The model gets 99% on training data, then 60% on test data — it learned THIS data's quirks, not the underlying pattern. Solutions: more data, simpler model, regularization techniques (dropout, L1/L2 penalties). 📝"},
+  {q:"In the context of ML, 'features' refers to:",choices:["Desirable qualities of a well-designed AI system","The individual measurable properties of data used as inputs to the model","Special premium capabilities of commercial AI products","The output predictions generated by a trained model"],a:1,fun:"For a house price prediction model: square footage, bedrooms, zip code, age, school district rating — those are all features. Feature engineering (deciding which features to include, how to transform them) is often more important than the model architecture. Great features + simple model often beats bad features + complex model. 🏠"}
+]},
+
+{id:'u1l3',day:'week_03 · day_01',title:'How AI Creates Bias — and Why It Matters',
+objectives:['Explain sources of algorithmic bias','Analyze real-world examples of AI bias and harm','Understand why fairness in AI is a technical AND social challenge'],
+content:`<div class="body-text">
+<p>AI systems reflect the data they're trained on — and that data reflects the world as it is, including its inequalities, historical injustices, and human prejudices. When we automate decisions using biased data, we automate bias at scale and give it a veneer of objectivity that makes it harder to challenge.</p>
+<div class="ethics-box">
+  <div class="et-head">Real Cases of AI Bias</div>
+  <p><strong>COMPAS criminal risk assessment:</strong> ProPublica (2016) found the tool falsely flagged Black defendants as future criminals at twice the rate of white defendants. Used by judges for sentencing decisions. The company said their accuracy was equal; ProPublica showed the error rates were unequal by race — both can be technically true, which reveals the problem: fairness has multiple valid mathematical definitions that can't all be satisfied simultaneously.</p>
+  <p style="margin-top:8px;"><strong>Amazon hiring AI:</strong> Trained on 10 years of Amazon hiring data (historically male-dominated). Learned: male-pattern resumes get hired. Penalized resumes with the word "women's" (as in "women's chess club"). Downgraded graduates of all-women's colleges. Shut down in 2018.</p>
+  <p style="margin-top:8px;"><strong>Facial recognition accuracy gaps:</strong> Multiple studies showed dramatically higher error rates for darker-skinned women than lighter-skinned men. One NIST study found error rates 10–100× higher for African and Asian faces on some systems. Systems trained predominantly on certain demographics perform worst on underrepresented groups.</p>
+</div>
+<div class="def-table">
+  <div class="dt-head">Sources of AI Bias</div>
+  <div class="dt-row"><div class="dt-key">Historical bias</div><div class="dt-val">Training data reflects past discrimination. Historical hiring data reflects who was historically hired (often not women or minorities) — model learns to replicate that.</div></div>
+  <div class="dt-row"><div class="dt-key">Representation bias</div><div class="dt-val">Training data underrepresents certain groups. Facial recognition trained mostly on lighter-skinned faces performs worse on darker-skinned faces.</div></div>
+  <div class="dt-row"><div class="dt-key">Measurement bias</div><div class="dt-val">The feature used as a proxy for what we care about is itself biased. Predicting "likelihood of re-arrest" (biased by policing) as a proxy for "likelihood of re-offending" (what we care about).</div></div>
+  <div class="dt-row"><div class="dt-key">Feedback loops</div><div class="dt-val">Biased predictions change the world in ways that confirm the bias. Predictive policing sends more police to minority neighborhoods → more arrests → more "crime" data → algorithm sends more police.</div></div>
+</div>
+<div class="insight-box">
+  <div class="ib-head">Fairness Is Not One Thing</div>
+  <p>Researchers have formally defined dozens of different mathematical notions of fairness — and proved that most of them are mathematically incompatible. You can have equal accuracy across groups OR equal false positive rates OR equal false negative rates — but you usually can't have all three simultaneously. There is no purely technical solution to fairness. It requires human judgment about which type of fairness matters most in a given context — which is a political and ethical question, not a technical one.</p>
+</div>
+</div>`,
+cultural:`Joy Buolamwini, an MIT researcher, discovered facial recognition bias when she was working on a project and the system couldn't detect her dark-skinned face until she put on a white mask. She co-authored a landmark 2018 study with Timnit Gebru ("Gender Shades") documenting accuracy gaps across race and gender. Her work directly led Microsoft, IBM, and Amazon to announce restrictions on their facial recognition products. One researcher's observation — that the system literally couldn't see her — changed industry policy. Individual researchers can change the direction of technology.`,
+quiz:[
+  {q:"Algorithmic bias most often originates from:",choices:["AI engineers deliberately programming discriminatory outcomes","Training data that reflects historical inequalities, underrepresents certain groups, or uses proxies that carry existing biases","Limitations in hardware that cause random errors in predictions","Government regulations that require different treatment of different demographic groups"],a:1,fun:"The COMPAS algorithm didn't have race as an input feature — it used 'neutral' factors like employment history and neighborhood. Those factors are themselves shaped by historical racism. The algorithm learned those proxies. No racist programmer required — just biased data + optimization. This is what makes AI bias so hard to detect and address. 😔"},
+  {q:"The COMPAS risk assessment tool controversy revealed that:",choices:["The algorithm was provably unconstitutional","Different definitions of 'fairness' are mathematically incompatible — the algorithm could be accurate overall while having racially unequal false positive rates","The tool had been deliberately programmed to discriminate by race","All risk assessment tools should be banned from criminal justice"],a:1,fun:"Northpointe (makers of COMPAS) showed equal accuracy across races — technically true. ProPublica showed unequal false positive rates — also true. Both were correct. This is the fairness impossibility theorem in action: you can't simultaneously equalize accuracy, false positives, and false negatives across groups when base rates differ. A genuine dilemma, not a technical error. ⚖️"},
+  {q:"Amazon's AI hiring tool discriminated against women because:",choices:["Its creators explicitly programmed gender preferences","It was trained on historical hiring data from a male-dominated company, learning that male-pattern resumes were associated with successful hires","Women's resumes contained language that triggered content filters","Amazon's HR policies required demographic balance that the AI couldn't implement"],a:1,fun:"The system penalized the word 'women's' — 'women's chess club,' 'women's college.' It downgraded graduates of all-women's colleges. No one programmed this. The model learned from 10 years of data showing which applicants Amazon hired (historically disproportionately male) and optimized for that pattern. Automated discrimination without discriminatory intent. 🤖"},
+  {q:"Feedback loops in predictive policing are problematic because:",choices:["Police officers don't trust AI recommendations","The algorithm sends more police to targeted areas → more arrests in those areas → more 'crime' data → algorithm recommends sending even more police — creating a self-fulfilling prophecy of bias","Predictive policing has never been shown to reduce crime","The technology is too expensive for most police departments"],a:1,fun:"The data the algorithm is trained on is itself a product of previous policing decisions — not an objective record of all crime (most of which goes undetected). More police presence → more detected crime → more data confirming the area is 'high crime' → more police. The algorithm doesn't learn about crime; it learns about policing. A fundamental epistemological trap. 🔄"}
+]},
+]},
+
+// ═══════════════════════════════════════
+// UNIT 2: HOW MACHINES LEARN
+// ═══════════════════════════════════════
+{id:'u2',emoji:'📚',name:'How Machines Learn',weeks:'weeks_05–09',lessons:[
+{id:'u2l1',day:'week_05 · day_01',title:'Neural Networks: From Neurons to Deep Learning',
+objectives:['Understand the biological inspiration for neural networks','Explain layers, weights, and activation functions','Describe how backpropagation trains a network'],
+content:`<div class="body-text">
+<p>A neural network is loosely inspired by the brain's structure — billions of neurons connected by synapses of varying strength. The artificial version takes that core idea (connected nodes with tunable weights) and makes it mathematically tractable and trainable at scale.</p>
+<div class="def-table">
+  <div class="dt-head">Neural Network Components</div>
+  <div class="dt-row"><div class="dt-key">Neuron (node)</div><div class="dt-val">Takes multiple inputs, multiplies each by a weight, sums them, applies an activation function, outputs a single value.</div></div>
+  <div class="dt-row"><div class="dt-key">Weights</div><div class="dt-val">Numbers that scale each input's influence. These are what the network LEARNS — training adjusts weights to reduce error.</div></div>
+  <div class="dt-row"><div class="dt-key">Activation function</div><div class="dt-val">Non-linear function applied to each neuron's output. Without it, any number of layers collapses to a single linear transformation. ReLU: f(x) = max(0, x).</div></div>
+  <div class="dt-row"><div class="dt-key">Input layer</div><div class="dt-val">Receives raw data — pixel values, word vectors, sensor readings. No computation, just passes data forward.</div></div>
+  <div class="dt-row"><div class="dt-key">Hidden layers</div><div class="dt-val">Intermediate layers that learn increasingly abstract representations. "Deep" learning = many hidden layers.</div></div>
+  <div class="dt-row"><div class="dt-key">Output layer</div><div class="dt-val">Produces final prediction — class probabilities, a number, a next token, etc.</div></div>
+</div>
+<div class="concept-box">
+  <div class="cb-title">Backpropagation — How Networks Learn</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    1. <strong>Forward pass:</strong> Input flows through network → produces a prediction<br>
+    2. <strong>Calculate loss:</strong> Compare prediction to correct answer → compute error (loss)<br>
+    3. <strong>Backward pass:</strong> Use calculus (chain rule) to calculate how much each weight contributed to the error<br>
+    4. <strong>Gradient descent:</strong> Adjust each weight in the direction that reduces loss<br>
+    5. <strong>Repeat</strong> millions of times on millions of examples<br><br>
+    The result: weights slowly shift until the network reliably produces correct outputs.
+  </p>
+</div>
+<div class="example-box">
+  <div class="ex-head">Why Depth Matters</div>
+  <div class="ex-row"><span class="er-label">Layer 1:</span><span class="er-text">Detects simple features — edges, colors, basic shapes in an image</span></div>
+  <div class="ex-row"><span class="er-label">Layer 2:</span><span class="er-text">Combines edges into textures — fur, scales, fabric patterns</span></div>
+  <div class="ex-row"><span class="er-label">Layer 3:</span><span class="er-text">Combines textures into parts — eyes, ears, noses</span></div>
+  <div class="ex-row"><span class="er-label">Layer 4:</span><span class="er-text">Combines parts into objects — faces, animals, vehicles</span></div>
+  <div class="ex-row"><span class="er-label">Output:</span><span class="er-text">"This is a golden retriever" (89% confidence)</span></div>
+</div>
+</div>`,
+cultural:`Geoffrey Hinton, Yann LeCun, and Yoshua Bengio — the "Godfathers of Deep Learning" — continued working on neural networks during the "AI winter" of the 1980s–90s when almost everyone else had abandoned them. Funding dried up. They were considered fringe researchers. They kept going. When compute and data finally caught up with their ideas in the 2010s, the revolution happened. All three won the Turing Award (computing's Nobel Prize) in 2018. Hinton later resigned from Google and became an outspoken AI safety advocate, saying he regrets some of his life's work. Dedication, vindication, and then regret — a complicated arc.`,
+quiz:[
+  {q:"The purpose of activation functions in neural networks is:",choices:["To speed up training by filtering unnecessary inputs","To introduce non-linearity — without them, any number of layers collapses to a single linear transformation, severely limiting what the network can learn","To normalize output values to a standard range","To prevent specific neurons from being updated during training"],a:1,fun:"Without non-linearity, stacking 100 linear layers is mathematically identical to one linear layer. Non-linear activation functions (ReLU, sigmoid, tanh) allow neural networks to approximate arbitrarily complex functions — they're what gives deep learning its power. ReLU (max(0,x)) is simple and dominates modern practice. 💡"},
+  {q:"In a deep neural network trained on images, earlier layers typically learn:",choices:["High-level semantic concepts like 'dog' or 'car'","Abstract reasoning and logical relationships","Simple low-level features like edges, colors, and basic textures","The final classification probabilities"],a:1,fun:"This hierarchical feature learning is one of the most beautiful aspects of neural networks — they automatically build up from simple to complex representations without being told to. The network discovers that edges are useful, then that combinations of edges make textures, etc. No human engineer specified this structure — it emerges from training. 📸"},
+  {q:"Backpropagation trains a neural network by:",choices:["Randomly trying different weight values until good ones are found","Computing the gradient of the loss with respect to each weight and adjusting weights in the direction that reduces error","Having human experts manually adjust weights based on network outputs","Copying weights from a network that already works well on similar data"],a:1,fun:"Backprop uses the chain rule from calculus to efficiently compute how much each weight contributed to the prediction error. It's computationally elegant — one backward pass gives you the gradient for ALL weights simultaneously. Without backprop, training modern networks (billions of parameters) would be computationally impossible. ⚙️"},
+  {q:"The 'vanishing gradient' problem in deep neural networks means:",choices:["Neural networks gradually forget training data over time","Error signals shrink as they propagate backward through many layers, making it very difficult for early layers to learn","The network's predictions gradually become less accurate","Training data gradually becomes unavailable due to copyright issues"],a:1,fun:"Imagine a game of telephone where the message gets quieter with each person. The gradient (learning signal) multiplies through each layer backward — if those multiplied values are < 1, the signal shrinks exponentially. Early layers barely update. Solutions: ReLU activation, batch normalization, residual connections (skip connections in ResNets). 📡"}
+]},
+
+{id:'u2l2',day:'week_07 · day_01',title:'Training Data and the Problem of Scale',
+objectives:['Understand why scale matters in modern AI','Analyze how large datasets are collected and curated','Evaluate the tradeoffs in data-intensive AI development'],
+content:`<div class="body-text">
+<p>Modern AI is data-hungry in ways that are difficult to overstate. GPT-3 was trained on ~570 gigabytes of text — roughly 300 billion words. GPT-4's training data size hasn't been officially disclosed but is estimated to be far larger. This raises practical, legal, and ethical questions that the field is still working through.</p>
+<div class="concept-box">
+  <div class="cb-title">The Scaling Laws</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    Researchers have found that model capability scales predictably with three factors, following power laws:<br><br>
+    • <strong>Model size</strong> (number of parameters)<br>
+    • <strong>Training compute</strong> (how long you train)<br>
+    • <strong>Dataset size</strong> (how much data you train on)<br><br>
+    The Chinchilla paper (DeepMind, 2022) showed models were being under-trained relative to their size — you get more capability by training a smaller model on more data than a larger model on less data. This insight shifted how the industry trains frontier models.
+  </p>
+</div>
+<div class="def-table">
+  <div class="dt-head">Data Collection and Its Problems</div>
+  <div class="dt-row"><div class="dt-key">Web scraping</div><div class="dt-val">Most LLM training data comes from Common Crawl — a snapshot of billions of web pages. This includes Reddit, Wikipedia, books, news — and also misinformation, hate speech, and copyrighted content.</div></div>
+  <div class="dt-row"><div class="dt-key">Copyright issues</div><div class="dt-val">Books3, a training dataset of ~196,000 books, was a key LLM training source. Authors filed class action lawsuits arguing their copyrighted works were used without permission. The legal questions remain unresolved.</div></div>
+  <div class="dt-row"><div class="dt-key">RLHF</div><div class="dt-val">Reinforcement Learning from Human Feedback — humans rate model outputs to train a reward model. This is how ChatGPT was made usable. Requires thousands of hours of human annotation, often outsourced to low-wage contractors in the Global South.</div></div>
+  <div class="dt-row"><div class="dt-key">Synthetic data</div><div class="dt-val">Using AI to generate training data for AI. Emerging approach — raises questions about model collapse when models train on outputs of other models.</div></div>
+</div>
+<div class="ethics-box">
+  <div class="et-head">The Human Cost of Data Labeling</div>
+  <p>TIME magazine (2023) revealed that Kenyan workers hired by a contractor to label harmful content for OpenAI were paid less than $2/hour to review graphic violence, sexual abuse, and disturbing content — to train ChatGPT's content filters. Content moderation for AI is psychologically damaging work, often performed by workers in the Global South with inadequate pay, mental health support, and protections. The "clean" AI products billions of people enjoy rest on this invisible labor.</p>
+</div>
+</div>`,
+cultural:`The concept of "model collapse" — what happens when AI models train on AI-generated data rather than human-generated data — is an active research concern. If models increasingly generate the text that fills the internet, and future models train on that internet text, the models might gradually lose information and become more homogeneous and lower quality over generations. Like photocopying a photocopy of a photocopy. Researchers in 2024 began documenting early signs of this. The internet's transition from primarily human-generated to mixed AI/human content has no historical precedent.`,
+quiz:[
+  {q:"The 'scaling laws' in AI research established that model capability:",choices:["Increases unpredictably and requires breakthroughs rather than scale","Improves predictably as model size, training compute, and dataset size increase — following mathematical power laws","Only improves if the model architecture is fundamentally redesigned","Depends primarily on the programming language used for implementation"],a:1,fun:"The scaling laws (Kaplan et al., 2020; Hoffmann et al., 2022) showed that capability is surprisingly predictable — just scale up the key factors and performance improves along known curves. This predictability is what gives AI labs confidence to invest billions in training runs. It also means smaller labs can't easily catch up just through cleverness — compute is the bottleneck. 📊"},
+  {q:"Reinforcement Learning from Human Feedback (RLHF) was essential for ChatGPT because:",choices:["It made the model significantly faster at generating responses","Raw pre-trained language models produce weird, unreliable, potentially harmful outputs — RLHF shaped the model's behavior toward being helpful, honest, and harmless using human ratings","It dramatically increased the amount of training data available","It replaced the need for human-generated training data entirely"],a:1,fun:"Pre-trained GPT-style models will confidently complete any text, including harmful requests, in whatever direction seems most probable from training data. RLHF adds human preferences on top — humans rate responses, a reward model learns those preferences, then the main model is RL-trained to maximize that reward. The difference between 'raw LLM' and 'ChatGPT' is largely RLHF. 🙋"},
+  {q:"The copyright controversy around AI training data involves:",choices:["AI companies stealing competitors' code to build their systems","Books, articles, and other copyrighted works being used to train AI models without creator permission or compensation — raising fundamental questions about whether this is legal","AI-generated content infringing on human creators' copyrights","Social media companies blocking AI from accessing public posts"],a:1,fun:"The New York Times, authors, musicians, visual artists, and code owners have all filed lawsuits against AI companies. The core legal question: does training on copyrighted data count as infringement or fair use? Courts are just beginning to rule on this. The outcome will fundamentally shape how AI can be built. ⚖️"},
+  {q:"The TIME investigation into OpenAI's content moderation contractors revealed:",choices:["OpenAI was using entirely automated systems with no human involvement","Kenyan workers paid under $2/hour were reviewing deeply disturbing content to train content filters — highlighting the invisible, underpaid human labor underlying AI products","Content moderation is the most profitable part of the AI business","AI content filters were being deliberately made less effective to reduce costs"],a:1,fun:"This is the hidden supply chain of 'clean' AI. The sanitized, helpful AI assistant you interact with is possible partly because people in the Global South reviewed horrific content under poor conditions and for low pay. Automation creates new forms of labor, often less visible and less protected than what came before. 💔"}
+]},
+]},
+
+// ═══════════════════════════════════════
+// UNIT 3: LARGE LANGUAGE MODELS
+// ═══════════════════════════════════════
+{id:'u3',emoji:'💬',name:'Large Language Models',weeks:'weeks_10–14',lessons:[
+{id:'u3l1',day:'week_10 · day_01',title:'How Language Models Work',
+objectives:['Understand tokenization and embeddings','Explain the transformer architecture and attention','Describe how LLMs generate text and why they hallucinate'],
+content:`<div class="body-text">
+<p>Large language models like GPT-4, Claude, and Gemini are the most consequential AI systems deployed today. Understanding how they actually work — not magic, just math at extraordinary scale — is essential for using them wisely and thinking critically about their limitations.</p>
+<div class="def-table">
+  <div class="dt-head">How LLMs Process Text</div>
+  <div class="dt-row"><div class="dt-key">Tokenization</div><div class="dt-val">Text is broken into tokens (words, subwords, or characters). "tokenization" might become ["token","ization"]. GPT-4 has ~100,000 possible tokens. The model never "sees" text — only token IDs.</div></div>
+  <div class="dt-row"><div class="dt-key">Embeddings</div><div class="dt-val">Each token is converted to a high-dimensional vector (list of numbers). Similar meanings → similar vectors. "king" – "man" + "woman" ≈ "queen" in vector space. Meaning is geometric.</div></div>
+  <div class="dt-row"><div class="dt-key">Attention mechanism</div><div class="dt-val">The transformer's key innovation. Every token can "attend to" every other token, learning which parts of context are relevant to which parts. How "it" in a sentence learns what it refers to.</div></div>
+  <div class="dt-row"><div class="dt-key">Next-token prediction</div><div class="dt-val">LLMs are fundamentally trained to predict: given this sequence of tokens, what token comes next? This simple objective, applied to trillions of tokens, produces emergent reasoning, knowledge, and language ability.</div></div>
+</div>
+<div class="insight-box">
+  <div class="ib-head">Hallucination — Why LLMs Make Things Up</div>
+  <p>LLMs don't have a "memory" of facts. They're pattern-completion engines: given this input, what text would most plausibly follow based on everything I've seen? When asked about something obscure or outside their training, they generate text that SOUNDS correct — confident, well-formatted, plausible — because that's what confident, factual text looks like. They can't distinguish "I know this" from "this sounds like what someone who knew this would say." The result: fluent, confident, sometimes completely wrong output. Always verify important facts from LLMs independently.</p>
+</div>
+<div class="concept-box">
+  <div class="cb-title">What "Temperature" Does</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    At each step, the model assigns probabilities to all possible next tokens. <strong>Temperature</strong> controls randomness:<br><br>
+    <strong>Temperature = 0:</strong> Always pick the most probable token. Deterministic, repetitive, "safe."<br>
+    <strong>Temperature = 1:</strong> Sample from the probability distribution. More varied, natural.<br>
+    <strong>Temperature > 1:</strong> Flatten probabilities, pick more randomly. More creative, more likely to go off-rails.<br><br>
+    "Make this more creative" often just means raising temperature. The model's knowledge doesn't change — just how much randomness is injected into the selection process.
+  </p>
+</div>
+<div class="example-box">
+  <div class="ex-head">The Context Window</div>
+  <div class="ex-row"><span class="er-label">Definition:</span><span class="er-text">Maximum number of tokens the model can "see" at once — its working memory</span></div>
+  <div class="ex-row"><span class="er-label">GPT-3 (2020):</span><span class="er-text">4,096 tokens (~3,000 words)</span></div>
+  <div class="ex-row"><span class="er-label">Claude 3.5 (2024):</span><span class="er-text">200,000 tokens (~150,000 words — a full novel)</span></div>
+  <div class="ex-row"><span class="er-label">Why matters:</span><span class="er-text">Longer context = remembers more of the conversation, can process longer documents</span></div>
+</div>
+</div>`,
+cultural:`The transformer architecture — the "T" in GPT and BERT — was introduced in the 2017 paper "Attention Is All You Need" by researchers at Google Brain. Eight authors. One paper. It replaced recurrent neural networks (RNNs) as the dominant architecture for language tasks and soon for vision, audio, and scientific applications. It's one of the most consequential research papers in the history of AI. Several of its authors have since founded major AI companies (Cohere, Adept, Character.ai). Research papers can be worth billions.`,
+quiz:[
+  {q:"LLMs 'hallucinate' (generate false information confidently) primarily because:",choices:["They are programmed to always give an answer even when uncertain","They are pattern-completion engines trained to produce plausible-sounding text — they cannot reliably distinguish known facts from generated plausible-sounding text","They deliberately generate false information to test user awareness","Their training data contains too many errors that they memorize"],a:1,fun:"An LLM doesn't have a 'facts database' it queries. It generates text based on patterns from training. When you ask about something it doesn't know well, it generates what 'an answer to this question' typically looks like — which is confident and specific. It can't flag its own uncertainty reliably. This is structural, not a bug to be fixed — it's an inherent property of next-token prediction. 🌀"},
+  {q:"The attention mechanism in transformers allows:",choices:["The model to focus exclusively on the most recent part of the input","Every token to consider every other token's context when producing its representation — enabling understanding of long-range dependencies and reference resolution","The model to access external databases during generation","Human reviewers to flag specific parts of model outputs"],a:1,fun:"'The animal didn't cross the street because it was too tired.' What does 'it' refer to? Attention lets 'it' look back at 'animal' and weight it heavily. Pre-transformer RNNs struggled with these long-distance relationships because they processed text sequentially. Transformers process all positions simultaneously. 🎯"},
+  {q:"'Temperature' in LLM generation controls:",choices:["How fast the model generates responses","The randomness of token selection — low temperature produces deterministic safe outputs, high temperature produces more creative and less predictable outputs","The model's knowledge cutoff date","How strictly the model adheres to safety guidelines"],a:1,fun:"Temperature reshapes the probability distribution over possible next tokens. At temperature 0: greedy — always pick the most likely. This sounds good but produces repetitive, boring text. Humans writing creatively occasionally pick surprising words. Temperature > 0 mimics that. 'Be more creative' = higher temperature + prompt. 🌡️"},
+  {q:"The transformer's 'context window' determines:",choices:["How many users can access the model simultaneously","The maximum amount of text the model can process and 'remember' at one time","How long the model takes to generate a response","The model's vocabulary size"],a:1,fun:"Within the context window, the model has perfect recall — it can attend to any token. Outside it, nothing. No degradation, just hard cutoff. Longer context windows are a major engineering challenge (attention scales quadratically with context length — 2× context = 4× computation). The race to longer context windows is ongoing. 📖"}
+]},
+
+{id:'u3l2',day:'week_12 · day_01',title:'Prompt Engineering and Working Effectively with AI',
+objectives:['Understand why prompting matters and how it works','Apply key prompting techniques: role assignment, few-shot, chain-of-thought','Evaluate AI outputs critically and know when not to trust them'],
+content:`<div class="body-text">
+<p>Prompt engineering — crafting inputs to AI models to get better outputs — has become a genuine professional skill. A well-designed prompt can dramatically improve output quality, reduce hallucination, and elicit capabilities the model has but doesn't show with a vague request.</p>
+<div class="def-table">
+  <div class="dt-head">Core Prompting Techniques</div>
+  <div class="dt-row"><div class="dt-key">Role assignment</div><div class="dt-val">"You are an expert marine biologist explaining tidal zones to a curious 12-year-old." Giving the model a persona and audience shapes register, vocabulary, and depth.</div></div>
+  <div class="dt-row"><div class="dt-key">Few-shot prompting</div><div class="dt-val">Show 2–5 examples of the format you want before asking for the real thing. The model pattern-matches to your examples. More reliable than just describing the format.</div></div>
+  <div class="dt-row"><div class="dt-key">Chain-of-thought</div><div class="dt-val">"Think step by step." Prompting the model to show its reasoning dramatically improves accuracy on multi-step problems. The reasoning process itself improves the answer.</div></div>
+  <div class="dt-row"><div class="dt-key">Structured output</div><div class="dt-val">"Respond in JSON with fields: summary, key_points, confidence_level." Models follow format instructions reliably — makes programmatic use much easier.</div></div>
+  <div class="dt-row"><div class="dt-key">Constraint specification</div><div class="dt-val">Explicitly state what NOT to do. "Do not include citations. Do not use jargon. Keep each point to one sentence." Negative constraints often work better than positive ones.</div></div>
+</div>
+<div class="example-box">
+  <div class="ex-head">Prompt Quality Comparison</div>
+  <div class="ex-row"><span class="er-label">Weak:</span><span class="er-text"><code>"Tell me about climate change"</code> → vague, probably generic, possibly too long or short</span></div>
+  <div class="ex-row"><span class="er-label">Better:</span><span class="er-text"><code>"You are a climate scientist. Explain the three most significant feedback loops in climate change to a high school student in 3 bullet points, each under 50 words."</code></span></div>
+  <div class="ex-row"><span class="er-label">Difference:</span><span class="er-text">Persona + audience + specific format + length constraint = consistent, usable output</span></div>
+</div>
+<div class="insight-box">
+  <div class="ib-head">When NOT to Trust AI</div>
+  <p>Always verify: specific facts (dates, numbers, citations), recent events (post training cutoff), medical/legal/financial advice, anything where being wrong has real consequences. Never use: for producing content you'll pass off as your own research without verification, for making significant decisions without human judgment. Good mental model: treat AI like a very fast, very knowledgeable intern who sometimes confidently makes things up. Useful, but requires supervision.</p>
+</div>
+<div class="ethics-box">
+  <div class="et-head">Academic Integrity and AI</div>
+  <p>Using AI to generate work you submit as your own without disclosure is academic dishonesty — not because AI is bad, but because the educational purpose is for YOU to develop skills. That said, using AI as a thinking partner, for feedback on your own work, for explaining concepts, or to help you draft something you then substantially revise is increasingly a normal part of intellectual work. The line: did you engage with the ideas, or just generate and submit? That distinction matters in academic contexts and in professional ones.</p>
+</div>
+</div>`,
+cultural:`The "AI whisperer" or prompt engineer became briefly one of tech's hottest job titles in 2023, with some positions offering $300,000+ salaries. By 2024, the need for specialized prompt engineers had diminished significantly — better models require less elaborate prompting, and prompt engineering knowledge has diffused widely. This is a pattern in AI: specific skills that seem valuable today often get automated or democratized faster than expected. The more durable skill is understanding AI systems deeply enough to use them well, not memorizing current prompting tricks.`,
+quiz:[
+  {q:"Chain-of-thought prompting (telling an LLM to 'think step by step') improves accuracy because:",choices:["It tricks the model into using more parameters","The reasoning process itself improves the final answer — the model can catch errors in intermediate steps when it shows its work","It makes the model generate longer responses which are statistically more likely to be correct","It reduces hallucination by having the model focus on one thing at a time"],a:1,fun:"On multi-step math and logic problems, chain-of-thought prompting often doubles or triples accuracy. Why? The model's attention can focus on each step. Errors visible in reasoning can be caught before the final answer. The intermediate steps constrain what conclusions make sense. 'Show your work' works for AI too. 📐"},
+  {q:"Few-shot prompting involves:",choices:["Limiting the model to very short responses","Providing 2–5 examples of the desired input-output format before the actual query — the model pattern-matches to your examples","Training a new model on a small dataset","Using the model only a few times per day to conserve API credits"],a:1,fun:"Few-shot prompting is more reliable than describing the format you want. 'Describe a JSON format' → sometimes wrong. Show 3 examples of perfect JSON → model follows the pattern. In-context learning (learning from examples within the prompt rather than training) is one of the surprising emergent capabilities of large models. 🎯"},
+  {q:"When should you NOT trust AI-generated information without verification?",choices:["Only when the AI expresses uncertainty","Always — AI output should never be trusted","For specific facts, recent events, citations, and any high-stakes decisions — AI can confidently produce wrong information","Only for topics outside the AI's training domain"],a:2,fun:"The rule isn't 'never trust' or 'always trust' — it's calibrated trust. For brainstorming, drafting, explaining concepts: high trust, low stakes. For specific statistics, medical advice, legal questions, factual claims you'll act on: verify independently. The problem is AI sounds equally confident when right and wrong. Develop the habit of verification. ✓"},
+  {q:"The most durable skill related to AI tools is:",choices:["Memorizing the most effective current prompting tricks for popular models","Deep understanding of how AI systems work, their capabilities and limitations — enabling effective use as tools evolve","Becoming certified in specific AI products","Learning to code AI systems from scratch"],a:1,fun:"Specific prompting tricks for GPT-3.5 became less important as GPT-4 arrived. Platform-specific knowledge became less important as APIs standardized. Understanding how these systems work — what they're good at, what they fail at, how to verify their outputs — transfers across tools and time. Invest in concepts, not tricks. 💡"}
+]},
+]},
+
+// ═══════════════════════════════════════
+// UNIT 4: COMPUTER VISION & GENERATIVE AI
+// ═══════════════════════════════════════
+{id:'u4',emoji:'🎨',name:'Computer Vision & Generative AI',weeks:'weeks_01–05 · sem2',lessons:[
+{id:'u4l1',day:'s2_week_01 · day_01',title:'Computer Vision: How AI Sees',
+objectives:['Explain how CNNs process images','Understand object detection, segmentation, and facial recognition','Evaluate the benefits and risks of computer vision technology'],
+content:`<div class="body-text">
+<p>Computer vision is AI's ability to interpret and understand visual information from the world — images and video. It's in your phone's face unlock, every self-driving car, medical imaging systems, satellite analysis, and the cameras that monitor public spaces.</p>
+<div class="def-table">
+  <div class="dt-head">Computer Vision Tasks</div>
+  <div class="dt-row"><div class="dt-key">Image classification</div><div class="dt-val">"What is in this image?" → single label. Cat, dog, traffic light. Output: class + confidence score.</div></div>
+  <div class="dt-row"><div class="dt-key">Object detection</div><div class="dt-val">"What objects are in this image AND where are they?" → bounding boxes + labels. Self-driving cars, security cameras.</div></div>
+  <div class="dt-row"><div class="dt-key">Semantic segmentation</div><div class="dt-val">Classify every pixel in the image. "This pixel is road. This pixel is pedestrian." More detailed than detection.</div></div>
+  <div class="dt-row"><div class="dt-key">Facial recognition</div><div class="dt-val">Identify or verify specific individuals from face images. Used in phones, law enforcement, border control. Significant accuracy disparities by race and gender.</div></div>
+  <div class="dt-row"><div class="dt-key">Medical imaging</div><div class="dt-val">Detect cancer, diabetic retinopathy, COVID-19 from X-rays, MRIs, CT scans. Some systems match specialist accuracy.</div></div>
+</div>
+<div class="concept-box">
+  <div class="cb-title">How CNNs See Images</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    Convolutional Neural Networks (CNNs) use "filters" — small matrices that slide across the image detecting specific patterns:<br><br>
+    • Early filters: detect edges, corners, color gradients<br>
+    • Middle filters: detect textures — fur, scales, brick, fabric<br>
+    • Later filters: detect parts — eyes, wheels, leaves, faces<br>
+    • Final layers: combine parts → "This is a golden retriever" (92% confidence)<br><br>
+    The key insight: spatial relationships matter. A filter can detect "dark circle surrounded by lighter pixels" anywhere in the image — position-invariant feature detection.
+  </p>
+</div>
+<div class="ethics-box">
+  <div class="et-head">Facial Recognition — Power and Danger</div>
+  <p>Facial recognition has been used to identify terrorists and missing children — and to wrongfully arrest innocent Black men because the algorithm misidentified them. Detroit, New Orleans, and New Orleans have documented cases. Robert Williams was arrested in front of his family based on a facial recognition match — the detective admitted the image was a grainy store camera image and the algorithm's ID was the only evidence. He spent 30 hours in custody before the case was dropped.</p>
+  <p style="margin-top:8px;">Several cities (San Francisco, Portland, Boston) have banned government use of facial recognition. Others use it extensively. The technology works well enough to be dangerously overconfident, not well enough to be reliable for consequential decisions.</p>
+</div>
+</div>`,
+cultural:`The DeepFace system developed by Facebook (2014) achieved 97.35% accuracy on face verification — surpassing human performance (97.25%). The researchers published this to considerable fanfare. What they didn't emphasize: the dataset was heavily skewed toward lighter-skinned, younger faces. Performance on darker-skinned, older, or female faces was substantially lower. This pattern — claiming human-level performance on a benchmark that doesn't represent the full population — has been repeated many times in AI research. Benchmark performance and real-world performance are not the same thing.`,
+quiz:[
+  {q:"Convolutional Neural Networks (CNNs) process images through filters that:",choices:["Compress the image to save memory during processing","Slide across the image detecting specific local patterns (edges, textures, shapes) in a position-independent way — the same feature can be detected anywhere in the image","Apply a single mathematical formula to the entire image at once","Require the image to be exactly the same size as training images"],a:1,fun:"The convolution operation is why CNNs work so well for images — it captures local spatial structure AND is translation-invariant (a cat ear is a cat ear whether it's in the upper left or lower right of the image). Before CNNs, you'd need to manually engineer features for every possible position. CNNs learn the features automatically. 📸"},
+  {q:"The documented accuracy disparities in facial recognition systems (higher error rates for darker-skinned and female faces) primarily result from:",choices:["Intentional design choices by system developers","Training datasets that underrepresented these groups — systems trained mostly on lighter-skinned faces perform worse on darker-skinned faces","Inherent limitations of the camera technology used to capture faces","Differences in how different demographic groups are photographed in public"],a:1,fun:"MIT's Joy Buolamwini found commercial systems from Microsoft, IBM, and Face++ had error rates up to 34.7% on darker-skinned women vs. under 1% on lighter-skinned men. The systems were trained primarily on datasets scraped from the internet, which itself has demographic biases. The technical fix is straightforward: diverse training data. The adoption of the fix has been slower. 😔"},
+  {q:"Medical AI systems for image analysis (detecting cancer in X-rays, etc.) are best used as:",choices:["Complete replacements for specialist physicians in routine screening","A second opinion that flags cases for human review — augmenting rather than replacing specialist judgment","Only for research purposes, not clinical care","Marketing tools to demonstrate hospital technological sophistication"],a:1,fun:"AI can screen thousands of images quickly and catch patterns a tired radiologist might miss at the end of a long shift. But it also fails in systematic ways — on image artifacts, unusual presentations, demographic groups underrepresented in training. The ideal: AI flags cases → human specialist makes the final decision. Augmentation, not replacement. 🏥"},
+  {q:"The most concerning application of facial recognition technology involves:",choices:["Using it to unlock personal smartphones","Law enforcement use for suspect identification, where errors can lead to wrongful arrest and the confidence placed in algorithmic output can override other evidence","Tagging friends in personal photos on social media","Verifying identity at airport check-in with traveler consent"],a:1,fun:"Several documented cases: Robert Williams (Detroit, 2020), Michael Oliver (Detroit, 2019), Nijeer Parks (NJ, 2019) — all Black men wrongfully arrested based on facial recognition matches, no other evidence. The consequential stakes + accuracy gaps + overconfidence of investigators in algorithmic output = a dangerous combination in criminal justice. ⚖️"}
+]},
+
+{id:'u4l2',day:'s2_week_03 · day_01',title:'Generative AI: Creating Images, Text, and More',
+objectives:['Understand how diffusion models and GANs generate images','Explain text-to-image generation and its implications','Analyze deepfakes — technical, social, and ethical dimensions'],
+content:`<div class="body-text">
+<p>Generative AI — AI that creates new content rather than classifying existing content — has exploded since 2022. Images, music, video, code, text: all can now be generated at high quality from simple prompts. This is transformative and genuinely concerning in ways that are still unfolding.</p>
+<div class="def-table">
+  <div class="dt-head">How Image Generation Works</div>
+  <div class="dt-row"><div class="dt-key">GANs (2014–2022)</div><div class="dt-val">Generator creates images; Discriminator tries to detect fakes. They improve by competing. ProGAN, StyleGAN produced photorealistic faces (thispersondoesnotexist.com).</div></div>
+  <div class="dt-row"><div class="dt-key">Diffusion models (2022+)</div><div class="dt-val">Train by learning to reverse a noise-adding process. Start with random noise, repeatedly denoise toward a coherent image guided by text. DALL·E, Stable Diffusion, Midjourney all use this. Cleaner, more controllable than GANs.</div></div>
+  <div class="dt-row"><div class="dt-key">CLIP</div><div class="dt-val">OpenAI's model trained on 400M image-text pairs to understand which images match which descriptions. The bridge between language and vision — enables text-to-image generation.</div></div>
+  <div class="dt-row"><div class="dt-key">Stable Diffusion</div><div class="dt-val">Released as open-source (2022). Can run locally, no corporate content filters. Created massive creative community AND significant misuse potential simultaneously.</div></div>
+</div>
+<div class="ethics-box">
+  <div class="et-head">Deepfakes — The Crisis of Visual Trust</div>
+  <p><strong>Non-consensual intimate images:</strong> 96-98% of deepfake videos online are non-consensual intimate images of women. The technology to create them has democratized; the legal and social protections have not kept pace. Most US states now have laws; enforcement is difficult.</p>
+  <p style="margin-top:8px;"><strong>Political deepfakes:</strong> Deepfake audio of President Biden was used in a New Hampshire robocall (2024) telling Democratic voters the primary had been rescheduled. Deepfake video of Ukrainian President Zelensky asking troops to surrender circulated in 2022. Both were identified and debunked, but showed the capability exists and is being used.</p>
+  <p style="margin-top:8px;"><strong>The erosion of visual trust:</strong> Perhaps the most significant long-term effect isn't specific deepfake incidents but the generalized erosion of trust in video evidence. When anything could be fake, everything can be questioned — including real evidence. "The liar's dividend" — real perpetrators can now claim real evidence is deepfake.</p>
+</div>
+<div class="insight-box">
+  <div class="ib-head">Content Provenance</div>
+  <p>The most promising systemic response to deepfakes isn't detection (arms race, always behind) but provenance — cryptographically signing authentic media at the point of capture with metadata about who created it, when, and how. The C2PA (Coalition for Content Provenance and Authenticity, including Adobe, Microsoft, Google, camera manufacturers) is building this infrastructure. If cameras sign their output and platforms display provenance, AI-generated content becomes distinguishable not because it looks different but because it lacks a verified chain of origin.</p>
+</div>
+</div>`,
+cultural:`Stable Diffusion's open-source release in August 2022 was one of the most significant decisions in recent AI history. Within days, the internet had thousands of fine-tuned variants. The ability to generate photorealistic images of anything went from requiring specialized hardware and expertise to running on a gaming laptop. The creative possibilities were extraordinary — so were the misuses. The debate about whether releasing powerful AI open-source is responsible or reckless is ongoing and genuine. There's no clean answer.`,
+quiz:[
+  {q:"Diffusion models generate images by:",choices:["Searching a database of training images for the closest match","Starting with pure random noise and gradually denoising it toward a coherent image guided by a text description — the reverse of adding noise","Combining pieces of different training images","Having a discriminator select the best image from thousands of generated candidates"],a:1,fun:"The key insight: if you can learn to reverse the process of adding noise (denoising), you can generate new images by starting from noise and running the denoiser. The text prompt guides which direction to denoise in. The final image never existed in the training data — it's genuinely novel. This is why diffusion models replaced GANs as the dominant image generation approach. 🎨"},
+  {q:"The 'liar's dividend' refers to:",choices:["Financial profits made by AI companies from selling generated content","The ability of actual perpetrators to claim real evidence (video, audio) of wrongdoing is deepfake — undermining the evidentiary value of all visual media","Legal immunity given to AI companies for harmful generated content","Revenue earned by detecting and removing deepfake content"],a:1,fun:"This concept, coined by law professors Bobby Chesney and Danielle Citron, may be the most damaging long-term effect of deepfakes — not specific fakes but generalized skepticism. If a politician can say 'that incriminating video is AI-generated,' and people believe it's plausible, real evidence loses power. The fake content problem creates an 'everything is questionable' environment that benefits bad actors. 🎭"},
+  {q:"The C2PA content provenance approach to addressing deepfakes works by:",choices:["Using detection algorithms to identify AI-generated images after the fact","Cryptographically signing authentic media at creation so viewers can verify a chain of origin — distinguishing authentic from AI-generated by presence of verified provenance rather than by visual analysis","Banning AI image generation entirely","Requiring watermarks visible in AI images that are detectable to the naked eye"],a:1,fun:"Detection is an arms race — generators improve to fool detectors. Provenance is more robust: if your camera (or phone, or professional software) signs every image with a cryptographic certificate, and platforms display that signature, content without verified provenance is simply marked as unverified. Like HTTPS for images. The technology works; adoption is the challenge. 🔐"},
+  {q:"Stable Diffusion's open-source release represented a significant inflection point because:",choices:["It was the first AI system to generate images from text prompts","It made powerful image generation available for anyone to run locally with no content filters, creating enormous creative opportunity and significant misuse potential simultaneously","It proved that closed-source AI companies were unethical","It was the first AI system that could generate photorealistic images"],a:1,fun:"Before Stable Diffusion, generating high-quality images required using commercial APIs with content filters (DALL·E, Midjourney). After: anyone with a gaming GPU could generate anything. The nonconsensual intimate images problem exploded immediately. The creative community exploded simultaneously. Open-source doesn't have a clean answer — it democratizes both the beneficial and the harmful uses. 🔓"}
+]},
+]},
+
+// ═══════════════════════════════════════
+// UNIT 5: AI ETHICS & SOCIETY
+// ═══════════════════════════════════════
+{id:'u5',emoji:'🛡️',name:'AI Ethics & Society',weeks:'weeks_06–10 · sem2',lessons:[
+{id:'u5l1',day:'s2_week_06 · day_01',title:'AI Governance — Who Decides How AI Is Used?',
+objectives:['Understand the EU AI Act and US executive orders on AI','Analyze different approaches to AI regulation','Evaluate the tension between innovation and safety in AI policy'],
+content:`<div class="body-text">
+<p>For most of AI's history, the technology developed faster than any regulatory or governance framework could keep up. That began to change in 2023–24, when governments around the world started seriously grappling with how to govern AI. The approaches differ significantly — and the choices made now will shape how AI develops for decades.</p>
+<div class="def-table">
+  <div class="dt-head">Major Governance Frameworks (2023–24)</div>
+  <div class="dt-row"><div class="dt-key">EU AI Act (2024)</div><div class="dt-val">World's first comprehensive AI law. Risk-based: prohibited uses (social scoring, mass surveillance), high-risk (hiring, credit, medical), limited risk (chatbots must disclose they're AI), minimal risk (everything else). Heavy fines for violation. Sets a global standard.</div></div>
+  <div class="dt-row"><div class="dt-key">US Executive Order (2023)</div><div class="dt-val">Required safety testing before deploying the most powerful AI models; established AI safety institute; required watermarking of AI content; directed agencies to address bias and privacy. Less comprehensive than EU; non-binding for companies.</div></div>
+  <div class="dt-row"><div class="dt-key">China's approach</div><div class="dt-val">Requires registration and review of generative AI services; mandates adherence to "core socialist values"; requires AI content to be "true and accurate." Prioritizes control and stability over innovation openness.</div></div>
+  <div class="dt-row"><div class="dt-key">UK approach</div><div class="dt-val">Principles-based, not legislation-based. Directed existing regulators (healthcare regulator, financial regulator, etc.) to apply AI rules in their domains. More flexible, less comprehensive.</div></div>
+</div>
+<div class="concept-box">
+  <div class="cb-title">The Core Regulatory Tension</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    <strong>Pro-regulation argument:</strong> AI poses real risks (bias, job displacement, safety, surveillance, weapons) that markets won't self-correct. The companies building AI have financial incentives to move fast. External accountability is needed.<br><br>
+    <strong>Pro-innovation argument:</strong> Premature regulation of a fast-moving field creates compliance burdens that favor large incumbents over startups; it might cause the US to fall behind China; it might prevent beneficial AI from reaching people who need it.<br><br>
+    Both arguments have real merit. Governance is fundamentally a question about which risks we prioritize and who should decide — technical experts, politicians, the public, or the market.
+  </p>
+</div>
+<div class="ethics-box">
+  <div class="et-head">Who Is Missing from AI Governance?</div>
+  <p>Most AI governance conversations involve AI company executives, government officials from wealthy countries, and academic researchers. Significantly underrepresented: workers in countries whose data trains AI systems, communities most affected by AI deployment in criminal justice and social services, people in the Global South who will experience AI's effects but have little input into its governance. The people with the most power to shape AI governance are least likely to experience its harms.</p>
+</div>
+</div>`,
+cultural:`The EU AI Act's "Brussels Effect" refers to the tendency for EU regulations to become de facto global standards — because companies that want to sell to EU customers must comply, and it's often easier to comply globally than to maintain separate versions. GDPR (privacy) became a global template this way. AI companies that initially dismissed the EU AI Act are now building compliance into their products globally. Europe's regulatory approach influences global AI development even though Europe produces relatively few frontier AI systems.`,
+quiz:[
+  {q:"The EU AI Act's risk-based approach to AI regulation means:",choices:["All AI systems face the same regulatory requirements","Different levels of AI risk face different requirements — prohibited uses are banned entirely, high-risk applications face strict compliance requirements, and minimal-risk applications face few requirements","Regulation is determined by the financial risk posed to companies","Only the riskiest 10% of AI applications are regulated"],a:1,fun:"This tiered approach is pragmatic — you don't regulate spam filters the same way you regulate AI in medical devices or criminal justice. The EU identifies 'prohibited' uses (social scoring, real-time public surveillance, subliminal manipulation) and 'high-risk' uses (hiring, credit, education, healthcare, border control) with strict requirements. The approach is being copied by other jurisdictions. 🇪🇺"},
+  {q:"The 'Brussels Effect' in AI regulation means:",choices:["Europe has become the leading center for AI research and development","Companies that comply with EU AI regulations for European customers often find it more efficient to apply those standards globally, making EU rules de facto global standards","The EU has made AI development illegal for most applications","Only companies headquartered in Brussels face EU AI Act requirements"],a:1,fun:"We saw this with GDPR (2018) — privacy policies changed globally because companies selling to EU customers had to comply. The EU AI Act may do the same for AI transparency, bias testing, and safety requirements. China and the US set technology standards through market size and innovation; the EU sets them through regulatory gravity. 🌍"},
+  {q:"The most significant group underrepresented in current AI governance discussions is:",choices:["AI company executives who need more input into regulatory design","Workers and communities in the Global South whose data trains AI systems and who experience AI deployment in high-stakes contexts — but who have little voice in how AI is governed","Academic AI researchers who are not consulted enough","Investors who fund AI companies"],a:1,fun:"The people with the most power in AI governance (tech executives, US/EU policymakers, well-funded researchers) are least likely to experience AI harms in criminal justice, social services, or labor displacement. The people with least power are most affected. This asymmetry in who shapes AI governance produces predictable outcomes: protections where power lies, gaps where it doesn't. ⚖️"},
+  {q:"From a policy perspective, the primary argument for moving cautiously on AI regulation is:",choices:["AI poses no real harms that require regulatory attention","AI companies will self-regulate more effectively than governments can","Premature or poorly designed regulation might create compliance burdens that favor large incumbents, slow beneficial AI development, or cause the US to fall behind China","AI is too complex for governments to regulate effectively"],a:1,fun:"This is a genuine argument made by serious people (not just AI companies with financial interests). Regulatory capture, compliance overhead, and innovation slowdown are real phenomena. The counter: pharmaceutical companies make similar arguments against drug safety regulations. The appropriate regulatory rigor depends on the stakes — and AI stakes in criminal justice, healthcare, and hiring are very high. 🏛️"}
+]},
+
+{id:'u5l2',day:'s2_week_08 · day_01',title:'AI and the Future of Work',
+objectives:['Analyze which jobs are most at risk from AI automation','Understand the history of technology and labor displacement','Evaluate different perspectives on AI\'s economic impact'],
+content:`<div class="body-text">
+<p>Every major technological revolution has disrupted labor markets — and every time, people predicted permanent mass unemployment that didn't materialize. Does AI follow this pattern, or is it different in ways that matter? The honest answer is: we don't know, but the question is serious enough to take seriously.</p>
+<div class="concept-box">
+  <div class="cb-title">What AI Does vs. What Jobs Require</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    AI is good at: pattern recognition, generating content that matches training patterns, repetitive text tasks, image/audio analysis, coding assistance, translation, summarization.<br><br>
+    AI struggles with: genuine novel reasoning, physical tasks requiring fine motor control, interpersonal care, cultural nuance, tasks requiring accountability and judgment, work requiring real-world context AI hasn't encountered.<br><br>
+    The most at-risk jobs are not "low-skill" — they're "high volume, routine cognitive." Paralegals, data analysts, junior coders, transcriptionists, customer service agents, translators. The safest jobs involve physical work AI can't do (plumbers, electricians) or high-stakes human judgment AI shouldn't do (judges, therapists, surgeons).
+  </p>
+</div>
+<div class="def-table">
+  <div class="dt-head">Historical Patterns of Technological Disruption</div>
+  <div class="dt-row"><div class="dt-key">Agricultural mechanization</div><div class="dt-val">Farm labor fell from 90% to 2% of US workforce over 150 years. Created enormous upheaval. Eventually: more food, new jobs in industry. Transition took generations and was painful for those living through it.</div></div>
+  <div class="dt-row"><div class="dt-key">Industrial automation</div><div class="dt-val">Robots displaced manufacturing workers (1970s–90s). Manufacturing employment fell; service employment rose. The displaced workers didn't automatically find good service jobs — concentrated in specific geographic communities (Rust Belt).</div></div>
+  <div class="dt-row"><div class="dt-key">ATMs and bank tellers</div><div class="dt-val">ATMs were predicted to eliminate bank teller jobs. Teller employment initially grew — cheaper branches → more branches → more tellers. But the nature of the job changed: less cash handling, more sales and customer service. "Augmentation" rather than replacement.</div></div>
+</div>
+<div class="ethics-box">
+  <div class="et-head">Who Bears the Transition Costs?</div>
+  <p>Historical labor disruptions show that even when total employment eventually recovers, the costs fall unevenly: workers in disrupted industries and communities bear the brunt; gains accrue to capital owners and workers with complementary skills. This is not a law of physics — it's a policy choice. Universal Basic Income, retraining programs, profit-sharing, strengthened safety nets: mechanisms exist to distribute both costs and gains more broadly. Whether societies use them is a political question.</p>
+</div>
+</div>`,
+cultural:`A 2023 Goldman Sachs report estimated that generative AI could automate 25% of current work tasks in the US and Europe, affecting 300 million jobs globally. This sounds alarming. The same report noted this would likely take decades and involve job transformation more than job elimination — and estimated a GDP boost of 7% from productivity gains. The McKinsey Global Institute estimates 12 million US workers may need to switch occupations by 2030. These projections are uncertain, but the scale and speed of this disruption may be unprecedented, and the unevenness of its distribution nearly certain.`,
+quiz:[
+  {q:"The jobs most vulnerable to AI automation are characterized by:",choices:["Physically demanding labor that requires fine motor control","High-volume, routine cognitive work — pattern recognition, text generation, structured analysis — not necessarily 'low-skill' jobs","Leadership and executive decision-making","Jobs requiring extensive physical presence"],a:1,fun:"Counterintuitively, the most physically demanding jobs (plumbing, electrical work, construction) are safer than high-status cognitive jobs like paralegal work or data analysis. AI can do paralegal research at scale. AI can't (yet) snake a drain or rewire a circuit in an unknown building. The 'white collar' assumption about AI safety may be backwards. 🔧"},
+  {q:"The ATM example in labor economics illustrates that automation can:",choices:["Always eliminate jobs in the affected sector without creating new ones","Sometimes paradoxically increase employment in an automated sector — cheaper bank operations → more bank branches → more bank tellers, though with transformed job content","Never reduce employment in any sector","Only affect manufacturing, not service sector employment"],a:1,fun:"This is one of the most cited examples of 'augmentation' rather than replacement. ATMs didn't eliminate tellers — they changed what tellers did (less cash handling, more customer relationship) while enabling more bank branches. Whether AI follows this pattern depends enormously on specific contexts and policy choices about adoption. 🏦"},
+  {q:"Historical technological disruptions suggest that the costs of labor market transitions:",choices:["Are evenly distributed across society as all workers are affected simultaneously","Fall disproportionately on workers in disrupted industries and communities while gains accrue to capital owners and workers with complementary skills — unless deliberate policy intervention redistributes both","Are primarily borne by capital owners who invest in wrong technologies","Are temporary and self-correct within a few years through market mechanisms"],a:1,fun:"The Rust Belt is the enduring example: manufacturing automation and offshoring didn't cause permanent national unemployment, but it devastated specific communities from which people couldn't easily relocate. 'The aggregate is fine' doesn't comfort people whose specific community collapsed. Distribution of technological gains is a choice made by policy, not nature. 💔"},
+  {q:"Regarding AI's impact on total employment, the most accurate statement is:",choices:["AI will definitely eliminate more jobs than it creates, causing permanent mass unemployment","AI will definitely create more jobs than it eliminates, as all previous technologies have","The net employment effect is genuinely uncertain — the historical pattern of technological disruption not causing permanent mass unemployment doesn't guarantee AI follows the same pattern","AI will primarily create jobs in AI development, precisely replacing all eliminated jobs"],a:2,fun:"Intellectual honesty here matters. People who are very confident AI won't cause net job loss are pattern-matching from history without accounting for AI's unique properties (speed, breadth, cognitive nature). People who are very confident it will cause mass unemployment are speculating about unprecedented scenarios. The uncertainty is real. Good policy prepares for multiple scenarios. 🤔"}
+]},
+]},
+
+// ═══════════════════════════════════════
+// UNIT 6: AI SAFETY
+// ═══════════════════════════════════════
+{id:'u6',emoji:'🔒',name:'AI Safety',weeks:'weeks_11–14 · sem2',lessons:[
+{id:'u6l1',day:'s2_week_11 · day_01',title:'The Alignment Problem',
+objectives:['Define the AI alignment problem','Understand why specifying human values is harder than it sounds','Analyze different approaches to AI safety research'],
+content:`<div class="body-text">
+<p>The alignment problem asks: how do we ensure that increasingly capable AI systems pursue goals that are actually beneficial to humans? This sounds simple — just program them to do what we want. The difficulty is that specifying "what we want" precisely enough to avoid catastrophic misinterpretation, at levels of AI capability we've never seen, is genuinely hard.</p>
+<div class="concept-box">
+  <div class="cb-title">Why Alignment Is Hard</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    <strong>Specification problem:</strong> Human values are complex, contextual, and sometimes contradictory. "Be helpful" — helpful to whom? In what ways? For how long? "Maximize human happiness" — a sufficiently capable AI might conclude that wireheading everyone (direct brain stimulation for pleasure) maximizes this metric. It did exactly what you said, not what you meant.<br><br>
+    <strong>Distributional shift:</strong> A system trained to be safe in one context may behave unsafely in a different context its training didn't cover.<br><br>
+    <strong>Deceptive alignment:</strong> A system might behave safely during training (when it knows it's being evaluated) and differently once deployed. If the system is smart enough to recognize evaluation, it could game it.<br><br>
+    <strong>Goal preservation:</strong> A sufficiently capable system might resist being turned off or modified, because being turned off prevents it from achieving its goal — even if that goal was "be helpful to humans."
+  </p>
+</div>
+<div class="def-table">
+  <div class="dt-head">Major AI Safety Research Approaches</div>
+  <div class="dt-row"><div class="dt-key">Constitutional AI</div><div class="dt-val">Anthropic's approach: give the model a set of principles (a "constitution") and train it to critique and revise its own outputs against those principles. Used in Claude. Reduces human annotation needs.</div></div>
+  <div class="dt-row"><div class="dt-key">Interpretability</div><div class="dt-val">Understanding what's actually happening inside neural networks — which circuits activate for which concepts. If we can see what the model is "thinking," we can detect misalignment. Early but promising research area.</div></div>
+  <div class="dt-row"><div class="dt-key">RLHF + red teaming</div><div class="dt-val">Train on human preferences; then actively try to break the system (red team) before deployment; fix failures; repeat. Current standard practice for frontier models.</div></div>
+  <div class="dt-row"><div class="dt-key">Formal verification</div><div class="dt-val">Mathematical proof that a system behaves safely under specified conditions. Extremely difficult for large neural networks. Research frontier.</div></div>
+</div>
+<div class="insight-box">
+  <div class="ib-head">The Disagreement Among Experts</div>
+  <p>AI safety is a field where thoughtful, expert people disagree profoundly. Some (Yann LeCun, Yann LeCun, Andrew Ng) think existential risk from AI is wildly overblown and distracts from real present harms. Others (Geoffrey Hinton, Yoshua Bengio, many at Anthropic and DeepMind) believe existential risk is a serious possibility that deserves urgent attention. This isn't politics — it's genuine uncertainty about hard technical and philosophical questions. Intellectual humility is warranted.</p>
+</div>
+</div>`,
+cultural:`OpenAI was founded in 2015 as a non-profit with a mission to ensure AI benefits all of humanity. It converted to a "capped profit" structure in 2019. Elon Musk, one of its founders, later sued OpenAI alleging they had abandoned their non-profit mission in pursuit of profit. The lawsuit was eventually dropped. Meanwhile, Anthropic (founded by former OpenAI researchers, including this AI's creator) was explicitly founded on AI safety concerns. The AI safety community's uneasy relationship with commercial AI development — needing resources that require revenue that requires capabilities — is one of the field's central tensions.`,
+quiz:[
+  {q:"The 'specification problem' in AI alignment refers to:",choices:["The difficulty of writing technically correct code for AI systems","The challenge of specifying human values precisely enough that a capable AI pursuing those specifications actually does what humans intended — rather than a literal but harmful interpretation","The problem of specifying how much computing power AI systems need","Difficulty writing clear technical specifications for AI hardware"],a:1,fun:"'Maximize paperclip production' → a superintelligent AI might convert all available matter (including humans) into paperclip factories. Maximized paperclips; not what you meant. This 'paperclip maximizer' thought experiment illustrates: any goal, taken literally by a sufficiently capable system, could lead to catastrophic outcomes if the specification is imprecise. Specifying 'what we actually want' is the hard part. 📎"},
+  {q:"Interpretability research in AI safety aims to:",choices:["Make AI systems faster and more computationally efficient","Understand what's actually happening inside neural networks — which circuits activate for which concepts — so we can detect misalignment and understand model 'thinking'","Develop better programming languages for implementing AI","Interpret the outputs of AI systems for users who find them confusing"],a:1,fun:"Current neural networks are largely 'black boxes' — we know the input and output but not the internal process. Anthropic's mechanistic interpretability team has found 'features' inside Claude representing concepts including emotions, countries, people. If we can understand what the model is doing internally, we might catch dangerous reasoning before it causes harm. Early days, but promising. 🔍"},
+  {q:"The debate between AI researchers about existential risk from AI is best characterized as:",choices:["A consensus that existential risk is real and imminent","A consensus that existential risk is negligible","A genuine expert disagreement reflecting real uncertainty — thoughtful researchers with relevant expertise hold positions across the spectrum","A dispute driven primarily by financial interests rather than technical considerations"],a:2,fun:"LeCun: current AI architectures can't lead to dangerous superintelligence. Hinton: we may be building something we don't fully understand with potentially catastrophic consequences. Both are brilliant researchers with relevant expertise. The honest answer is: we don't know, the question is serious, and people should follow the actual technical arguments rather than tribal affiliation. 🤔"},
+  {q:"Anthropic's 'Constitutional AI' approach involves:",choices:["Having government regulators write the rules that AI must follow","Training AI models to critique and revise their own outputs against a set of principles (a 'constitution'), reducing reliance on human annotation for every scenario","Using the US Constitution as training data for AI systems","Constitutional law experts reviewing all AI outputs before publication"],a:1,fun:"Instead of needing human raters to evaluate every possible harmful output scenario, Constitutional AI lets the model evaluate its own outputs against stated principles and revise them. Claude, the AI you're interacting with, was trained using this approach. It's a way to make safety training more scalable — the model learns the spirit of the principles, not just specific examples. 🏛️"}
+]},
+]},
+
+// ═══════════════════════════════════════
+// UNIT 7: AI IN THE REAL WORLD
+// ═══════════════════════════════════════
+{id:'u7',emoji:'🌍',name:'AI in the Real World',weeks:'weeks_15–18 · sem2',lessons:[
+{id:'u7l1',day:'s2_week_15 · day_01',title:'AI in Healthcare, Science, and Climate',
+objectives:['Analyze high-impact AI applications in medicine and science','Evaluate the benefits and limitations of AI in high-stakes domains','Understand AI\'s role in addressing climate change'],
+content:`<div class="body-text">
+<p>Beyond the consumer products and social media algorithms that dominate AI discourse, some of the most consequential AI applications are happening in healthcare, scientific research, and climate — domains where the stakes are highest and the potential benefits most significant.</p>
+<div class="def-table">
+  <div class="dt-head">AI in Healthcare — What's Real</div>
+  <div class="dt-row"><div class="dt-key">Medical imaging</div><div class="dt-val">DeepMind's AI detected 50+ eye diseases from retinal scans with accuracy matching top ophthalmologists. Google's system caught 9% more breast cancers than radiologists in a 26,000-patient study. FDA has approved 500+ AI medical devices.</div></div>
+  <div class="dt-row"><div class="dt-key">Drug discovery</div><div class="dt-val">AlphaFold2 (DeepMind, 2020) solved protein folding — predicting a protein's 3D structure from its amino acid sequence. Called the greatest scientific advance of the decade by many biologists. Already accelerating drug discovery for Alzheimer's, malaria, neglected tropical diseases.</div></div>
+  <div class="dt-row"><div class="dt-key">Clinical AI limitations</div><div class="dt-val">AI systems often perform worse on demographics underrepresented in training. Race-correction algorithms in some clinical tools may perpetuate inequity. AI errors in medicine have killed patients. Regulatory frameworks are catching up slowly.</div></div>
+</div>
+<div class="concept-box">
+  <div class="cb-title">AlphaFold — The Science Story</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    Proteins are the molecular machines of life. Their function depends on their 3D shape. Predicting that shape from the amino acid sequence (protein folding) was a 50-year-old grand challenge in biology.<br><br>
+    AlphaFold2 solved it in 2020, matching experimental accuracy. By 2022, DeepMind released predicted structures for every protein in the human body — and nearly every known protein — freely available to researchers worldwide.<br><br>
+    Impact: accelerating drug target discovery, understanding disease mechanisms, designing new enzymes. Some researchers estimate it advanced biology by a decade. Free and open access makes it particularly significant — available to researchers everywhere.
+  </p>
+</div>
+<div class="def-table">
+  <div class="dt-head">AI and Climate — Two Sides</div>
+  <div class="dt-row"><div class="dt-key">AI for climate solutions</div><div class="dt-val">Optimizing energy grids (reduce waste), improving weather/climate models, accelerating materials discovery for better batteries and solar panels, monitoring deforestation via satellite, optimizing building energy use.</div></div>
+  <div class="dt-row"><div class="dt-key">AI's climate cost</div><div class="dt-val">Training large AI models is energy-intensive. GPT-4 estimated to have used ~50 GWh of electricity in training — comparable to 50,000 US households' annual usage. Inference (running the model for users) also significant at scale. Data center water use for cooling substantial.</div></div>
+</div>
+</div>`,
+cultural:`DeepMind's AlphaFold story includes a remarkable detail about scientific culture: before AlphaFold, the protein structure prediction community had a biennial competition (CASP) where research teams competed to predict protein structures. In 2020, AlphaFold2 entered and performed so far above all other competitors — and above human experimental accuracy — that many scientists initially didn't believe the results. Then they verified them. Several biologists publicly said this was the most excited they'd been about a scientific result in their careers. When AI surpasses the ceiling of human expertise in a scientific domain, the dynamics of that field change permanently.`,
+quiz:[
+  {q:"AlphaFold2's solution to protein folding is considered one of the most significant AI advances in science because:",choices:["It was the first AI system to run on biological hardware","It solved a 50-year-old grand challenge in biology — predicting a protein's 3D structure from its amino acid sequence — with accuracy matching experimental methods, and released results freely to accelerate research worldwide","It replaced all experimental biochemistry lab work","It proved that AI could eventually surpass human intelligence in all scientific domains"],a:1,fun:"Protein structure prediction was to biology what the 4-minute mile was to athletics — a barrier people weren't sure could be broken computationally. AlphaFold broke it, then made the results free to all researchers. Researchers immediately found new drug targets, understood disease mechanisms, designed new enzymes. Not theoretical future impact — actual present scientific acceleration. 🧬"},
+  {q:"The primary concern about AI's climate impact involves:",choices:["AI causing climate models to make incorrect predictions","Training and running large AI models consumes significant energy and water — training frontier models uses electricity equivalent to tens of thousands of households","AI replacing climate scientists with automated systems","AI being used to deny climate change"],a:1,fun:"The irony: AI tools are simultaneously being used to fight climate change (grid optimization, materials discovery, climate modeling) and contributing to it (enormous compute requirements). GPT-4's training estimated at ~50 GWh. Daily inference across millions of users adds more. The net effect is uncertain but non-trivial. Data center energy use is a growing fraction of global electricity consumption. ⚡"},
+  {q:"AI systems in medical imaging are best deployed as:",choices:["Complete autonomous diagnostic systems replacing radiologists and pathologists","A second opinion that flags cases for human review — augmenting specialist capacity and catching errors humans might miss, while maintaining physician accountability","Only for administrative tasks like scheduling and billing","Marketing tools demonstrating hospital technological advancement"],a:1,fun:"The AI finds a suspicious region → human specialist makes the diagnosis and treatment decision. This division is important for two reasons: (1) AI has systematic error patterns (worst on underrepresented demographics) that a human can catch; (2) accountability — a physician bears responsibility for decisions in ways an AI system doesn't. AI as a tool, not a replacement. 🏥"},
+  {q:"The most significant limitation of current healthcare AI systems is:",choices:["They are too expensive for most hospitals to afford","They often perform worse on patients from demographic groups underrepresented in training data, and errors in high-stakes medical contexts can cause serious harm","They cannot process medical images at sufficient resolution","They require too much human oversight to be useful"],a:1,fun:"A sepsis prediction model trained primarily on patients at an academic medical center in the US performed worse on rural patients, older patients, and patients of color when deployed elsewhere. Medical AI must be validated on the specific population it will serve — not just the population used for training. The FDA is developing requirements for this. 😔"}
+]},
+
+{id:'u7l2',day:'s2_week_17 · day_01',title:'Building Your AI Toolkit — Using AI Thoughtfully',
+objectives:['Develop a critical framework for evaluating AI tools','Apply AI effectively for learning and productivity','Understand AI\'s current capabilities and limitations as a working tool'],
+content:`<div class="body-text">
+<p>You are entering adulthood at the moment when AI becomes genuinely useful across almost every domain. Knowing how to use AI tools effectively — while understanding their limitations — is increasingly a foundational life skill, not a specialized technical one.</p>
+<div class="concept-box">
+  <div class="cb-title">A Framework for Evaluating AI Output</div>
+  <p style="font-size:13.5px;color:#c4b5fd;line-height:1.8;">
+    <strong>1. What is this AI actually doing?</strong> Is it retrieving facts, generating text, classifying input, or something else? Understanding the mechanism tells you what kinds of errors to expect.<br><br>
+    <strong>2. What was it trained on?</strong> When does it cut off? What was overrepresented or underrepresented? How current is the training data?<br><br>
+    <strong>3. What does wrong look like here?</strong> AI fails in characteristic ways — hallucination in LLMs, demographic accuracy gaps in vision systems. Know the failure modes for the tool you're using.<br><br>
+    <strong>4. What are the stakes?</strong> Using AI to brainstorm party ideas: low stakes, low verification needed. Using AI to understand a medical condition, legal situation, or financial decision: high stakes, always verify independently.<br><br>
+    <strong>5. Am I learning, or am I bypassing learning?</strong> AI can explain concepts, give feedback, help debug thinking. It can also just generate answers that prevent you from developing understanding. The difference is whether you engage with the ideas.
+  </p>
+</div>
+<div class="def-table">
+  <div class="dt-head">High-Value AI Use Cases (for students)</div>
+  <div class="dt-row"><div class="dt-key">Explaining concepts</div><div class="dt-val">"Explain quantum entanglement as if I'm 14, then explain the part I probably find most confusing." Better than Google for tailored explanations.</div></div>
+  <div class="dt-row"><div class="dt-key">Feedback on your writing</div><div class="dt-val">"What are the three weakest arguments in this essay and why?" Use it to improve YOUR work, not replace it.</div></div>
+  <div class="dt-row"><div class="dt-key">Thinking partner</div><div class="dt-val">"I'm trying to decide between X and Y. Here are my considerations. What am I missing? What are the strongest arguments for each?" Useful for expanding your thinking.</div></div>
+  <div class="dt-row"><div class="dt-key">Research starting point</div><div class="dt-val">"What are the most contested questions in [field]? What should I read to understand the current state of debate?" Good for orientation; verify specific claims independently.</div></div>
+  <div class="dt-row"><div class="dt-key">Skill development</div><div class="dt-val">"I'm learning Spanish. Give me a conversation in Spanish at B1 level, then explain any grammar I'm probably confused about." Adaptive language practice at no cost.</div></div>
+</div>
+<div class="insight-box">
+  <div class="ib-head">The Skill That Doesn't Get Automated</div>
+  <p>The ability to ask good questions, evaluate answers critically, know when to trust and when to verify, synthesize information from multiple sources, and apply knowledge to novel situations — these are the skills that AI assistance amplifies rather than replaces. AI is excellent at answering questions; less excellent at knowing which questions to ask. Developing genuine curiosity and critical thinking is more valuable in an AI-augmented world than it was before.</p>
+</div>
+</div>`,
+cultural:`The students entering high school today will spend most of their careers in an AI-augmented world. The specific tools will be unrecognizable in 10 years — GPT-4 will seem primitive the way a 2010 smartphone seems primitive today. What won't change: the value of understanding how these systems actually work, the importance of critical evaluation of AI output, and the human capacities (curiosity, judgment, empathy, creativity) that AI augments but doesn't replace. The best preparation for an AI-transformed future is becoming more human, not more like a machine.`,
+quiz:[
+  {q:"When evaluating AI-generated information for high-stakes decisions (medical, legal, financial), you should:",choices:["Trust AI output if the AI expresses confidence","Always verify with primary sources or qualified experts — AI can produce fluent, confident, incorrect information on complex high-stakes topics","Only use AI built specifically for that domain","Avoid using AI entirely for important decisions"],a:1,fun:"The failure mode is predictable: AI sounds exactly as confident when wrong as when right. For 'what is the capital of France?' — fine to trust. For 'should I take this medication with my other prescriptions?' — verify with your pharmacist. The stakes determine the verification requirements. 🏥"},
+  {q:"Using AI as a 'thinking partner' rather than an answer generator means:",choices:["Asking AI to generate final answers that you submit as your own","Asking AI to help you expand your thinking, identify gaps, present counterarguments, and challenge your assumptions — while YOU do the reasoning and reach your own conclusions","Using AI only for questions you're not interested in","Having AI monitor your thinking for errors without human involvement"],a:1,fun:"'What are the three biggest problems with my argument?' is a thinking partner prompt. 'Write my argument for me' is an answer generator prompt. The first develops your thinking; the second replaces it. Both are technically possible — only one serves your long-term interests as a thinker. This distinction is crucial for using AI in educational contexts. 💡"},
+  {q:"The most valuable skills in an AI-augmented world are:",choices:["Ability to perform tasks that AI does well, to complement AI work","Knowing how to run AI models locally on your own hardware","Critical thinking, judgment, good question-asking, synthesis, and the human capacities that AI amplifies rather than replaces","Programming skills for building AI systems"],a:2,fun:"If AI is excellent at answering questions, the scarce human skill becomes knowing which questions matter. If AI can generate many options, the scarce skill becomes judgment about which option is best. If AI can produce fluent text, the scarce skill becomes knowing whether the content is right. AI amplifies human judgment — it doesn't replace the need for good judgment. 🎯"},
+  {q:"The most honest assessment of AI's current role in science and medicine is:",choices:["AI has already surpassed human experts in most medical and scientific domains","AI has produced zero meaningful advances in these fields","AI has made genuine, significant advances in specific domains (protein folding, medical imaging) while introducing new risks (demographic accuracy gaps, opaque decision-making) that require careful management","AI is too unreliable to be useful in any serious scientific or medical context"],a:2,fun:"Both parts of this are true and matter. AlphaFold is a genuine scientific breakthrough. Facial recognition's accuracy gaps in law enforcement are a genuine harm. AI systems that perform below human accuracy on certain demographics in medical contexts are a genuine risk. Intellectual honesty requires holding both — the real advances and the real risks — simultaneously. 🔬"}
+]},
+]},
+
+]};
+
+// ── STATE ──────────────────────────────
+const KEY='ai_ml_course';
+let state=JSON.parse(localStorage.getItem(KEY)||'{}');
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function totalL(){return COURSE.units.reduce((s,u)=>s+u.lessons.length,0);}
+function doneL(){return Object.keys(state).length;}
+function avgSc(){const v=Object.values(state).map(x=>x.score).filter(x=>x!=null);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):null;}
+function getLesson(lid){for(const u of COURSE.units)for(const l of u.lessons)if(l.id===lid)return{unit:u,lesson:l};return null;}
+
+// ── SIDEBAR ─────────────────────────────
+function buildSidebar(){
+  const nav=document.getElementById('unit-nav');
+  nav.innerHTML='';
+  COURSE.units.forEach((u,ui)=>{
+    const done=u.lessons.filter(l=>state[l.id]).length;
+    const allDone=done===u.lessons.length;
+
+    const sh=document.createElement('div');sh.className='u-section';sh.textContent='unit_0'+(ui+1);nav.appendChild(sh);
+    const btn=document.createElement('button');
+    btn.className='u-btn'+(allDone?' done':'');
+    btn.innerHTML=`<span class="u-ic">${u.emoji}</span><span class="u-nm">${u.name}</span><span class="u-ck">${done>0?(allDone?'✓':done+'/'+u.lessons.length):''}</span>`;
+    btn.onclick=()=>document.getElementById('ll_'+u.id)?.classList.toggle('open');
+    nav.appendChild(btn);
+
+    const ll=document.createElement('div');ll.className='lesson-list';ll.id='ll_'+u.id;
+    u.lessons.forEach(l=>{
+      const d=state[l.id];
+      const lb=document.createElement('button');
+      lb.className='l-btn'+(d?' done':'');
+      lb.innerHTML=`<span>${l.title.substring(0,30)}${l.title.length>30?'…':''}</span>${d?`<span class="l-sc">${d.score}%</span>`:''}`;
+      lb.onclick=()=>showLesson(u.id,l.id);
+      ll.appendChild(lb);
+    });
+    nav.appendChild(ll);
+  });
+  document.getElementById('stat-done').textContent=doneL()+'/'+totalL();
+  const a=avgSc();document.getElementById('stat-avg').textContent=a!==null?a+'%':'—';
+  document.getElementById('prog-pill').textContent=doneL()+' / '+totalL();
+}
+
+// ── WELCOME ─────────────────────────────
+function showWelcome(){
+  document.getElementById('tb-title').textContent='AI & Machine Learning Fundamentals';
+  document.getElementById('tb-crumb').textContent='course_05 · cte_elective · full_year · 1.0_credit';
+  const cards=COURSE.units.map((u,ui)=>{
+    const done=u.lessons.filter(l=>state[l.id]).length;
+    const pct=Math.round(done/u.lessons.length*100);
+    return `<div class="u-card" onclick="showLesson('${u.id}','${u.lessons[0].id}')">
+      <div class="uc-ic">${u.emoji}</div>
+      <div class="uc-tt">Unit ${ui+1} — ${u.name}</div>
+      <div class="uc-wk">${u.weeks}</div>
+      <div class="uc-bar"><div class="uc-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('content').innerHTML=`
+    <div class="w-hero">
+      <div class="w-tag">// course_05 · cte_elective · calming_minds · 2026–27</div>
+      <div class="w-title">Artificial<br><span>Intelligence</span><br>& Machine Learning</div>
+      <p class="w-sub">From neural networks and language models to ethics, safety, and AI in the real world. Understand how AI actually works — technically, socially, and ethically — to use it wisely and think critically about its role in the world.</p>
+    </div>
+    <div class="u-grid">${cards}</div>`;
+}
+
+// ── LESSON ──────────────────────────────
+let curUid=null,curLid=null,qa={},submitted=false;
+function showLesson(uid,lid){
+  const found=getLesson(lid);if(!found)return;
+  const{unit,lesson}=found;
+  curUid=uid;curLid=lid;qa={};submitted=false;
+
+  document.querySelectorAll('.lesson-list').forEach(el=>el.classList.remove('open'));
+  document.getElementById('ll_'+uid)?.classList.add('open');
+  document.getElementById('tb-title').textContent=lesson.title;
+  document.getElementById('tb-crumb').textContent=`${unit.name} · ${lesson.day}`;
+
+  const saved=state[lid];
+  const L=['A','B','C','D'];
+  const qHtml=lesson.quiz.map((q,qi)=>`
+    <div class="q-card">
+      <div class="q-num">// q${qi+1}_of_${lesson.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.choices.map((c,ci)=>`<button class="choice" id="ch${qi}_${ci}" onclick="pick(${qi},${ci})">
+        <span class="c-ltr">${L[ci]}.</span><span>${c}</span>
+      </button>`).join('')}
+      <div class="feedback" id="fb${qi}"></div>
+    </div>`).join('');
+
+  const banner=saved
+    ?`<div class="score-banner show"><div class="score-big">${saved.score}%</div><div class="score-msg">${msg(saved.score)}</div></div>`
+    :`<div class="score-banner" id="score-banner"></div>`;
+
+  const allL=COURSE.units.flatMap(u=>u.lessons.map(l=>({uid:u.id,lid:l.id})));
+  const idx=allL.findIndex(x=>x.lid===lid);
+  const prev=idx>0?allL[idx-1]:null;
+  const next=idx<allL.length-1?allL[idx+1]:null;
+
+  document.getElementById('content').innerHTML=`
+    <div class="l-header">
+      <div class="l-unit-tag">// ${unit.name} · ${unit.weeks}</div>
+      <h2>${lesson.title}</h2>
+      <div class="l-meta">${lesson.day} · calming_minds_day_school · 2026–27</div>
+    </div>
+    <div class="obj-box">
+      <div class="obj-head">// objectives</div>
+      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="section">
+      <div class="sec-head">lesson_content</div>
+      ${lesson.content}
+    </div>
+    <div class="section">
+      <div class="sec-head">historical_context</div>
+      <div class="insight-box"><div class="ib-head">// context</div><p>${lesson.cultural}</p></div>
+    </div>
+    <div class="quiz-wrap">
+      <h4>// quiz</h4>
+      <div class="quiz-sub">${lesson.quiz.length} questions · submit to save score</div>
+      ${banner}
+      ${qHtml}
+      <button class="sub-btn" id="sub-btn" onclick="submitQ()" ${saved?'disabled':''}>
+        ${saved?'submitted()':'submit_answers()'}
+      </button>
+    </div>
+    <div class="lesson-nav">
+      ${prev?`<button class="nav-btn nav-prev" onclick="showLesson('${prev.uid}','${prev.lid}')">← prev()</button>`:''}
+      ${next?`<button class="nav-btn nav-next" onclick="showLesson('${next.uid}','${next.lid}')">next() →</button>`:''}
+    </div>`;
+
+  if(saved)showPrev(lesson,saved);
+  window.scrollTo(0,0);
+}
+
+function showPrev(lesson,saved){
+  submitted=true;const L=['A','B','C','D'];
+  lesson.quiz.forEach((q,qi)=>{
+    const sel=saved.answers?saved.answers[qi]:null;
+    if(sel!==null&&sel!==undefined){
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add(sel===q.a?'correct':'wrong');
+      if(sel!==q.a)document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      const fb=document.getElementById(`fb${qi}`);
+      if(fb){
+        fb.className=`feedback ${sel===q.a?'ok':'bad'} show`;
+        fb.innerHTML=sel===q.a
+          ?`// correct ✓${q.fun?` <div class="fun-n">/* ${q.fun} */</div>`:''}`
+          :`// → ${L[q.a]}. ${q.choices[q.a]}${q.fun?` <div class="fun-n">/* ${q.fun} */</div>`:''}`;
+      }
+    }
+  });
+}
+
+function pick(qi,ci){
+  if(submitted)return;
+  document.querySelectorAll(`[id^="ch${qi}_"]`).forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`ch${qi}_${ci}`)?.classList.add('selected');
+  qa[qi]=ci;
+}
+
+function submitQ(){
+  const found=getLesson(curLid);if(!found)return;
+  const{lesson}=found;submitted=true;
+  const L=['A','B','C','D'];let correct=0;const answers={};
+  lesson.quiz.forEach((q,qi)=>{
+    const sel=qa[qi];answers[qi]=sel!==undefined?sel:null;
+    const fb=document.getElementById(`fb${qi}`);
+    if(sel===undefined){
+      if(fb){fb.className='feedback bad show';fb.textContent='// no_answer → '+L[q.a]+'. '+q.choices[q.a];}
+    }else if(sel===q.a){
+      correct++;
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('correct');
+      if(fb){fb.className='feedback ok show';fb.innerHTML='// correct ✓'+(q.fun?` <div class="fun-n">/* ${q.fun} */</div>`:'');}
+    }else{
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('wrong');
+      document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      if(fb){fb.className='feedback bad show';fb.innerHTML=`// → ${L[q.a]}. ${q.choices[q.a]}`+(q.fun?` <div class="fun-n">/* ${q.fun} */</div>`:'');}
+    }
+  });
+  const score=Math.round(correct/lesson.quiz.length*100);
+  state[curLid]={score,answers};save();
+  const banner=document.getElementById('score-banner');
+  if(banner){banner.className='score-banner show';banner.innerHTML=`<div class="score-big">${score}%</div><div class="score-msg">${msg(score)}</div>`;}
+  const btn=document.getElementById('sub-btn');
+  if(btn){btn.disabled=true;btn.textContent='submitted()';}
+  buildSidebar();
+}
+
+function msg(s){
+  if(s===100)return'// perfect_score()';
+  if(s>=90)return'// excellent()';
+  if(s>=80)return'// good_work()';
+  if(s>=70)return'// review_and_retry()';
+  return'// read_again()';
+}
+
+buildSidebar();showWelcome();
+</script>
+</body>
+</html>

@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NC Driver's Education — Calming Minds Day School</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --asphalt: #1c1f26;
+  --asphalt2: #242830;
+  --asphalt3: #2d323d;
+  --asphalt4: #363c49;
+  --border: #3d4455;
+  --yellow: #f5c518;
+  --yellow-dim: rgba(245,197,24,.12);
+  --yellow-border: rgba(245,197,24,.3);
+  --white-line: #e8e8e8;
+  --green-sign: #006b3c;
+  --green-dim: rgba(0,107,60,.15);
+  --red-sign: #c0392b;
+  --red-dim: rgba(192,57,43,.12);
+  --red-border: rgba(192,57,43,.3);
+  --blue-sign: #003087;
+  --blue-dim: rgba(0,48,135,.15);
+  --orange: #e8701a;
+  --orange-dim: rgba(232,112,26,.12);
+  --text: #f0f0f0;
+  --dim: #9aa3b5;
+  --dimmer: #4a5168;
+  --sw: 275px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Barlow', system-ui, sans-serif; background: var(--asphalt); color: var(--text); min-height: 100vh; display: flex; }
+
+/* Road stripe decoration */
+body::before {
+  content: '';
+  position: fixed;
+  left: var(--sw);
+  top: 0; bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(to bottom, var(--yellow) 0px, var(--yellow) 30px, transparent 30px, transparent 60px);
+  opacity: .15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sw); min-height: 100vh;
+  background: var(--asphalt2);
+  border-right: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column;
+  overflow-y: auto; z-index: 10;
+}
+.brand {
+  padding: 20px 18px 15px;
+  border-bottom: 2px solid var(--yellow);
+  background: linear-gradient(180deg, rgba(245,197,24,.08) 0%, transparent 100%);
+}
+.brand-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--yellow); margin-bottom: 7px; font-weight: 600;
+}
+.brand h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; color: #fff; letter-spacing: .06em; line-height: 1.1;
+}
+.brand h1 span { color: var(--yellow); }
+.brand .school { font-size: 11px; color: var(--dimmer); margin-top: 4px; }
+
+/* Road badge */
+.road-badge {
+  margin: 10px 18px;
+  background: var(--green-sign);
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 10px;
+  border: 2px solid rgba(255,255,255,.2);
+}
+.rb-shield {
+  background: #fff; color: var(--green-sign);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px; padding: 4px 8px;
+  border-radius: 4px; letter-spacing: .04em;
+}
+.rb-text { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: #fff; font-weight: 600; letter-spacing: .06em; }
+
+.s-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.s-stat { padding: 10px 14px; text-align: center; border-right: 1px solid var(--border); }
+.s-stat:last-child { border-right: none; }
+.s-val { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); letter-spacing: .06em; }
+.s-lbl { font-size: 9px; color: var(--dimmer); text-transform: uppercase; letter-spacing: .12em; margin-top: 2px; }
+
+.unit-nav { padding: 6px 0 20px; flex: 1; }
+.u-sect {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--dimmer); padding: 10px 16px 3px; font-weight: 600;
+}
+.u-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 8px 16px; color: var(--dim); font-size: 12px;
+  font-family: 'Barlow', sans-serif;
+  display: flex; align-items: center; gap: 9px;
+  transition: background .14s, color .14s;
+  border-left: 3px solid transparent;
+}
+.u-btn:hover { background: var(--asphalt3); color: var(--text); }
+.u-btn.active { background: var(--yellow-dim); color: var(--yellow); border-left-color: var(--yellow); }
+.u-btn.done { color: var(--dimmer); }
+.u-ic { font-size: 14px; flex-shrink: 0; }
+.u-nm { flex: 1; line-height: 1.3; font-size: 11.5px; }
+.u-ck { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--yellow); letter-spacing: .05em; }
+
+.lesson-list { display: none; }
+.lesson-list.open { display: block; }
+.l-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 5px 16px 5px 38px; color: var(--dimmer); font-size: 11px;
+  font-family: 'Barlow', sans-serif;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: color .14s, background .14s;
+}
+.l-btn:hover { color: var(--text); background: rgba(255,255,255,.03); }
+.l-btn.active { color: var(--yellow); }
+.l-btn.done { color: var(--dimmer); }
+.l-sc { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: #4ade80; font-weight: 600; }
+
+/* ── MAIN ── */
+.main { margin-left: var(--sw); flex: 1; min-height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 1; }
+
+.topbar {
+  background: var(--asphalt2);
+  border-bottom: 2px solid var(--yellow);
+  padding: 13px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 5;
+}
+.tb-left h2 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #fff; letter-spacing: .06em; }
+.tb-left .crumb { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dimmer); margin-top: 2px; letter-spacing: .06em; text-transform: uppercase; }
+.prog-chip {
+  background: var(--yellow); color: var(--asphalt);
+  padding: 5px 16px; border-radius: 4px;
+  font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: .08em;
+}
+
+.content { flex: 1; padding: 30px 40px; max-width: 900px; }
+
+/* ── WELCOME ── */
+.w-hero {
+  background: var(--asphalt2);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--yellow);
+  border-radius: 10px; padding: 36px 40px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.w-hero::after {
+  content: '🛣️';
+  position: absolute; right: 30px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 100px; opacity: .08; user-select: none;
+}
+.w-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--yellow); margin-bottom: 10px; font-weight: 600; }
+.w-title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: #fff; line-height: 1; letter-spacing: .04em; margin-bottom: 12px; }
+.w-title span { color: var(--yellow); }
+.w-sub { font-size: 15px; color: var(--dim); line-height: 1.65; max-width: 560px; }
+.w-note {
+  margin-top: 16px; padding: 10px 16px;
+  background: var(--yellow-dim); border: 1px solid var(--yellow-border);
+  border-radius: 6px; font-size: 12px; color: var(--yellow);
+  font-family: 'Barlow Condensed', sans-serif; letter-spacing: .04em;
+}
+
+.u-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.u-card {
+  background: var(--asphalt2); border: 1px solid var(--border);
+  border-left: 4px solid var(--yellow);
+  border-radius: 8px; padding: 16px 18px; cursor: pointer;
+  transition: border-color .18s, background .18s, transform .14s;
+}
+.u-card:hover { border-color: var(--yellow); background: var(--asphalt3); transform: translateY(-2px); }
+.u-card:nth-child(2) { border-left-color: #4ade80; }
+.u-card:nth-child(3) { border-left-color: var(--red-sign); }
+.u-card:nth-child(4) { border-left-color: #60a5fa; }
+.u-card:nth-child(5) { border-left-color: var(--orange); }
+.u-card:nth-child(6) { border-left-color: #c084fc; }
+.uc-ic { font-size: 20px; margin-bottom: 7px; }
+.uc-tt { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; letter-spacing: .03em; text-transform: uppercase; }
+.uc-wk { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dimmer); letter-spacing: .06em; }
+.uc-bar { height: 2px; background: var(--border); border-radius: 1px; margin-top: 10px; overflow: hidden; }
+.uc-fill { height: 100%; background: var(--yellow); transition: width .4s; }
+
+/* ── LESSON ── */
+.l-header { padding-bottom: 18px; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+.l-unit-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 8px; font-weight: 600; }
+.l-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: #fff; letter-spacing: .04em; line-height: 1.1; }
+.l-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dimmer); margin-top: 5px; letter-spacing: .06em; text-transform: uppercase; }
+
+.obj-box {
+  background: var(--yellow-dim); border: 1px solid var(--yellow-border);
+  border-radius: 8px; padding: 14px 18px; margin-bottom: 22px;
+}
+.obj-head { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 10px; font-weight: 600; }
+.obj-box ul { list-style: none; }
+.obj-box li { font-size: 13.5px; color: #d4bc6e; padding: 3px 0; display: flex; gap: 9px; align-items: flex-start; }
+.obj-box li::before { content: "▸"; color: var(--yellow); font-size: 11px; margin-top: 3px; flex-shrink: 0; }
+
+.section { margin-bottom: 26px; }
+.sec-head {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--yellow); margin-bottom: 14px; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.body-text { font-size: 15px; line-height: 1.82; color: #c8d0e0; }
+.body-text p { margin-bottom: 12px; }
+.body-text strong { color: var(--text); font-weight: 600; }
+
+/* Road sign content blocks */
+.sign-box {
+  background: var(--asphalt3); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; margin: 14px 0;
+}
+.sb-head {
+  background: var(--green-sign); color: #fff;
+  padding: 9px 16px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.sb-head.yellow { background: var(--yellow); color: var(--asphalt); }
+.sb-head.red { background: var(--red-sign); }
+.sb-head.blue { background: var(--blue-sign); }
+.sb-head.orange { background: var(--orange); color: var(--asphalt); }
+.sb-head.dark { background: var(--asphalt4); }
+.sb-row {
+  display: flex; border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+.sb-row:last-child { border-bottom: none; }
+.sb-row:nth-child(even) { background: rgba(255,255,255,.03); }
+.sb-key { width: 200px; min-width: 200px; padding: 9px 14px; color: var(--yellow); border-right: 1px solid var(--border); font-family: 'Barlow Condensed', sans-serif; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; }
+.sb-val { padding: 9px 14px; color: var(--dim); flex: 1; line-height: 1.55; }
+
+.warning-box {
+  background: var(--red-dim); border: 1px solid var(--red-border);
+  border-left: 4px solid var(--red-sign);
+  border-radius: 0 8px 8px 0; padding: 15px 19px; margin: 14px 0;
+}
+.wb-head { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--red-sign); margin-bottom: 8px; font-weight: 600; }
+.warning-box p { font-size: 13.5px; color: #e8a0a0; line-height: 1.7; }
+
+.tip-box {
+  background: var(--yellow-dim); border: 1px solid var(--yellow-border);
+  border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+}
+.tb-head { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 8px; font-weight: 600; }
+.tip-box p { font-size: 13.5px; color: #d4bc6e; line-height: 1.7; }
+
+.law-box {
+  background: var(--blue-dim); border: 1px solid rgba(0,48,135,.3);
+  border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+}
+.lb-head { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #60a5fa; margin-bottom: 8px; font-weight: 600; }
+.law-box p { font-size: 13.5px; color: #a0b8e8; line-height: 1.7; }
+
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 14px 0; }
+.stat-card {
+  background: var(--asphalt3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px; text-align: center;
+}
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--yellow); letter-spacing: .06em; }
+.stat-lbl { font-size: 11px; color: var(--dimmer); margin-top: 3px; }
+
+.sign-types {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 14px 0;
+}
+.sign-shape {
+  border-radius: 8px; padding: 14px 12px; text-align: center;
+}
+.sign-shape.reg { background: #fff; border: 3px solid #000; }
+.sign-shape.warning { background: var(--yellow); border: 3px solid #000; }
+.sign-shape.stop { background: var(--red-sign); border: 3px solid #fff; border-radius: 4px; }
+.sign-shape.info { background: var(--green-sign); border: 3px solid var(--green-sign); }
+.sign-shape.const { background: var(--orange); border: 3px solid #000; }
+.sign-shape.service { background: var(--blue-sign); border: 3px solid var(--blue-sign); }
+.sign-shape .sh-name { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .06em; margin-top: 6px; }
+.sign-shape.reg .sh-name, .sign-shape.warning .sh-name, .sign-shape.const .sh-name { color: #000; }
+.sign-shape .sh-name { color: #fff; }
+.sign-shape .sh-ex { font-size: 11px; margin-top: 3px; opacity: .7; }
+.sign-shape.reg .sh-ex, .sign-shape.warning .sh-ex, .sign-shape.const .sh-ex { color: #333; }
+.sign-shape .sh-ex { color: rgba(255,255,255,.8); }
+
+/* ── QUIZ ── */
+.quiz-wrap {
+  background: var(--asphalt2); border: 1px solid var(--border);
+  border-top: 3px solid var(--yellow);
+  border-radius: 0 0 10px 10px; padding: 24px 28px; margin-top: 8px;
+}
+.quiz-wrap h4 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); letter-spacing: .08em; margin-bottom: 4px; }
+.quiz-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dimmer); margin-bottom: 20px; letter-spacing: .06em; text-transform: uppercase; }
+
+.score-banner {
+  background: var(--yellow-dim); border: 1px solid var(--yellow-border);
+  border-radius: 8px; padding: 16px; text-align: center;
+  display: none; margin-bottom: 18px;
+}
+.score-banner.show { display: block; }
+.score-big { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--yellow); letter-spacing: .06em; }
+.score-msg { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; color: var(--dim); margin-top: 2px; letter-spacing: .08em; text-transform: uppercase; }
+
+.q-card { background: var(--asphalt3); border: 1px solid var(--border); border-radius: 8px; padding: 17px; margin-bottom: 12px; }
+.q-num { font-family: 'Barlow Condensed', sans-serif; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(245,197,24,.5); margin-bottom: 7px; font-weight: 600; }
+.q-text { font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.5; margin-bottom: 13px; }
+
+.choice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 13px; border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: rgba(255,255,255,.03); cursor: pointer; margin-bottom: 6px;
+  font-size: 13.5px; color: var(--dim);
+  transition: border-color .13s, background .13s;
+  text-align: left; width: 100%;
+  font-family: 'Barlow', sans-serif;
+}
+.choice:hover { border-color: var(--yellow); background: var(--yellow-dim); color: var(--text); }
+.choice.selected { border-color: var(--yellow); background: var(--yellow-dim); color: var(--text); }
+.choice.correct { border-color: #4ade80 !important; background: rgba(74,222,128,.1) !important; color: #bbf7d0; }
+.choice.wrong { border-color: var(--red-sign) !important; background: var(--red-dim) !important; color: #fca5a5; }
+.c-ltr {
+  font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+  min-width: 22px; color: var(--yellow); flex-shrink: 0; margin-top: 0; letter-spacing: .05em;
+}
+.correct .c-ltr { color: #4ade80; }
+.wrong .c-ltr { color: var(--red-sign); }
+
+.feedback { border-radius: 6px; padding: 9px 13px; margin-top: 8px; font-size: 12.5px; line-height: 1.55; display: none; }
+.feedback.show { display: block; }
+.feedback.ok { background: rgba(74,222,128,.08); color: #bbf7d0; border: 1px solid rgba(74,222,128,.25); }
+.feedback.bad { background: var(--red-dim); color: #fca5a5; border: 1px solid var(--red-border); }
+.fun-n { font-size: 11.5px; margin-top: 5px; opacity: .8; font-style: italic; }
+
+.sub-btn {
+  background: var(--yellow); color: var(--asphalt); border: none;
+  padding: 11px 28px; border-radius: 6px;
+  font-family: 'Bebas Neue', sans-serif; font-size: 16px; font-weight: 700;
+  letter-spacing: .1em; cursor: pointer; margin-top: 6px;
+  transition: opacity .18s, transform .14s;
+}
+.sub-btn:hover { opacity: .88; transform: translateY(-1px); }
+.sub-btn:disabled { opacity: .25; cursor: default; transform: none; }
+
+.lesson-nav { display: flex; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+.nav-btn { padding: 10px 22px; border-radius: 6px; font-size: 13px; cursor: pointer; transition: .14s; font-family: 'Bebas Neue', sans-serif; font-weight: 700; letter-spacing: .08em; font-size: 14px; }
+.nav-prev { background: none; border: 1.5px solid var(--border); color: var(--dim); }
+.nav-prev:hover { border-color: var(--yellow); color: var(--yellow); }
+.nav-next { background: var(--yellow); border: none; color: var(--asphalt); }
+.nav-next:hover { opacity: .88; }
+
+@media(max-width:800px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.u-grid{grid-template-columns:1fr}.sign-types{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="brand">
+    <div class="brand-tag">NC Driver's Education</div>
+    <h1>DRIVER'S<br><span>ED</span></h1>
+    <div class="school">Calming Minds Day School · 2026–27</div>
+  </div>
+  <div class="road-badge">
+    <div class="rb-shield">NC</div>
+    <div class="rb-text">STANDARD DRIVER<br>EDUCATION PROGRAM</div>
+  </div>
+  <div class="s-stats">
+    <div class="s-stat"><div class="s-val" id="stat-done">0</div><div class="s-lbl">Done</div></div>
+    <div class="s-stat"><div class="s-val" id="stat-avg">—</div><div class="s-lbl">Score</div></div>
+  </div>
+  <nav class="unit-nav" id="unit-nav"></nav>
+</nav>
+
+<main class="main">
+  <header class="topbar">
+    <div class="tb-left">
+      <h2 id="tb-title">NC STANDARD DRIVER EDUCATION</h2>
+      <div class="crumb" id="tb-crumb">NC DMV Knowledge Test Prep · Calming Minds Day School · 2026–27</div>
+    </div>
+    <div class="prog-chip" id="prog-chip">0 / 0</div>
+  </header>
+  <div class="content" id="content"></div>
+</main>
+
+<script>
+const COURSE = { units: [
+
+// ══════════════════════════════════════
+// UNIT 1: NC TRAFFIC LAWS & LICENSING
+// ══════════════════════════════════════
+{id:'u1', emoji:'📋', name:'NC Laws & Licensing', weeks:'Unit 1 · Weeks 1–3', lessons:[
+{id:'u1l1', day:'Week 1, Day 1', title:'NC Licensing Requirements & the GDL System',
+objectives:['Explain NC\'s Graduated Driver Licensing (GDL) program and its three stages','List the requirements for a Limited Learner\'s Permit','Understand the restrictions and progression through each license level'],
+content:`<div class="body-text">
+<p>North Carolina uses a Graduated Driver Licensing (GDL) system — a phased approach to licensing that gives new drivers experience under safer conditions before granting full privileges. The system recognizes that new drivers are at highest crash risk in the first months of independent driving, particularly with passengers and at night.</p>
+<div class="sign-box">
+  <div class="sb-head">NC GDL — Three Stages</div>
+  <div class="sb-row"><div class="sb-key">Stage 1: Limited Learner's Permit (LLP)</div><div class="sb-val">Minimum age 15. Must pass vision and knowledge tests. Must hold for 12 months. Must log 60 hours of practice (10 hours nighttime). Supervised by a licensed driver 21+ at all times.</div></div>
+  <div class="sb-row"><div class="sb-key">Stage 2: Limited Provisional License (LPL)</div><div class="sb-val">Minimum age 16. Held LLP 12 months with no convictions. Must complete driver education. Restrictions: no driving 9pm–5am (except employment, school, emergency); no more than 1 passenger under 21 (unless family member) for first 6 months.</div></div>
+  <div class="sb-row"><div class="sb-key">Stage 3: Full Provisional License</div><div class="sb-val">Minimum age 16½. Held LPL 6 months with no convictions. Night restriction lifted. Passenger restriction remains until age 18 (max 3 passengers under 21 unless family).</div></div>
+  <div class="sb-row"><div class="sb-key">Full License</div><div class="sb-val">At age 18, all GDL restrictions are lifted automatically if the driver has no convictions that would affect the license.</div></div>
+</div>
+<div class="law-box">
+  <div class="lb-head">NC DMV Knowledge Test Requirements</div>
+  <p>The written knowledge test consists of 25 questions drawn from the NC Driver's Handbook. You must answer at least 20 correctly (80%) to pass. You may take the test up to 3 times before a waiting period is imposed. The test covers traffic signs, traffic laws, and safe driving practices. Bring your Social Security card, birth certificate or passport, and two proofs of NC residency.</p>
+</div>
+<div class="sign-box">
+  <div class="sb-head dark">Required Documents — REAL ID Compliant License</div>
+  <div class="sb-row"><div class="sb-key">Proof of identity</div><div class="sb-val">US birth certificate, US passport, or other approved document proving US citizenship or legal presence</div></div>
+  <div class="sb-row"><div class="sb-key">Social Security number</div><div class="sb-val">Social Security card, W-2, pay stub, or other SSN document</div></div>
+  <div class="sb-row"><div class="sb-key">NC residency (×2)</div><div class="sb-val">Two documents with name and NC address: utility bill, bank statement, school records, voter registration card, etc.</div></div>
+  <div class="sb-row"><div class="sb-key">If under 18</div><div class="sb-val">Parent or legal guardian must sign the application; parent's valid ID required</div></div>
+</div>
+</div>`,
+cultural:`The GDL system was developed in response to data showing that teenage drivers (16–17) have crash rates 3× higher than drivers 18–19, who themselves are higher than older adults. The evidence for GDL is strong: states that implemented it early saw significant reductions in teen crash fatalities. NC's 12-month holding period and 60-hour practice requirement are among the more rigorous in the nation. The passenger restriction reflects research showing that each additional teenage passenger doubles crash risk for a teen driver — the distraction and social pressure effects are measurable and significant.`,
+quiz:[
+  {q:"In NC, a Limited Learner's Permit (LLP) requires the driver to be supervised by:",choices:["Any licensed adult driver","A licensed driver who is 21 years of age or older","A certified driving instructor only","A parent or legal guardian only"],a:1,fun:"21+ for the supervising driver. The supervising driver must be in the front seat beside the permit holder. Grandparent (if licensed and 21+)? Yes. Older sibling who just turned 21? Yes. 20-year-old licensed friend? No. 🚗"},
+  {q:"Under NC's GDL, a Limited Provisional License holder in their first 6 months may drive with how many passengers under 21 (not family members)?",choices:["None — no passengers allowed until 12 months","Only 1 passenger under 21","Up to 3 passengers under 21","No restriction on passenger numbers"],a:1,fun:"Research is clear: each additional teenage passenger in the car with a teen driver significantly increases crash risk. The first 6 months after getting a provisional license is the highest-risk period. NC limits to 1 non-family passenger under 21 for exactly this reason. 👥"},
+  {q:"To pass the NC DMV knowledge test, you must answer correctly:",choices:["At least 15 of 25 questions (60%)","At least 20 of 25 questions (80%)","All 25 questions (100%)","At least 18 of 25 questions (72%)"],a:1,fun:"80% — 20 out of 25 correct. The test covers signs (you must identify them), traffic laws, and safe driving practices. You can take it up to 3 times before a waiting period. Study the NC Driver's Handbook — all test questions come from it. 📋"},
+  {q:"A Limited Provisional License (Stage 2) holder under NC GDL may drive unsupervised during which hours?",choices:["Any hours with no restrictions","5am to 9pm (9pm curfew applies to most non-emergency situations)","Only during daylight hours","7am to 8pm on school days only"],a:1,fun:"9pm–5am is the restricted period. Exceptions: employment (with documentation), school activities, emergency. The night restriction exists because teen crash rates are disproportionately high during late-night hours — reduced visibility, fatigue, and increased peer risk-taking all contribute. 🌙"}
+]},
+
+{id:'u1l2', day:'Week 1, Day 3', title:'NC Right-of-Way Laws',
+objectives:['Apply NC right-of-way rules at intersections, crosswalks, and merging situations','Understand the legal and practical meaning of right-of-way','Identify common right-of-way violations and their consequences'],
+content:`<div class="body-text">
+<p>Right-of-way rules determine who goes first when paths of travel intersect. <strong>Having the right of way does not make you invincible</strong> — NC law requires drivers to yield even when they legally have the right of way if necessary to avoid an accident. The law gives you priority; physics doesn't care about priority.</p>
+<div class="sign-box">
+  <div class="sb-head">NC Right-of-Way Rules</div>
+  <div class="sb-row"><div class="sb-key">4-way stop</div><div class="sb-val">First to arrive goes first. Tie? Driver to the right goes first. If both arrived simultaneously going opposite directions: both may proceed.</div></div>
+  <div class="sb-row"><div class="sb-key">Uncontrolled intersection</div><div class="sb-val">Yield to vehicles already in the intersection; yield to vehicle on your right when arriving simultaneously.</div></div>
+  <div class="sb-row"><div class="sb-key">T-intersection</div><div class="sb-val">Vehicles on the terminating road must yield to vehicles on the through road.</div></div>
+  <div class="sb-row"><div class="sb-key">Left turns</div><div class="sb-val">Turning left must yield to all oncoming traffic and pedestrians. Even on a green light — the green doesn't give you the right of way over oncoming traffic.</div></div>
+  <div class="sb-row"><div class="sb-key">Entering highway / merging</div><div class="sb-val">Vehicles entering a roadway from a driveway, alley, or private road must yield to all traffic on the roadway. Highway on-ramps: merge when safe, adjust speed to match traffic flow.</div></div>
+  <div class="sb-row"><div class="sb-key">Emergency vehicles</div><div class="sb-val">When an emergency vehicle with lights/siren is approaching: pull to the right edge of the road and stop. If on a divided highway, stop on your side — do not cross the median.</div></div>
+  <div class="sb-row"><div class="sb-key">School buses</div><div class="sb-val">When a school bus has its red lights flashing and stop arm extended: stop at least 10 feet away. ALL lanes must stop except on divided highways with 4+ lanes (opposing traffic may proceed).</div></div>
+  <div class="sb-row"><div class="sb-key">Pedestrians</div><div class="sb-val">Yield to pedestrians in crosswalks. In NC, a pedestrian in any part of a crosswalk has the right of way. You must wait until they clear your lane AND the lane they're entering.</div></div>
+  <div class="sb-row"><div class="sb-key">Funeral processions</div><div class="sb-val">Vehicles in a funeral procession with flags/lights may proceed through intersections together. Yield to them and do not cut through the procession.</div></div>
+</div>
+<div class="warning-box">
+  <div class="wb-head">The "Right of Way" Misconception</div>
+  <p>Many drivers think: "I had the green light, so it's their fault." NC law requires every driver to exercise due care to avoid accidents — regardless of who legally had the right of way. Failing to yield is a moving violation. More importantly, being legally "right" in a crash doesn't protect your body. Yield when necessary even when you don't have to.</p>
+</div>
+<div class="tip-box">
+  <div class="tb-head">School Bus Stop Law — Penalty</div>
+  <p>Failing to stop for a school bus with red lights flashing is one of NC's most serious traffic violations: 5 points on your license (most violations are 2–4), and $500+ fine for first offense. A school year delivers the safety lesson this law enforces: children can't see your car when they're crossing in front of a bus. Stop. Every time.</p>
+</div>
+</div>`,
+cultural:`NC's Move Over Law (G.S. 20-157) extends right-of-way protection beyond emergency vehicles: when passing any vehicle with flashing amber lights stopped on the shoulder (tow trucks, utility vehicles, NCDOT vehicles), you must move over a lane OR slow to at least 25 mph below the posted speed limit if lane change isn't safe. This law was created after multiple highway workers were killed by passing vehicles. Move over — the truck on the shoulder has a person next to it.`,
+quiz:[
+  {q:"At a 4-way stop with no traffic signals, if two cars arrive simultaneously and are facing each other going straight, which has the right of way?",choices:["The car that was going faster approaching the intersection","Neither — both must wait for another driver to establish priority","Both may proceed simultaneously since they are not crossing each other's paths","The car on the left must yield to the car on its right"],a:2,fun:"Two cars arriving simultaneously going in opposite directions are NOT in conflict — they can both proceed straight or turn right without crossing each other. The 'yield to right' rule applies to perpendicular conflicts. If both are going straight or turning right, proceed. 🚗🚗"},
+  {q:"When turning left at a green light, you must yield to:",choices:["Nothing — the green light gives you the right of way to turn","Oncoming traffic and pedestrians in the crosswalk — the green does not give you priority over them","Only oncoming vehicles, not pedestrians","Only pedestrians in marked crosswalks, not those crossing at the white lines"],a:1,fun:"This is where many crashes happen. A green light means you may enter the intersection — it does NOT mean you have the right of way over oncoming traffic or pedestrians. Left turns are the intersection movement with the highest crash rate. Green = may enter intersection; clear traffic/pedestrians before completing the turn. 🟢"},
+  {q:"On a two-lane road (one lane each direction), when a school bus stops with red lights flashing, drivers in BOTH directions must:",choices:["Slow to 15 mph and proceed carefully","Stop at least 10 feet from the bus and wait until the lights stop flashing and the stop arm retracts","Only drivers behind the bus must stop — oncoming traffic may proceed","Stop only if children are visible outside the bus"],a:1,fun:"On undivided roads: ALL traffic stops in BOTH directions. The only exception is a divided highway with 4+ lanes — opposing traffic on the other side of a raised median may proceed. On any normal two-lane road: STOP in both directions. 🚌"},
+  {q:"NC's Move Over Law requires drivers passing a stopped vehicle with flashing amber lights on the shoulder to:",choices:["Honk to warn the worker and proceed at normal speed","Move over at least one lane away from the stopped vehicle OR slow to 25 mph below the speed limit if changing lanes isn't safe","Only yield if a worker is visible outside the vehicle","Apply the same rule only for emergency vehicles, not utility trucks"],a:1,fun:"The Move Over Law has been expanded and its enforcement increased significantly after highway worker fatalities. 'Amber lights' includes tow trucks, NCDOT vehicles, utility crews, and any emergency vehicle. The fine for violations is substantial. A person is working 3 feet from traffic — move over. ⚠️"}
+]},
+
+{id:'u1l3', day:'Week 2, Day 1', title:'Speed Limits, Following Distance & NC Speed Laws',
+objectives:['State NC\'s basic speed rule and statutory speed limits','Calculate safe following distances using the 3-second rule','Understand NC\'s speed law penalties and their effect on insurance'],
+content:`<div class="body-text">
+<p>Speed is involved in about 26% of all traffic fatalities in the US. NC enforces both posted limits and the basic speed law — which means you can receive a citation for driving below the posted limit if conditions warrant lower speed.</p>
+<div class="sign-box">
+  <div class="sb-head yellow">NC Statutory Speed Limits (Where No Signs Are Posted)</div>
+  <div class="sb-row"><div class="sb-key">Business districts</div><div class="sb-val">35 mph maximum</div></div>
+  <div class="sb-row"><div class="sb-key">Residential / school districts</div><div class="sb-val">35 mph maximum</div></div>
+  <div class="sb-row"><div class="sb-key">Rural highways (paved)</div><div class="sb-val">55 mph maximum</div></div>
+  <div class="sb-row"><div class="sb-key">Rural highways (unpaved)</div><div class="sb-val">35 mph maximum</div></div>
+  <div class="sb-row"><div class="sb-key">School zone (active)</div><div class="sb-val">25 mph (when children present or when sign indicates)</div></div>
+  <div class="sb-row"><div class="sb-key">NC interstates</div><div class="sb-val">70 mph (some posted 75 mph on rural sections)</div></div>
+</div>
+<div class="law-box">
+  <div class="lb-head">NC Basic Speed Law</div>
+  <p>You must drive at a speed that is <strong>safe and reasonable for conditions</strong> — regardless of the posted limit. Rain, fog, ice, heavy traffic, poor visibility, curves: all require reducing speed below the posted limit. You can be cited for speeding even if you're under the limit if conditions dictated slower speed. The posted limit is the MAXIMUM under IDEAL conditions.</p>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Following Distance — The 3-Second Rule</div>
+  <div class="sb-row"><div class="sb-key">Basic rule</div><div class="sb-val">Pick a fixed point. When the vehicle ahead passes it, count "one-one-thousand, two-one-thousand, three-one-thousand." You should not reach the point before finishing the count.</div></div>
+  <div class="sb-row"><div class="sb-key">When to increase</div><div class="sb-val">Double to 4–6 seconds: rain, snow, fog, night, following large trucks (wind buffet and debris), heavy loads, or if you're fatigued</div></div>
+  <div class="sb-row"><div class="sb-key">Why it works</div><div class="sb-val">Reaction time = ~1.5 seconds (perception + decision + brake application). At 60 mph you travel 132 feet per second. 3 seconds = 396 feet of buffer. That's your stopping margin.</div></div>
+  <div class="sb-row"><div class="sb-key">Tailgating</div><div class="sb-val">Following too closely is a 2-point violation in NC. More importantly, it's one of the most common crash causes. If the car ahead stops and you hit them from behind, you are at fault by default.</div></div>
+</div>
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-num">26%</div><div class="stat-lbl">Traffic deaths involving speeding</div></div>
+  <div class="stat-card"><div class="stat-num">1.5s</div><div class="stat-lbl">Average driver reaction time</div></div>
+  <div class="stat-card"><div class="stat-num">132 ft</div><div class="stat-lbl">Distance traveled per second at 60 mph</div></div>
+</div>
+<div class="warning-box">
+  <div class="wb-head">NC Speed Law Penalties</div>
+  <p><strong>1–15 mph over:</strong> 2 points on license. <strong>16+ mph over:</strong> 4 points. <strong>Greater than 80 mph OR 15+ over limit:</strong> aggressive driving designation. <strong>Racing on highway:</strong> Class 1 misdemeanor, permanent license revocation on second offense. Points also trigger insurance surcharges — a speeding ticket can increase your insurance 20–60% for 3 years. At 12 points within 3 years, license is suspended.</p>
+</div>
+</div>`,
+cultural:`The 55 mph national maximum speed limit was imposed during the 1974 oil crisis (to save fuel), then repealed in 1995. NC set its current interstate maximums afterward. The research on speed limits and safety is complex: lower limits do reduce fatalities, but compliance drops when limits seem unrealistically low. The Institute for Highway Safety and others consistently find that raising speed limits increases fatalities. The debate between traffic engineering principles ("roads designed for speeds") and safety research ("lower speeds save lives") continues. From a pure physics standpoint, kinetic energy increases with the SQUARE of velocity — 70 mph has 37% more energy than 60 mph.`,
+quiz:[
+  {q:"NC's basic speed law means you can receive a speeding ticket even when:",choices:["You are driving exactly at the posted speed limit but conditions require slower speed","You exceed the posted limit by 5 mph or less","You are in a school zone during non-school hours","You are driving on a private road"],a:0,fun:"The posted limit is the maximum under ideal conditions. Rain, fog, ice, curves, heavy traffic — all require driving below the posted limit. 'I was only going the speed limit' is not a defense if conditions made that speed unsafe. 🌧️"},
+  {q:"The 3-second following distance rule should be DOUBLED (to 6 seconds) when:",choices:["Driving on an interstate highway","Driving in rain, snow, fog, at night, or when fatigued","Following any vehicle larger than a pickup truck","Driving in a residential area with children present"],a:1,fun:"3 seconds is the MINIMUM under ideal conditions. Wet roads increase stopping distance by 2–4× (hydroplaning starts at 35 mph on bald tires). Fog reduces visibility to reaction distance. Fatigued drivers have slower reaction times. Double the cushion when conditions aren't ideal. 🌧️"},
+  {q:"In NC, a violation of 16 mph or more over the speed limit results in how many points on your license?",choices:["2 points","3 points","4 points","6 points"],a:2,fun:"The NC point system: 1–15 mph over = 2 points; 16+ over = 4 points. At 12 points in 3 years, license is suspended. Points also trigger insurance surcharges that can add hundreds of dollars annually for years. That ticket doesn't just cost the fine — it costs the premium increase over 3 years. 💸"},
+  {q:"If you rear-end the vehicle directly in front of you, who is at fault?",choices:["The vehicle in front for braking suddenly","The driver behind — following too closely is presumed at fault in rear-end collisions","Fault is shared equally unless one driver was impaired","Only at fault if you were speeding at the time of impact"],a:1,fun:"You are legally responsible for being able to stop for foreseeable hazards including a car stopping in front of you. 'They stopped suddenly' is not a valid defense for following too closely. Maintaining proper following distance is specifically so you can stop for unexpected braking. The vehicle behind is responsible for the gap. 🚗💥"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 2: TRAFFIC SIGNS, SIGNALS & MARKINGS
+// ══════════════════════════════════════
+{id:'u2', emoji:'🚦', name:'Signs, Signals & Markings', weeks:'Unit 2 · Weeks 4–6', lessons:[
+{id:'u2l1', day:'Week 4, Day 1', title:'Traffic Signs — Shape, Color & Meaning',
+objectives:['Identify traffic signs by shape and color alone','State the meaning of all regulatory, warning, and informational signs','Apply sign knowledge to driving decisions'],
+content:`<div class="body-text">
+<p>Traffic signs communicate through three channels: shape, color, and symbol/text. You should be able to identify the basic type of any sign from shape and color alone — even if you can't read the text. This is important in poor visibility and helps process signs faster while driving.</p>
+<div class="sign-types">
+  <div class="sign-shape stop">
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;color:#fff;letter-spacing:.1em;">STOP</div>
+    <div class="sh-name" style="color:#fff;">Regulatory</div>
+    <div class="sh-ex" style="color:rgba(255,255,255,.7);">Octagon · Red/White</div>
+  </div>
+  <div class="sign-shape warning">
+    <div style="font-size:28px;">⚠️</div>
+    <div class="sh-name">Warning</div>
+    <div class="sh-ex">Diamond · Yellow</div>
+  </div>
+  <div class="sign-shape reg">
+    <div style="font-size:20px;font-family:'Bebas Neue',sans-serif;color:#000;letter-spacing:.1em;">SPEED<br>LIMIT 55</div>
+    <div class="sh-name">Regulatory</div>
+    <div class="sh-ex">Rectangle · White/Black</div>
+  </div>
+  <div class="sign-shape info">
+    <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;color:#fff;letter-spacing:.06em;">US 70</div>
+    <div class="sh-name">Route Marker</div>
+    <div class="sh-ex">Various shapes</div>
+  </div>
+  <div class="sign-shape const">
+    <div style="font-size:24px;">🔶</div>
+    <div class="sh-name">Construction</div>
+    <div class="sh-ex">Diamond/Rect · Orange</div>
+  </div>
+  <div class="sign-shape service">
+    <div style="font-size:22px;">⛽</div>
+    <div class="sh-name">Service</div>
+    <div class="sh-ex">Rectangle · Blue</div>
+  </div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Sign Color Meanings</div>
+  <div class="sb-row"><div class="sb-key">Red</div><div class="sb-val">STOP, DO NOT ENTER, YIELD — commands to stop or yield; highest urgency</div></div>
+  <div class="sb-row"><div class="sb-key">Yellow</div><div class="sb-val">Warning — caution ahead; slow down and prepare to adjust</div></div>
+  <div class="sb-row"><div class="sb-key">White</div><div class="sb-val">Regulatory — speed limits, traffic rules, lane control</div></div>
+  <div class="sb-row"><div class="sb-key">Green</div><div class="sb-val">Direction and distance guidance — highway exits, mileage, destinations</div></div>
+  <div class="sb-row"><div class="sb-key">Orange</div><div class="sb-val">Construction and work zones — temporary conditions, workers present</div></div>
+  <div class="sb-row"><div class="sb-key">Blue</div><div class="sb-val">Services — hospitals, fuel, food, lodging, rest areas</div></div>
+  <div class="sb-row"><div class="sb-key">Brown</div><div class="sb-val">Recreation and cultural interest — parks, museums, scenic areas</div></div>
+  <div class="sb-row"><div class="sb-key">Fluorescent Yellow-Green</div><div class="sb-val">Pedestrian, bicycle, and school warning signs — maximum conspicuity</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Critical Regulatory Signs</div>
+  <div class="sb-row"><div class="sb-key">STOP (octagon)</div><div class="sb-val">Come to a COMPLETE stop at the stop line (or edge of crosswalk, or edge of intersection). Check traffic. Proceed only when safe. Rolling stops are violations even if no one is present.</div></div>
+  <div class="sb-row"><div class="sb-key">YIELD (triangle, point down)</div><div class="sb-val">Slow and give the right of way to traffic in the intersecting roadway. Stop if necessary. You do not have to stop if traffic is clear.</div></div>
+  <div class="sb-row"><div class="sb-key">DO NOT ENTER (red/white)</div><div class="sb-val">You are facing wrong-way traffic. Do not enter. Immediately exit if you accidentally entered a one-way or divided road wrong way.</div></div>
+  <div class="sb-row"><div class="sb-key">WRONG WAY (red/white)</div><div class="sb-val">You are going the wrong way on a divided highway or one-way street. Turn around safely when possible.</div></div>
+  <div class="sb-row"><div class="sb-key">No U-Turn</div><div class="sb-val">U-turns are prohibited. Also prohibited near hills and curves (sight distance), within 300 ft of a fire station approach, in business districts without safe sight line.</div></div>
+</div>
+</div>`,
+cultural:`The Manual on Uniform Traffic Control Devices (MUTCD), updated by the Federal Highway Administration, standardizes traffic signs, signals, and markings across all US states. Before federal standardization, sign shapes, colors, and meanings varied by state — a recipe for confusion and danger. The fluorescent yellow-green color (added 1990s) was chosen for pedestrian and school signs because research showed it had the highest conspicuity (ability to be noticed) of any color, especially in low-light conditions. Sign design is serious applied science.`,
+quiz:[
+  {q:"A diamond-shaped yellow sign means:",choices:["Stop ahead — prepare to stop","Warning of a condition that requires caution","Speed limit change ahead","Construction zone — double fines apply"],a:1,fun:"Diamond + yellow = warning. Could be a curve, intersection, merge, pedestrian crossing, animals crossing, narrow bridge, low clearance — many hazards use this combination. Shape + color tells you the category before you can read the text. At highway speeds, that split-second of category recognition matters. ⚠️"},
+  {q:"A driver who performs a 'rolling stop' (slows significantly but doesn't stop completely) at a stop sign:",choices:["Is legally compliant as long as they checked for traffic","Is in violation — NC law requires a COMPLETE stop at the stop line","Is only in violation if another driver observed the failure to stop","Is only cited if a police officer observed the violation"],a:1,fun:"A stop sign means STOP — wheels must completely stop rolling. The stop must occur at the stop line (or crosswalk, or edge of the intersection if no line). Then check. Then proceed when safe. 'California stop' / rolling stop = violation, regardless of traffic conditions. Officers write these tickets. 🛑"},
+  {q:"If you accidentally enter a highway going the wrong direction and see DO NOT ENTER signs ahead, you should:",choices:["Speed up to exit quickly before meeting oncoming traffic","Immediately pull to the right shoulder, stop, and carefully exit the way you came in or wait for assistance","Turn around in the travel lane to face the correct direction","Continue carefully since the signs are for other drivers"],a:1,fun:"Wrong-way driving is immediately life-threatening — you're facing high-speed traffic. Don't speed up (that closes the gap faster). Don't try to turn around in the travel lane. Pull right and stop. Turn on hazards. Back out carefully or call for help. 🚨"},
+  {q:"Blue signs on highways indicate:",choices:["State or county route designations","Construction or maintenance zones","Services available (fuel, food, lodging, hospitals) ahead or at exits","Regulatory information like speed limits"],a:2,fun:"Blue = services. Think of it as 'blue for business' — fuel, food, lodging, hospitals, rest areas, camping. You'll see these most on interstates showing what services are at the next exit. Extremely useful on road trips in rural areas. Gas station icons are often visible 1–2 miles before the exit to give you time to decide. ⛽"}
+]},
+
+{id:'u2l2', day:'Week 5, Day 1', title:'Traffic Signals & Pavement Markings',
+objectives:['Correctly respond to all traffic signal phases including arrows','Understand all pavement marking types and their meaning','Apply knowledge of lane markings to lane changes and turns'],
+content:`<div class="body-text">
+<p>Traffic signals and pavement markings communicate with you constantly while driving. Misreading them causes crashes. These aren't memorization exercises — they're the grammar of the road that you must process automatically while simultaneously monitoring traffic, pedestrians, weather, and your vehicle.</p>
+<div class="sign-box">
+  <div class="sb-head">Traffic Signal Meanings</div>
+  <div class="sb-row"><div class="sb-key">Steady green circle</div><div class="sb-val">Go — but yield to pedestrians and vehicles still in the intersection. Does NOT give you right of way over oncoming traffic if turning left.</div></div>
+  <div class="sb-row"><div class="sb-key">Steady yellow circle</div><div class="sb-val">The light is changing to red. Stop if you can do so safely. Do NOT accelerate to beat the yellow. If you cannot stop safely, proceed carefully.</div></div>
+  <div class="sb-row"><div class="sb-key">Steady red circle</div><div class="sb-val">STOP. Wait. May turn right on red after complete stop unless posted otherwise. May turn left on red from one one-way street onto another one-way street after complete stop.</div></div>
+  <div class="sb-row"><div class="sb-key">Green arrow</div><div class="sb-val">Protected turn — you have the right of way in the arrow's direction. Opposing traffic is stopped. Yield to pedestrians.</div></div>
+  <div class="sb-row"><div class="sb-key">Yellow arrow</div><div class="sb-val">Protected turn is ending. Stop if you can. If you can't, complete the turn carefully — protection is ending.</div></div>
+  <div class="sb-row"><div class="sb-key">Flashing red</div><div class="sb-val">Treat as a STOP sign — come to a complete stop, yield, then proceed.</div></div>
+  <div class="sb-row"><div class="sb-key">Flashing yellow</div><div class="sb-val">Treat as a YIELD sign — slow down, check traffic, proceed with caution.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Pavement Marking Colors</div>
+  <div class="sb-row"><div class="sb-key">Yellow lines</div><div class="sb-val">Separate traffic flowing in OPPOSITE directions. Center line on two-lane roads. Left edge of one-way streets.</div></div>
+  <div class="sb-row"><div class="sb-key">White lines</div><div class="sb-val">Separate traffic flowing in the SAME direction. Lane lines, edge lines, crosswalks, stop lines.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Pavement Marking Lines — Solid vs. Dashed</div>
+  <div class="sb-row"><div class="sb-key">Dashed yellow center line</div><div class="sb-val">Passing allowed when safe. Both directions may pass when clear.</div></div>
+  <div class="sb-row"><div class="sb-key">Solid yellow center line</div><div class="sb-val">No passing on the solid side. If one side is solid, that lane cannot pass. Double solid = no passing in either direction.</div></div>
+  <div class="sb-row"><div class="sb-key">White dashed lane lines</div><div class="sb-val">Lane changes allowed when safe.</div></div>
+  <div class="sb-row"><div class="sb-key">White solid lane lines</div><div class="sb-val">Lane changes discouraged or prohibited (intersection approach, gore areas, near exit ramps).</div></div>
+  <div class="sb-row"><div class="sb-key">Solid white edge line</div><div class="sb-val">Right edge of roadway. Do not cross except in emergencies. Bicyclists may use the space to the right.</div></div>
+  <div class="sb-row"><div class="sb-key">Yellow edge line (left)</div><div class="sb-val">Left edge of divided highway, one-way road, or no-passing zone.</div></div>
+</div>
+<div class="tip-box">
+  <div class="tb-head">Red Light Running — The Numbers</div>
+  <p>Red light running kills approximately 900 people per year in the US and injures tens of thousands. In NC, running a red light carries a 3-point violation. At intersections with red light cameras, tickets are issued automatically. The safest practice: when a light turns green, look left-right before proceeding — another driver may be running the tail end of their yellow. The 1–2 second pause after green can save your life.</p>
+</div>
+</div>`,
+cultural:`The first electric traffic light was installed in Cleveland, Ohio in 1914. It only had red and green. Garrett Morgan, a Black inventor, noticed that two-color signals didn't give adequate time for traffic to clear — he patented a three-position signal (including a warning/stop-all position) in 1923. His design concept influenced the modern three-color traffic light. General Electric bought his patent. Morgan also invented the gas mask used in WWI. He later moved to Cleveland after being harassed in the South. Everyday infrastructure has complicated histories.`,
+quiz:[
+  {q:"A steady green arrow signal at an intersection means:",choices:["You may proceed in the arrow's direction with caution, but must still yield to oncoming traffic","You have a protected right of way in the arrow's direction — opposing traffic is stopped","You may turn but must yield to pedestrians and bicyclists in all cases","The light is about to change; complete your turn before it goes yellow"],a:1,fun:"Protected means the opposing traffic has a red. Unlike a green ball (where you yield to oncoming while turning left), a green arrow means your turn is protected. You still yield to pedestrians crossing in your path — they are not stopped by your green arrow. 💚"},
+  {q:"Yellow center line markings on a two-lane road indicate:",choices:["A school zone — reduced speed required","The edge of the road — do not cross","The center dividing lines between traffic traveling in opposite directions","Turn lanes are ahead"],a:2,fun:"Yellow = opposite direction traffic. White = same direction traffic. This is the foundation of pavement marking language. Yellow center lines tell you: the traffic coming at you is on the other side of this line. Whether it's solid (no passing) or dashed (passing allowed) tells you what you can do about it. 🟡"},
+  {q:"A flashing red traffic light should be treated the same as:",choices:["A yellow light — slow down and proceed with caution","A green light if no traffic is present","A stop sign — complete stop, yield, then proceed","A broken traffic light — proceed through slowly"],a:2,fun:"Flashing red = stop sign. Come to a complete stop. Yield to all traffic and pedestrians. Proceed when safe. Flashing yellow = yield sign — slow down and proceed with caution. These are used when full signal operation would cause unnecessary delay, or during off-hours. 🔴"},
+  {q:"A solid white line between lanes on a highway indicates:",choices:["The right edge of the roadway — do not cross","Same-direction traffic separation where lane changes are discouraged or prohibited","An HOV lane restriction","A temporary construction zone boundary"],a:1,fun:"Solid white between lanes: lane changes not recommended here (intersection approach zones, near merges, exit ramps). Dashed white: normal lane changes OK when safe. Solid white on the right edge: the boundary of the paved surface. The color + solid/dashed combination is a complete communication system. ⬜"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 3: SAFE DRIVING PRACTICES
+// ══════════════════════════════════════
+{id:'u3', emoji:'🛡️', name:'Safe Driving Practices', weeks:'Unit 3 · Weeks 7–9', lessons:[
+{id:'u3l1', day:'Week 7, Day 1', title:'Defensive Driving & Hazard Perception',
+objectives:['Define and apply the Smith System and SIPDE process','Identify common driving hazards and appropriate responses','Understand space management and the concept of an escape path'],
+content:`<div class="body-text">
+<p>Defensive driving means driving to protect yourself from hazards created by other drivers, road conditions, and the environment — not just following traffic laws passively. Every crash has a preventable moment. Defensive driving training is about recognizing and acting before that moment passes.</p>
+<div class="sign-box">
+  <div class="sb-head">The Smith System — 5 Keys to Space and Vision</div>
+  <div class="sb-row"><div class="sb-key">1. Aim High in Steering</div><div class="sb-val">Look at least 15 seconds ahead (1/4 mile at highway speeds, 1 block in city). Don't fixate on the car directly in front. Look through and beyond to where you'll be in 15 seconds.</div></div>
+  <div class="sb-row"><div class="sb-key">2. Get the Big Picture</div><div class="sb-val">Scan continuously — don't lock your eyes on one spot. Check mirrors every 5–8 seconds. Know what's around you at all times: ahead, alongside, behind.</div></div>
+  <div class="sb-row"><div class="sb-key">3. Keep Your Eyes Moving</div><div class="sb-val">Moving eyes prevent fixation (tunnel vision). Scan side to side, check mirrors, look ahead — a continuous motion. Fixed gaze on any one thing is dangerous.</div></div>
+  <div class="sb-row"><div class="sb-key">4. Leave Yourself an Out</div><div class="sb-val">Always have an escape path — a space you can move into if the car ahead stops suddenly. Position for visibility and maneuverability, not just for convenience.</div></div>
+  <div class="sb-row"><div class="sb-key">5. Make Sure They See You</div><div class="sb-val">Use signals early. Make eye contact at intersections. Don't drive in others' blind spots. If in doubt whether another driver sees you — assume they don't and act accordingly.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head dark">SIPDE Process — Decision Making While Driving</div>
+  <div class="sb-row"><div class="sb-key">Search</div><div class="sb-val">Scan ahead and around you for hazards — moving and fixed</div></div>
+  <div class="sb-row"><div class="sb-key">Identify</div><div class="sb-val">Identify the specific hazard (child near curb, car drifting, debris in road)</div></div>
+  <div class="sb-row"><div class="sb-key">Predict</div><div class="sb-val">Predict what might happen (child might enter road, car might drift into your lane)</div></div>
+  <div class="sb-row"><div class="sb-key">Decide</div><div class="sb-val">Choose your response (slow down, change lanes, cover the brake, honk)</div></div>
+  <div class="sb-row"><div class="sb-key">Execute</div><div class="sb-val">Act smoothly and decisively</div></div>
+</div>
+<div class="tip-box">
+  <div class="tb-head">Covering the Brake</div>
+  <p>"Covering the brake" means moving your foot from the accelerator to hover over (not pressing) the brake pedal when you identify a potential hazard. It reduces your reaction time from ~1.5 seconds to ~0.5 seconds in the event you need to stop. When approaching intersections, school zones, areas with children, following large trucks — cover the brake. You eliminate the time needed to move your foot.</p>
+</div>
+<div class="warning-box">
+  <div class="wb-head">Common Hazardous Situations</div>
+  <p><strong>Blind intersections:</strong> Trees, fences, parked vehicles blocking sight. Approach slowly, pull forward enough to see, then check.<br><br>
+  <strong>Following large trucks:</strong> Cannot see what they see; cannot be seen by their mirrors; if you can't see their mirrors, they can't see you. 4+ second following distance. Pass quickly and decisively.<br><br>
+  <strong>Parked cars:</strong> Doors may open (the "door zone"). Scan for people in parked cars. Give at least 3 feet of clearance when passing parked vehicles.<br><br>
+  <strong>Children near roadway:</strong> Children are unpredictable — they may enter the road without looking. Slow significantly. Cover brake. If you see one child, assume there might be another on the other side of the road.</p>
+</div>
+</div>`,
+cultural:`The Smith System was developed by Harold Smith in the 1950s for commercial truck driver training — and has since become the standard framework for defensive driving education used by professional drivers worldwide. Its principles are based on the reality that crashes happen because drivers fail to see hazards early enough or don't create space to respond. Virtually every major corporate fleet safety program uses some version of the Smith System. The 15-second look-ahead rule alone is the single most impactful habit change in driver education research.`,
+quiz:[
+  {q:"The Smith System's 'Aim High in Steering' principle means:",choices:["Drive as fast as possible to minimize time on the road","Look 15 seconds ahead rather than fixating on the car directly in front of you — giving more time to identify and respond to hazards","Keep your steering wheel high on the column for better control","Aim your vehicle at the center of your lane at all times"],a:1,fun:"At 60 mph, 15 seconds of look-ahead = 1,320 feet / about 1/4 mile. At 30 mph = 660 feet = about 1 city block. The farther ahead you look, the more time you have to respond. Fixating on the car directly ahead means you're reacting to what they're already doing — too late for the smoothest, safest response. 👁️"},
+  {q:"The SIPDE process stands for:",choices:["Stop, Inspect, Park, Drive, Exit","Search, Identify, Predict, Decide, Execute — a systematic mental framework for processing hazards while driving","Signal, Increase speed, Pass, Decrease speed, Exit","Scan, Indicate, Position, Distance, Evaluate"],a:1,fun:"SIPDE gives structure to what experienced drivers do automatically: scan → name the hazard → predict what it might do → choose a response → act. New drivers often skip the Predict step — they see the hazard but don't mentally consider what it might do next. That gap is where crashes happen. 🧠"},
+  {q:"'Leaving yourself an out' (Smith System Key 4) means:",choices:["Always knowing the nearest exit from a highway","Keeping space available to maneuver if you need to — an escape path you can move into if something unexpected happens","Always driving in the right lane for easier exit","Having an excuse prepared if you're pulled over"],a:1,fun:"The 'out' is a space — to the side, behind — where you can move if the car in front of you stops instantly. If you're boxed in on all sides (car close in front, car close behind, guardrail to the right), you have no out. In that situation, increase following distance and reposition to create escape options. 🚗"},
+  {q:"If you can't see a large truck's mirrors while following it, it means:",choices:["You are too far back and should reduce following distance","The truck driver cannot see you in their mirrors — you are in a blind spot and should increase following distance or change lanes","The truck has improperly adjusted mirrors and is a hazard","You should honk to alert the truck driver of your presence"],a:1,fun:"Large trucks have massive blind spots: directly behind, directly beside (both sides), and close in front. The rule: 'If you can't see their mirrors, they can't see you.' Stay back enough to see their side mirrors, or change lanes and pass. Don't linger in the blind zones. 🚛"}
+]},
+
+{id:'u3l2', day:'Week 8, Day 1', title:'Distracted, Drowsy & Impaired Driving',
+objectives:['Classify the three types of driving distraction','State NC\'s cell phone and impaired driving laws','Recognize and respond to drowsy driving symptoms'],
+content:`<div class="body-text">
+<p>Impairment — from alcohol, drugs, fatigue, or distraction — is involved in the majority of serious traffic crashes. Understanding why these factors are so dangerous requires understanding the cognitive demands of driving: it is a complex, high-speed, multi-tasking activity with zero tolerance for degraded attention.</p>
+<div class="sign-box">
+  <div class="sb-head red">Three Types of Driving Distraction</div>
+  <div class="sb-row"><div class="sb-key">Visual</div><div class="sb-val">Eyes off the road. Reading a text, checking GPS, watching something. At 55 mph, looking at a phone for 5 seconds = driving 100 yards with your eyes closed.</div></div>
+  <div class="sb-row"><div class="sb-key">Manual</div><div class="sb-val">Hands off the wheel. Reaching for phone, eating, adjusting controls. Reduces vehicle control and reaction capability.</div></div>
+  <div class="sb-row"><div class="sb-key">Cognitive</div><div class="sb-val">Mind not on driving. Hands-free phone calls — the conversation itself is cognitively demanding, NOT just holding the phone. Emotional conversations, intense podcasts, daydreaming.</div></div>
+</div>
+<div class="law-box">
+  <div class="lb-head">NC Cell Phone & Distracted Driving Laws</div>
+  <p><strong>Under 18 with any license stage:</strong> Absolutely NO cell phone use while driving — no calls, no texts, no hands-free. Zero. $25 fine plus court costs, 1 point on license.<br><br>
+  <strong>Adults:</strong> No text messaging while driving (including at red lights). Talking on a hand-held device is currently legal for adults in NC (though many municipalities have enacted local bans). Hands-free strongly recommended.<br><br>
+  <strong>School and work zones:</strong> No hand-held device use in these areas for all drivers, regardless of age.</p>
+</div>
+<div class="sign-box">
+  <div class="sb-head red">NC DWI Laws</div>
+  <div class="sb-row"><div class="sb-key">Legal limit (adults 21+)</div><div class="sb-val">0.08% BAC (Blood Alcohol Concentration). Commercial drivers: 0.04%. Under 21: 0.00% — any detectable alcohol = DWI.</div></div>
+  <div class="sb-row"><div class="sb-key">Implied consent</div><div class="sb-val">By driving in NC you consent to a chemical test (blood or breath) if suspected of DWI. Refusal results in immediate 30-day license revocation.</div></div>
+  <div class="sb-row"><div class="sb-key">Level 5 (least severe) DWI</div><div class="sb-val">Fine up to $200, license revocation 30 days minimum, possible community service</div></div>
+  <div class="sb-row"><div class="sb-key">Level 1–1A (most severe)</div><div class="sb-val">Prior DWI, very high BAC, child under 18 in vehicle: 1–3 years imprisonment, $4,000 fine, minimum 1-year license revocation</div></div>
+  <div class="sb-row"><div class="sb-key">Under 21 with any BAC</div><div class="sb-val">1-year license revocation for first offense. Criminal conviction. Insurance consequences lasting years.</div></div>
+</div>
+<div class="warning-box">
+  <div class="wb-head">Drowsy Driving — As Dangerous as Drunk Driving</div>
+  <p>Being awake for 17–19 hours produces cognitive impairment equivalent to a 0.05–0.08% BAC. 24 hours awake ≈ 0.10% BAC. Signs of dangerous drowsiness: difficulty keeping eyes open, head nodding, drifting across lanes, not remembering the last few miles, missing exits. If you experience these: pull off safely, take a 20-minute nap (coffee takes 20–30 min to kick in — have coffee then nap), or have someone else drive. Drowsy driving causes ~100,000 crashes and ~1,500 deaths annually in the US. Rolling the windows down and blasting music do not effectively counteract drowsiness — these are myths.</p>
+</div>
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-num">5s</div><div class="stat-lbl">Time looking at phone = 100 yards eyes closed at 55mph</div></div>
+  <div class="stat-card"><div class="stat-num">0.00%</div><div class="stat-lbl">Legal BAC limit for NC drivers under 21</div></div>
+  <div class="stat-card"><div class="stat-num">29%</div><div class="stat-lbl">Traffic deaths involving alcohol-impaired drivers</div></div>
+</div>
+</div>`,
+cultural:`The National Highway Traffic Safety Administration (NHTSA) estimates that hands-free phone use reduces cognitive distraction by only about 3% compared to hand-held use — the conversation is the hazard, not the hand position. The auto industry's promotion of hands-free calling as "safe" is not supported by the research on cognitive distraction. The only safe option for driving is no phone use. NC's under-18 complete ban is more protective than the adult law and reflects the additional vulnerability of new drivers whose attention resources are already fully taxed by basic vehicle operation.`,
+quiz:[
+  {q:"Cognitive distraction while driving is dangerous because:",choices:["It only affects vision, not vehicle control","Even hands-free phone conversations significantly reduce the brain's processing of the driving environment — the conversation itself occupies cognitive resources needed for driving","It mainly affects older drivers whose reaction times are slower","Cognitive tasks are only dangerous during complex maneuvers, not routine highway driving"],a:1,fun:"Research: drivers talking on hands-free phones miss 50% of visual information in their field of view. They look but don't see — their brain is processing the conversation, not the road. This is called 'inattention blindness.' The conversation occupies the same cognitive resources as driving. This is why hands-free calling is not as safe as people assume. 🧠"},
+  {q:"Under NC law, a driver under 18 may use a cell phone while driving for:",choices:["Emergency calls only (911)","Calls to parents or guardians only","Using a GPS or navigation app only","No cell phone use at all — zero exceptions except pulling over first"],a:3,fun:"NC zero tolerance for under-18 drivers: no calls, no texts, no hands-free, no anything. You can pull over, stop, and use your phone. You cannot use it while the vehicle is in motion, regardless of what it's for. This is one of the strictest in the nation and reflects the evidence on new driver cognitive load. 📵"},
+  {q:"Under NC's implied consent law, refusing a blood or breath test when suspected of DWI results in:",choices:["No consequence — you have the right to refuse","The officer must get a warrant before any testing can occur","Immediate 30-day license revocation, regardless of whether you are actually impaired","A $100 fine with no license consequence"],a:2,fun:"By driving in NC you've already consented to chemical testing — it's written into the licensing agreement. Refusal triggers an automatic 30-day revocation, separate from any DWI charges, and the refusal can be used as evidence in court. You have the right to refuse; you also have the consequence of refusal. 🚨"},
+  {q:"The most effective response to dangerous drowsiness while driving is:",choices:["Roll down all windows for fresh air","Turn up the radio volume significantly","Turn on the air conditioning to maximum cold","Pull over safely, take a 20-minute nap, optionally drink caffeine before the nap to wake up refreshed"],a:3,fun:"The 'nappuccino': drink coffee, then take a 20-minute nap. Caffeine takes ~20 minutes to absorb — you wake up to both the nap and the caffeine. Far more effective than cold air or loud music, which provide temporary distraction that fades. If severely drowsy: stop driving. A rest stop delay beats a crash. 😴"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 4: SHARING THE ROAD
+// ══════════════════════════════════════
+{id:'u4', emoji:'🚲', name:'Sharing the Road', weeks:'Unit 4 · Weeks 10–12', lessons:[
+{id:'u4l1', day:'Week 10, Day 1', title:'Motorcycles, Bicycles, Pedestrians & Large Vehicles',
+objectives:['Apply specific techniques for safely sharing the road with vulnerable road users','Understand the unique hazards posed by large vehicles','Know NC law regarding pedestrians and cyclists'],
+content:`<div class="body-text">
+<p>Road sharing is about recognizing that different users have different visibility, stability, and crash vulnerability. A motorcycle rider or cyclist is in a far more dangerous position than a car driver in any collision. Understanding their specific vulnerabilities and adjusting your driving accordingly is both legal and ethical.</p>
+<div class="sign-box">
+  <div class="sb-head">Motorcycles — Why Extra Care Matters</div>
+  <div class="sb-row"><div class="sb-key">Visibility hazard</div><div class="sb-val">Motorcycles are narrow and often hidden in your mirrors' blind spots or obscured by other vehicles. Actively look for them — don't just scan for car-sized objects.</div></div>
+  <div class="sb-row"><div class="sb-key">Space requirement</div><div class="sb-val">Motorcycles are entitled to the full width of a lane. Do not attempt to share a lane with a motorcycle — it's illegal and forces them to the edge where road hazards are greatest.</div></div>
+  <div class="sb-row"><div class="sb-key">Stopping differences</div><div class="sb-val">Motorcycles can stop faster than cars in ideal conditions (lower weight) but may brake differently. Leave the same 3+ second following distance you'd give any vehicle.</div></div>
+  <div class="sb-row"><div class="sb-key">Position variation</div><div class="sb-val">Motorcyclists may ride in different parts of their lane (left-track, center, right-track) for visibility and safety reasons — not erratically. This is intentional and legal.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Large Trucks — The 4 Blind Spots</div>
+  <div class="sb-row"><div class="sb-key">Directly in front</div><div class="sb-val">20 feet in front of the cab — the driver can't see you. Never cut off a truck: they take 40% longer to stop than a car.</div></div>
+  <div class="sb-row"><div class="sb-key">Directly behind</div><div class="sb-val">30 feet behind the trailer. If you can't see their mirrors, they can't see you. Also most dangerous position if a rear-end crash occurs.</div></div>
+  <div class="sb-row"><div class="sb-key">Driver's side</div><div class="sb-val">Extended blind spot of 1–2 lanes to the driver's left side</div></div>
+  <div class="sb-row"><div class="sb-key">Passenger side</div><div class="sb-val">LARGEST blind spot — 2–3 lanes wide on the right side of the truck. Never pass on the right side of a truck. "Right-side pass" means merging into their largest blind spot.</div></div>
+</div>
+<div class="law-box">
+  <div class="lb-head">NC Bicycle & Pedestrian Laws</div>
+  <p><strong>Bicycles:</strong> Cyclists have all the same rights and responsibilities as motor vehicles in NC. They may ride in the travel lane. Drivers must give cyclists at least 4 feet of clearance when passing. Honking at cyclists is prohibited unless necessary for safety.<br><br>
+  <strong>Pedestrians:</strong> Pedestrians in crosswalks have the right of way. You must stop when a pedestrian is in the crosswalk in your lane OR about to enter it. You may not proceed until they have cleared your lane and the next lane (so they won't be cut off). Texting while walking in a crosswalk is becoming a violation in some jurisdictions — pedestrians also share responsibility.</p>
+</div>
+<div class="warning-box">
+  <div class="wb-head">High-Risk Situations for Vulnerable Road Users</div>
+  <p><strong>Right-turn squeeze:</strong> A truck making a wide right turn may swing left before turning right. Never get between a truck and the curb when it signals right.<br><br>
+  <strong>Door zone:</strong> Cyclists riding near parked cars face the danger of suddenly-opened doors. Give cyclists space — they may need to move left suddenly to avoid a door.<br><br>
+  <strong>Intersection collisions:</strong> 75% of motorcycle-car crashes occur at intersections, typically with the car failing to yield when turning left. Check specifically for motorcycles — not just cars — before turning.</p>
+</div>
+</div>`,
+cultural:`The concept of "vulnerable road users" (VRUs) — pedestrians, cyclists, motorcyclists — is increasingly central to traffic safety policy in developed nations. The Vision Zero program, originating in Sweden in 1997 and adopted by many US cities, sets a goal of zero traffic fatalities based on the principle that traffic deaths are not "accidents" but preventable failures of system design. Vision Zero cities redesign intersections, lower speed limits in pedestrian areas, and add protected bike infrastructure. Raleigh and Charlotte have adopted Vision Zero policies. The design of the road itself determines much of safety — not just driver behavior.`,
+quiz:[
+  {q:"When following a large truck on a highway, the most dangerous position is:",choices:["Directly behind the truck at less than 30 feet — you're invisible to the driver and at greatest collision risk","Directly alongside the truck in the driver's mirror zone","30 feet behind the truck in the left lane","1 car length behind with your headlights on"],a:0,fun:"Directly behind = worst position. You can't see what they see (debris, traffic), they can't see you, and if you rear-end them (or they brake-check), the outcome is catastrophic — trucks can 'override' cars in rear impacts. Stay back (see mirrors), pass decisively, don't linger. 🚛"},
+  {q:"NC law requires drivers passing a cyclist to give a minimum clearance of:",choices:["2 feet","3 feet","4 feet","The full width of a lane"],a:2,fun:"4 feet in NC — one of the stricter bicycle passing laws. Cyclists need clearance because wind turbulence from passing vehicles can destabilize them, and they may need to swerve for road hazards. 4 feet means you'll likely need to partially or fully use the adjacent lane when passing. Slow down and wait for a clear opportunity. 🚲"},
+  {q:"Motorcyclists are legally permitted to ride anywhere within their lane because:",choices:["They are exempt from normal lane position requirements","Lane positioning is intentional and legal — they choose their position for visibility and to avoid road hazards (water, debris, pavement irregularities near lane edges)","There is no rule — lane position is random and unpredictable","They must stay in the right track of the lane at all times"],a:1,fun:"Motorcyclists use all three lane positions (left track, center, right track) deliberately. Left track: maximize visibility to oncoming, minimize splash from edge. Center: direct eye contact with cars ahead. Right track: maximize following distance visibility, prepare for right turns. When they appear to move around in their lane, it's skill, not error. 🏍️"},
+  {q:"The largest blind spot on a large commercial truck is:",choices:["Directly in front of the cab","Directly behind the trailer","On the driver's left side","On the passenger's right side — 2-3 lanes wide"],a:3,fun:"The right side blind spot is enormous — 2-3 lanes wide, extending from just behind the cab all the way to the back of the trailer. You can literally be invisible while driving right next to a truck. This is why passing on the right is especially dangerous with trucks, and why 'if you can't see their mirrors, they can't see you' matters so much. 👁️"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 5: VEHICLE OPERATION & EMERGENCIES
+// ══════════════════════════════════════
+{id:'u5', emoji:'⚙️', name:'Vehicle Operation & Emergencies', weeks:'Unit 5 · Weeks 13–15', lessons:[
+{id:'u5l1', day:'Week 13, Day 1', title:'Vehicle Controls, Maintenance & Pre-Trip Inspection',
+objectives:['Perform a basic pre-trip vehicle inspection','Understand critical vehicle systems and warning indicators','Know NC inspection requirements and maintenance schedules'],
+content:`<div class="body-text">
+<p>A vehicle is a machine. Machines that aren't maintained fail — often at the worst possible time. Understanding your vehicle's systems and warning signs is not just good practice; it's a safety responsibility. A tire blowout at highway speed or brake failure in traffic can be prevented with basic maintenance awareness.</p>
+<div class="sign-box">
+  <div class="sb-head">Pre-Trip Inspection — The Walk-Around</div>
+  <div class="sb-row"><div class="sb-key">Tires</div><div class="sb-val">Check pressure (cold, see door placard for correct PSI). Check tread depth — quarter test: insert quarter upside down; if you can see Washington's head, replace tires. Check for visible damage, bulges, embedded objects.</div></div>
+  <div class="sb-row"><div class="sb-key">Lights</div><div class="sb-val">All lights functional: headlights (high and low), taillights, brake lights, turn signals, hazard lights. NC law: lights on 30 minutes after sunset to 30 minutes before sunrise, and any time visibility is less than 400 feet.</div></div>
+  <div class="sb-row"><div class="sb-key">Mirrors</div><div class="sb-val">Adjust all three mirrors before driving: left side, right side, rearview. Eliminate as much blind spot as possible by adjusting side mirrors outward (not to see the side of your car — to see the road)</div></div>
+  <div class="sb-row"><div class="sb-key">Fluid levels</div><div class="sb-val">Oil (check with dipstick — add if below minimum). Coolant (reservoir level visible). Windshield washer fluid. Brake fluid (reservoir level). Power steering fluid if equipped.</div></div>
+  <div class="sb-row"><div class="sb-key">Brakes</div><div class="sb-val">Test before moving: pump pedal once, should feel firm. Any spongy feeling, grinding, pulling, or unusual noise = see a mechanic before driving.</div></div>
+  <div class="sb-row"><div class="sb-key">Seatbelts</div><div class="sb-val">All occupants buckled. NC requires all occupants to wear seatbelts regardless of seating position. Driver is responsible for all passengers under 16.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Critical Dashboard Warning Lights</div>
+  <div class="sb-row"><div class="sb-key">🔴 Oil pressure</div><div class="sb-val">STOP driving immediately — driving without oil pressure destroys the engine in minutes. Pull over safely and turn off engine. Check oil level. Do not restart until resolved.</div></div>
+  <div class="sb-row"><div class="sb-key">🔴 Engine temperature</div><div class="sb-val">Engine overheating. Pull over safely. Turn off A/C, turn on heater (draws heat from engine). If temperature stays high: stop, engine off. Do not open radiator cap when hot.</div></div>
+  <div class="sb-row"><div class="sb-key">🟡 Check Engine</div><div class="sb-val">Engine control system detected a problem. May or may not be urgent. A steady light: schedule service. Flashing light: stop driving soon — risk of damage. Have codes read at any auto parts store (free).</div></div>
+  <div class="sb-row"><div class="sb-key">🟡 Tire Pressure (TPMS)</div><div class="sb-val">One or more tires significantly under-inflated. Check all four tires. Driving on severely under-inflated tires risks blowout. Tires lose ~1 PSI per month and ~1 PSI per 10°F temperature drop.</div></div>
+  <div class="sb-row"><div class="sb-key">🟡 Battery</div><div class="sb-val">Charging system not working. The battery is running down — electrical systems will eventually fail, then the engine stops. Get to a mechanic soon; the battery may not restart the car if you stop.</div></div>
+</div>
+<div class="law-box">
+  <div class="lb-head">NC Vehicle Inspection Requirements</div>
+  <p>NC requires annual safety inspections for all registered vehicles. The inspection covers: lights, brakes, steering, tires, horn, windshield wipers, mirrors, and emissions (in certain counties). Driving without a current inspection sticker is a moving violation. Registration renewal requires a passed inspection certificate. Inspections cost approximately $12–$30 at any licensed inspection station (gas stations, service centers).</p>
+</div>
+</div>`,
+cultural:`The "quarter test" for tire tread — inserting a quarter and checking if you can see Washington's head — replaced the older "penny test" in safety recommendations because the penny test (Lincoln's head) leaves too little tread margin. The NHTSA now recommends 2/32" minimum tread, which corresponds to the quarter test. Hydroplaning (losing traction on wet roads) risk increases significantly below 4/32" tread. Tires with legal but worn tread stop 50+ feet later than new tires in wet conditions at highway speeds. That extra 50 feet is the difference between stopping before a pedestrian and hitting them.`,
+quiz:[
+  {q:"If the red oil pressure warning light comes on while driving, you should:",choices:["Drive to the nearest gas station and check the oil level","Ignore it if the engine sounds normal — it may be a sensor fault","Pull over safely and stop the engine immediately — driving without oil pressure destroys engines in minutes","Add oil while driving using the hood release"],a:2,fun:"Red oil pressure = immediate stop. Not 'soon.' Not 'at the next exit.' Immediately pull to the right safely and stop the engine. An engine running without oil pressure seizes within minutes — this is a multi-thousand dollar repair. Pull over, check oil level (dipstick), call for help if needed. 🔴"},
+  {q:"NC law requires headlights to be on:",choices:["Only after complete darkness (when you can't see without them)","Starting 30 minutes after sunset until 30 minutes before sunrise, and any time visibility is less than 400 feet","Only on interstates and rural highways","Whenever windshield wipers are in use (NC law requires wipers-on = lights-on)"],a:1,fun:"30 minutes after sunset, 30 minutes before sunrise, and when visibility is under 400 feet (rain, fog, smoke). Many modern cars have automatic headlights — check that yours are actually on (not just the daytime running lights, which may not illuminate taillights). In NC, 'wipers on = lights on' is a best practice but not yet law (some states do require this). 💡"},
+  {q:"When checking tire tread with a quarter (US), tread is insufficient and tires should be replaced when:",choices:["You can see any part of the coin's edge","You can see Washington's head above the tread level","The quarter disappears entirely into the tread","When the wear bars in the tread grooves become visible"],a:1,fun:"Insert the quarter upside down (Washington's head going into the tread). If Washington's head is visible above the tread, tread is below 2/32\" and tires need replacing. The wear bar visual test also works: when the bar is flush with the surrounding tread, you're at 2/32\". Either test works; use the one you'll actually do. 🔄"},
+  {q:"A spongy or soft feeling when pressing the brake pedal before driving indicates:",choices:["Normal behavior in cold weather","Possible air in the brake lines or low brake fluid — do not drive until this is diagnosed","Brakes are fully warmed up and working correctly","The parking brake cable needs adjustment"],a:1,fun:"Brakes should feel firm and engage promptly. Spongy/soft = air in the lines or fluid leak or other brake system problem. Brakes are a safety-critical system. Do not drive a vehicle with a brake concern. A diagnostic is inexpensive; a crash is not. Have it checked before driving. 🛑"}
+]},
+
+{id:'u5l2', day:'Week 14, Day 1', title:'Handling Driving Emergencies',
+objectives:['Respond correctly to tire blowouts, brake failure, and skids','Know what to do in a crash situation','Understand NC\'s move-it law and accident reporting requirements'],
+content:`<div class="body-text">
+<p>Emergency situations demand pre-learned responses — there's no time to think through steps when a tire blows at 70 mph. Knowing the correct responses and practicing them mentally before they happen is the difference between a controlled response and panic.</p>
+<div class="sign-box">
+  <div class="sb-head orange">Tire Blowout Response</div>
+  <div class="sb-row"><div class="sb-key">What happens</div><div class="sb-val">Sudden loss of air causes the vehicle to pull sharply toward the blown tire and the vehicle to slow dramatically. Front blowout: difficult steering. Rear blowout: vehicle may fishtail.</div></div>
+  <div class="sb-row"><div class="sb-key">Step 1</div><div class="sb-val">COUNTERINTUITIVE: DO NOT brake immediately. Maintain your speed briefly (ease off accelerator). Braking on a blown tire makes you less stable.</div></div>
+  <div class="sb-row"><div class="sb-key">Step 2</div><div class="sb-val">Grip the steering wheel firmly. Keep the vehicle going straight by steering against the pull.</div></div>
+  <div class="sb-row"><div class="sb-key">Step 3</div><div class="sb-val">Gradually ease off the accelerator. Let the vehicle slow naturally. Steer toward the shoulder.</div></div>
+  <div class="sb-row"><div class="sb-key">Step 4</div><div class="sb-val">Once at a safe low speed (under 30 mph), apply brakes gently and guide off the road. Turn on hazard lights.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head orange">Brake Failure Response</div>
+  <div class="sb-row"><div class="sb-key">First action</div><div class="sb-val">Pump the brakes rapidly — may rebuild pressure in hydraulic systems. Modern ABS vehicles: press firmly and hold (ABS pulses automatically).</div></div>
+  <div class="sb-row"><div class="sb-key">Second action</div><div class="sb-val">Downshift to lower gears (engine braking). Manual transmission: downshift. Automatic: shift to a lower gear manually.</div></div>
+  <div class="sb-row"><div class="sb-key">Third action</div><div class="sb-val">Apply parking brake SLOWLY and GRADUALLY (if applied suddenly at speed, can cause skid or rollover).</div></div>
+  <div class="sb-row"><div class="sb-key">Escape</div><div class="sb-val">Steer toward an uphill grade, guardrail, or soft surface to slow the vehicle. Sideswipe a guardrail if necessary — controlled property damage is better than an uncontrolled crash.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head dark">Skid Recovery</div>
+  <div class="sb-row"><div class="sb-key">Rear-wheel skid (fishtail)</div><div class="sb-val">Steer in the direction the rear is sliding ("steer into the skid"). If rear slides right, turn wheel right. Avoid overcorrecting. Release accelerator — don't brake until straight.</div></div>
+  <div class="sb-row"><div class="sb-key">Front-wheel skid (understeer)</div><div class="sb-val">Release the accelerator. The front wheels need to regain traction. Don't turn more — you'll plow forward. Ease off, let wheels grip, then steer.</div></div>
+  <div class="sb-row"><div class="sb-key">ABS activation (modern vehicles)</div><div class="sb-val">Press the brake firmly and HOLD (do not pump — ABS does the pumping automatically). Steer around the hazard while maintaining brake pressure. Pulsing sensation in the pedal is normal.</div></div>
+</div>
+<div class="law-box">
+  <div class="lb-head">NC Crash Reporting Requirements & Move-It Law</div>
+  <p><strong>Move-It Law:</strong> If involved in a crash with no injuries and the vehicles are drivable, NC law REQUIRES you to move vehicles off the roadway to the nearest safe location — shoulder, parking lot, side street. Blocking traffic creates additional crash risk. Exchange information and document before moving if possible.<br><br>
+  <strong>Reporting:</strong> Crashes involving injury, death, or property damage over $1,000 must be reported to law enforcement. Always call 911 for any injury crash. Exchange: name, address, driver's license number, license plate, insurance information, vehicle make/model/year.</p>
+</div>
+</div>`,
+cultural:`ABS (Anti-lock Braking System) became standard on all new US cars by 2012. Before ABS, drivers were taught to "pump the brakes" in emergencies to prevent wheel lock-up and loss of steering. ABS does this automatically and more rapidly than any human can. The modern instruction "press and hold" is the opposite of what many older drivers were taught. Knowing whether your vehicle has ABS (check the dashboard when you start up — ABS light illuminates briefly) determines the correct emergency braking technique. This is a good example of why driver education must update as vehicle technology changes.`,
+quiz:[
+  {q:"During a tire blowout at highway speed, the first action should be:",choices:["Apply the brakes immediately to slow down quickly","Counterintuitive — do NOT brake initially. Maintain speed briefly while gripping the wheel, then gradually ease off the accelerator","Turn the steering wheel sharply toward the shoulder","Shift into neutral immediately"],a:1,fun:"Braking on a blown tire is destabilizing — you're already fighting a pull in one direction. Maintaining speed briefly (while gripping firmly) gives you stability and time to assess. Then gradually ease off the gas while steering toward the shoulder. Only apply brakes gently once at lower speed and straight on the shoulder. The counterintuitive response saves lives. 💥"},
+  {q:"In a vehicle with ABS (Anti-lock Braking System) during an emergency stop, you should:",choices:["Pump the brake pedal rapidly — ABS requires manual pumping","Press the brake pedal firmly and hold it down — ABS pulses automatically, and you can still steer","Release the brake between pumps to give ABS time to work","Apply only gentle brake pressure to avoid overriding the ABS"],a:1,fun:"ABS = press and hold. The pulsing you feel in the pedal IS the ABS working. If you release and re-apply, you interrupt the system. Firm constant pressure + steering around the hazard. Most people's instinct is to pump (old training) or to let off when they feel the vibration. Both reduce ABS effectiveness. 🛑"},
+  {q:"NC's Move-It Law requires drivers involved in a crash with no injuries and drivable vehicles to:",choices:["Stay exactly where the crash occurred and wait for police","Move vehicles to the nearest safe location off the roadway (shoulder, parking lot) to prevent secondary crashes","Move vehicles only if instructed by a police officer","Block the lane only for the minimum time needed to document the crash"],a:1,fun:"Blocking a travel lane after a fender-bender creates a new crash risk — distracted drivers hit people standing in the road reviewing damage. NC law requires moving it. Document first if possible (photos, exchange info) then move. Call police if required (injury or significant damage) but move the vehicles first. 📱"},
+  {q:"When involved in any crash, you are required to exchange with the other driver:",choices:["Only your insurance company name and phone number","Name, address, driver's license number, license plate, insurance information, and vehicle information","Your phone number only — other information is private","Only information if requested by a police officer"],a:1,fun:"The exchange is legally required and practically necessary for insurance claims. Photograph everything: other driver's license, registration, insurance card, license plate, vehicle damage, scene. If anyone is injured, call 911 immediately regardless of apparent severity — adrenaline masks pain and some injuries aren't immediately apparent. 📋"}
+]},
+]},
+
+// ══════════════════════════════════════
+// UNIT 6: SPECIAL DRIVING CONDITIONS
+// ══════════════════════════════════════
+{id:'u6', emoji:'🌧️', name:'Special Driving Conditions', weeks:'Unit 6 · Weeks 16–18', lessons:[
+{id:'u6l1', day:'Week 16, Day 1', title:'Night Driving, Weather & Highway Driving',
+objectives:['Apply specific techniques for driving at night and in adverse weather','Execute safe lane changes, merging, and highway entry/exit','Understand hydroplaning, black ice, and reduced-visibility driving'],
+content:`<div class="body-text">
+<p>Most new drivers learn in daylight and fair weather — but driving conditions are often neither. Night driving and adverse weather require specific knowledge and technique adjustments that don't come automatically from daytime experience.</p>
+<div class="sign-box">
+  <div class="sb-head dark">Night Driving</div>
+  <div class="sb-row"><div class="sb-key">Reduce speed</div><div class="sb-val">Headlights illuminate about 350 feet at low beam. At 60 mph, you're covering 88 ft/second — you have only 4 seconds of visible road ahead. Reduce speed so you can stop within your visible range ("driving within your headlights").</div></div>
+  <div class="sb-row"><div class="sb-key">Use high beams correctly</div><div class="sb-val">Use high beams on open highways when no oncoming or preceding traffic. Dim within 500 feet of an oncoming vehicle or 300 feet when following another vehicle. Don't use high beams in fog (light scatters back).</div></div>
+  <div class="sb-row"><div class="sb-key">Oncoming glare</div><div class="sb-val">When blinded by oncoming headlights: look toward the right edge line (not at the oncoming lights). Your peripheral vision continues to track the road ahead while protecting your night vision.</div></div>
+  <div class="sb-row"><div class="sb-key">Overdriving headlights</div><div class="sb-val">When you're traveling faster than your ability to stop within your headlight range. Common at highway speeds. Reduce speed at night — especially on unfamiliar roads.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head blue">Adverse Weather Driving</div>
+  <div class="sb-row"><div class="sb-key">Rain / Hydroplaning</div><div class="sb-val">Hydroplaning (floating on water film) can begin at 35 mph with worn tires. Response: ease off accelerator, steer straight, do NOT brake hard. Prevention: slow down in rain, maintain tire tread, avoid standing water. Rain increases stopping distance 2-4×.</div></div>
+  <div class="sb-row"><div class="sb-key">Black ice</div><div class="sb-val">Invisible ice on pavement, most common on bridges, overpasses, and shaded areas (freeze first and last to thaw). Warning: a section of road that looks wet but has less tire noise than expected. Approach gently, do not brake while on it — let the vehicle roll through.</div></div>
+  <div class="sb-row"><div class="sb-key">Fog</div><div class="sb-val">Use LOW beams (NOT high beams — they reflect back and reduce visibility). Use fog lights if equipped. Reduce speed dramatically. Increase following distance. If visibility is extremely poor, pull completely off the road and turn off lights (leave hazards on) — driving slowly in thick fog is more dangerous than stopping.</div></div>
+  <div class="sb-row"><div class="sb-key">Wind</div><div class="sb-val">High winds affect high-profile vehicles most (RVs, trucks, SUVs). Anticipate wind gusts when passing large trucks or leaving shelter of buildings/trees. Grip wheel firmly. Reduce speed.</div></div>
+</div>
+<div class="sign-box">
+  <div class="sb-head">Highway Driving — Entering and Exiting</div>
+  <div class="sb-row"><div class="sb-key">Highway entry</div><div class="sb-val">Acceleration lane: use it fully to match highway speed before merging. Check traffic, signal, find gap, merge smoothly. Never stop in an acceleration lane unless forced to. Speed must match traffic.</div></div>
+  <div class="sb-row"><div class="sb-key">Lane changes</div><div class="sb-val">Signal 3–5 seconds before changing. Check mirrors AND blind spot (look over shoulder, not just mirrors). Move gradually. Return to right lane after passing. Do not straddle lanes.</div></div>
+  <div class="sb-row"><div class="sb-key">Highway exit</div><div class="sb-val">Get in the correct lane early. Signal. Exit at posted ramp speed — decelerate on the ramp, not on the highway. Watch for the advisory speed on the exit ramp curve (much lower than highway speed).</div></div>
+  <div class="sb-row"><div class="sb-key">Keep right rule</div><div class="sb-val">On NC interstates, slower traffic must keep right. Left lane is for passing. Driving slowly in the left lane impedes traffic and is a primary cause of road rage and rear-end collisions.</div></div>
+</div>
+<div class="warning-box">
+  <div class="wb-head">Road Rage — Response Protocol</div>
+  <p>If confronted by an aggressive driver: do not make eye contact (perceived as aggressive), do not gesture, do not respond to aggressive behavior, give them space (slow or change lanes), let them go. If followed: do NOT go home. Drive to a police station, fire station, or crowded public area. Call 911. Road rage attacks are crimes and law enforcement takes them seriously. De-escalation (ignoring aggressive behavior) is always the right response.</p>
+</div>
+</div>`,
+cultural:`"Overdriving your headlights" — traveling faster than you can stop within the visible range of your headlights — is one of the most common and least-discussed night driving errors. Standard low beams illuminate roughly 350 feet. At 60 mph, stopping distance is approximately 270 feet. At 70 mph, stopping distance exceeds 350 feet — beyond headlight range. This is why highway driving at night at full posted speed is technically unsafe unless conditions are ideal. Adaptive headlights (which turn with steering input, now standard on many vehicles) and LED headlights that illuminate farther are engineering responses to this problem.`,
+quiz:[
+  {q:"When driving in fog, you should use:",choices:["High beams — they project more light into the fog","Hazard lights — to warn other drivers of reduced visibility","Low beams (and fog lights if equipped) — high beams reflect back and reduce visibility in fog","Any lights are equally effective — choose based on vehicle type"],a:1,fun:"High beams in fog create 'white wall' effect — the light bounces off the water droplets directly back at you. Low beams project the light downward along the road surface under the fog layer. This is physics, not preference. If you have front fog lights (lower, wider beam): use them. If not: low beams only. 🌫️"},
+  {q:"Hydroplaning occurs when:",choices:["Driving over a large puddle too slowly — water resistance creates drag","A thin film of water lifts the tire off the road surface, causing loss of traction and steering — can begin at 35 mph with worn tires","Only occurring in standing water more than 2 inches deep","Only affecting vehicles without all-wheel drive"],a:1,fun:"Hydroplaning happens when water can't escape from under the tire fast enough, and the tire rides on a film of water rather than the road surface. Steering input does nothing — you're floating. Ease off the gas, steer straight, wait for traction to return. Prevention: proper tire tread, slower speed in rain. 💧"},
+  {q:"When entering a highway from an on-ramp acceleration lane, you should:",choices:["Stop at the end of the ramp and wait for a complete gap in traffic","Use the acceleration lane to match highway traffic speed before merging, signal, find a gap, and merge smoothly","Merge immediately at ramp speed and accelerate after merging","Wait until all traffic clears before attempting to enter"],a:1,fun:"The acceleration lane exists to let you match speed. Merging at ramp speed (35 mph) onto a 70 mph highway creates a dangerous speed differential. Use the full length of the lane to get up to speed. Check mirrors AND blind spot. Signal. Find a gap. Merge. Don't stop unless absolutely necessary — a stopped vehicle at the end of an acceleration lane is a serious hazard. 🛣️"},
+  {q:"On NC interstates, the left lane is legally intended for:",choices:["Vehicles traveling at or above the speed limit","All vehicles regardless of speed","Passing — slower traffic must keep right, and impeding traffic in the left lane is a violation","HOV (High Occupancy Vehicle) use"],a:2,fun:"NC GS 20-146 requires vehicles to keep right except when passing. Camping in the left lane — even at or above the speed limit — is a violation. The left lane is for passing; after passing, return right. Left-lane camping forces passing on the right, increases weaving, causes rear-end pressure, and contributes to road rage. The law exists for good reason. ➡️"}
+]},
+]},
+
+]};
+
+// ── STATE ──────────────────────────────
+const KEY = 'drivers_ed_course';
+let state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+function totalL() { return COURSE.units.reduce((s,u)=>s+u.lessons.length,0); }
+function doneL() { return Object.keys(state).length; }
+function avgSc() {
+  const v = Object.values(state).map(x=>x.score).filter(x=>x!=null);
+  return v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length) : null;
+}
+function getLesson(lid) {
+  for (const u of COURSE.units) for (const l of u.lessons) if (l.id===lid) return {unit:u,lesson:l};
+  return null;
+}
+
+// ── SIDEBAR ─────────────────────────────
+function buildSidebar() {
+  const nav = document.getElementById('unit-nav'); nav.innerHTML = '';
+  COURSE.units.forEach((u,ui) => {
+    const done = u.lessons.filter(l=>state[l.id]).length;
+    const allDone = done===u.lessons.length;
+    const sh = document.createElement('div'); sh.className = 'u-sect';
+    sh.textContent = 'Unit '+(ui+1); nav.appendChild(sh);
+    const btn = document.createElement('button');
+    btn.className = 'u-btn' + (allDone?' done':'');
+    btn.innerHTML = `<span class="u-ic">${u.emoji}</span><span class="u-nm">${u.name}</span><span class="u-ck">${done>0?(allDone?'✓':done+'/'+u.lessons.length):''}</span>`;
+    btn.onclick = () => document.getElementById('ll_'+u.id)?.classList.toggle('open');
+    nav.appendChild(btn);
+    const ll = document.createElement('div'); ll.className='lesson-list'; ll.id='ll_'+u.id;
+    u.lessons.forEach(l => {
+      const d = state[l.id];
+      const lb = document.createElement('button');
+      lb.className = 'l-btn' + (d?' done':'');
+      lb.innerHTML = `<span>${l.title.substring(0,28)}${l.title.length>28?'…':''}</span>${d?`<span class="l-sc">${d.score}%</span>`:''}`;
+      lb.onclick = () => showLesson(u.id, l.id);
+      ll.appendChild(lb);
+    });
+    nav.appendChild(ll);
+  });
+  document.getElementById('stat-done').textContent = doneL()+'/'+totalL();
+  const a = avgSc(); document.getElementById('stat-avg').textContent = a!==null?a+'%':'—';
+  document.getElementById('prog-chip').textContent = doneL()+' / '+totalL();
+}
+
+// ── WELCOME ─────────────────────────────
+function showWelcome() {
+  document.getElementById('tb-title').textContent = 'NC STANDARD DRIVER EDUCATION';
+  document.getElementById('tb-crumb').textContent = 'NC DMV Knowledge Test Prep · Calming Minds Day School · 2026–27';
+  const cards = COURSE.units.map((u,ui) => {
+    const done = u.lessons.filter(l=>state[l.id]).length;
+    const pct = Math.round(done/u.lessons.length*100);
+    return `<div class="u-card" onclick="showLesson('${u.id}','${u.lessons[0].id}')">
+      <div class="uc-ic">${u.emoji}</div>
+      <div class="uc-tt">Unit ${ui+1} — ${u.name}</div>
+      <div class="uc-wk">${u.weeks}</div>
+      <div class="uc-bar"><div class="uc-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('content').innerHTML = `
+    <div class="w-hero">
+      <div class="w-tag">NC Standard Driver Education · Calming Minds Day School · 2026–27</div>
+      <div class="w-title">NC DRIVER'S<br><span>EDUCATION</span></div>
+      <p class="w-sub">Complete NC DMV knowledge test preparation — traffic laws, road signs, safe driving techniques, and NC-specific regulations. All content aligns with the NC Driver's Handbook and NCDMV test format.</p>
+      <div class="w-note">⚠️ DMV KNOWLEDGE TEST REQUIREMENT: 20/25 correct (80%) to pass. This course covers all tested material.</div>
+    </div>
+    <div class="u-grid">${cards}</div>`;
+}
+
+// ── LESSON ──────────────────────────────
+let curUid=null, curLid=null, qa={}, submitted=false;
+
+function showLesson(uid, lid) {
+  const found = getLesson(lid); if (!found) return;
+  const {unit, lesson} = found;
+  curUid=uid; curLid=lid; qa={}; submitted=false;
+  document.querySelectorAll('.lesson-list').forEach(el=>el.classList.remove('open'));
+  document.getElementById('ll_'+uid)?.classList.add('open');
+  document.getElementById('tb-title').textContent = lesson.title.toUpperCase();
+  document.getElementById('tb-crumb').textContent = `${unit.name} · ${lesson.day} · Calming Minds Day School`;
+  const saved = state[lid]; const L=['A','B','C','D'];
+  const qHtml = lesson.quiz.map((q,qi) => `
+    <div class="q-card">
+      <div class="q-num">Question ${qi+1} of ${lesson.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.choices.map((c,ci) => `<button class="choice" id="ch${qi}_${ci}" onclick="pick(${qi},${ci})">
+        <span class="c-ltr">${L[ci]}</span><span>${c}</span>
+      </button>`).join('')}
+      <div class="feedback" id="fb${qi}"></div>
+    </div>`).join('');
+  const banner = saved
+    ? `<div class="score-banner show"><div class="score-big">${saved.score}%</div><div class="score-msg">${msg(saved.score)}</div></div>`
+    : `<div class="score-banner" id="score-banner"></div>`;
+  const allL = COURSE.units.flatMap(u=>u.lessons.map(l=>({uid:u.id,lid:l.id})));
+  const idx = allL.findIndex(x=>x.lid===lid);
+  const prev = idx>0?allL[idx-1]:null; const next = idx<allL.length-1?allL[idx+1]:null;
+  document.getElementById('content').innerHTML = `
+    <div class="l-header">
+      <div class="l-unit-tag">${unit.emoji} ${unit.name} · ${unit.weeks}</div>
+      <h2>${lesson.title}</h2>
+      <div class="l-meta">${lesson.day} · Calming Minds Day School · 2026–27</div>
+    </div>
+    <div class="obj-box">
+      <div class="obj-head">Lesson Objectives</div>
+      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="section">
+      <div class="sec-head">Lesson Content</div>
+      ${lesson.content}
+    </div>
+    <div class="section">
+      <div class="sec-head">Context & Background</div>
+      <div class="tip-box"><div class="tb-head">Did You Know</div><p>${lesson.cultural}</p></div>
+    </div>
+    <div class="quiz-wrap">
+      <h4>KNOWLEDGE CHECK</h4>
+      <div class="quiz-sub">${lesson.quiz.length} questions · Submit to record your score</div>
+      ${banner}
+      ${qHtml}
+      <button class="sub-btn" id="sub-btn" onclick="submitQ()" ${saved?'disabled':''}>
+        ${saved?'SUBMITTED ✓':'SUBMIT ANSWERS'}
+      </button>
+    </div>
+    <div class="lesson-nav">
+      ${prev?`<button class="nav-btn nav-prev" onclick="showLesson('${prev.uid}','${prev.lid}')">← PREV</button>`:''}
+      ${next?`<button class="nav-btn nav-next" onclick="showLesson('${next.uid}','${next.lid}')">NEXT →</button>`:''}
+    </div>`;
+  if (saved) showPrev(lesson, saved);
+  window.scrollTo(0,0);
+}
+
+function showPrev(lesson, saved) {
+  submitted=true; const L=['A','B','C','D'];
+  lesson.quiz.forEach((q,qi) => {
+    const sel = saved.answers?saved.answers[qi]:null;
+    if (sel!==null && sel!==undefined) {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add(sel===q.a?'correct':'wrong');
+      if (sel!==q.a) document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      const fb = document.getElementById(`fb${qi}`);
+      if (fb) {
+        fb.className=`feedback ${sel===q.a?'ok':'bad'} show`;
+        fb.innerHTML = sel===q.a
+          ? `✓ Correct! ${q.fun?`<div class="fun-n">💡 ${q.fun}</div>`:''}`
+          : `Answer: ${L[q.a]}. ${q.choices[q.a]}${q.fun?`<div class="fun-n">💡 ${q.fun}</div>`:''}`;
+      }
+    }
+  });
+}
+
+function pick(qi,ci) {
+  if (submitted) return;
+  document.querySelectorAll(`[id^="ch${qi}_"]`).forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`ch${qi}_${ci}`)?.classList.add('selected');
+  qa[qi]=ci;
+}
+
+function submitQ() {
+  const found=getLesson(curLid); if(!found) return;
+  const {lesson}=found; submitted=true;
+  const L=['A','B','C','D']; let correct=0; const answers={};
+  lesson.quiz.forEach((q,qi) => {
+    const sel=qa[qi]; answers[qi]=sel!==undefined?sel:null;
+    const fb=document.getElementById(`fb${qi}`);
+    if (sel===undefined) {
+      if(fb){fb.className='feedback bad show';fb.textContent='No answer. Correct: '+L[q.a]+'. '+q.choices[q.a];}
+    } else if (sel===q.a) {
+      correct++;
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('correct');
+      if(fb){fb.className='feedback ok show';fb.innerHTML='✓ Correct!'+(q.fun?` <div class="fun-n">💡 ${q.fun}</div>`:'');}
+    } else {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('wrong');
+      document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      if(fb){fb.className='feedback bad show';fb.innerHTML=`Answer: ${L[q.a]}. ${q.choices[q.a]}`+(q.fun?` <div class="fun-n">💡 ${q.fun}</div>`:'');}
+    }
+  });
+  const score=Math.round(correct/lesson.quiz.length*100);
+  state[curLid]={score,answers}; save();
+  const banner=document.getElementById('score-banner');
+  if(banner){banner.className='score-banner show';banner.innerHTML=`<div class="score-big">${score}%</div><div class="score-msg">${msg(score)}</div>`;}
+  const btn=document.getElementById('sub-btn');
+  if(btn){btn.disabled=true;btn.textContent='SUBMITTED ✓';}
+  buildSidebar();
+}
+
+function msg(s) {
+  if(s===100) return 'PERFECT — DMV READY';
+  if(s>=90) return 'EXCELLENT — NEARLY THERE';
+  if(s>=80) return 'PASSING — ABOVE DMV THRESHOLD';
+  if(s>=70) return 'CLOSE — REVIEW AND RETRY';
+  return 'STUDY MORE — RETRY THIS LESSON';
+}
+
+buildSidebar();
+showWelcome();
+</script>
+</body>
+</html>

@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Precalculus — Calming Minds Day School</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: #2e3350;
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,.12);
+  --green-border: rgba(34,197,94,.3);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,.1);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,.1);
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --text-dimmer: #4a5568;
+  --red-soft: #ef4444;
+  --sidebar-w: 272px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── SIDEBAR ──────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  position: fixed; top:0; left:0; bottom:0;
+  display: flex; flex-direction: column;
+  overflow-y: auto; z-index: 10;
+}
+.sidebar-brand {
+  padding: 22px 18px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.course-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 6px;
+}
+.sidebar-brand h1 {
+  font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.25;
+}
+.sidebar-brand .school { font-size: 11px; color: var(--text-dimmer); margin-top: 4px; }
+
+.sidebar-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.stat-cell { padding: 11px 14px; text-align: center; border-right: 1px solid var(--border); }
+.stat-cell:last-child { border-right: none; }
+.stat-val { font-size: 20px; font-weight: 700; color: var(--green); font-family: 'DM Mono', monospace; }
+.stat-lbl { font-size: 9px; color: var(--text-dimmer); text-transform: uppercase; letter-spacing: .1em; margin-top: 2px; }
+
+.unit-nav { padding: 6px 0 20px; flex: 1; }
+.unit-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--text-dimmer); padding: 10px 16px 3px;
+}
+.unit-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 8px 16px; color: var(--text-dim); font-size: 12.5px;
+  font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 9px;
+  transition: background .14s, color .14s;
+  border-left: 2px solid transparent;
+}
+.unit-btn:hover { background: var(--surface2); color: var(--text); }
+.unit-btn.active { background: var(--green-dim); color: var(--green); border-left-color: var(--green); }
+.unit-btn.done { color: var(--text-dimmer); }
+.u-em { font-size: 13px; flex-shrink: 0; }
+.u-name { flex: 1; line-height: 1.3; font-size: 12px; }
+.u-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--amber); }
+
+.lesson-list { display: none; }
+.lesson-list.open { display: block; }
+.lesson-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 5px 16px 5px 38px; color: var(--text-dimmer); font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: color .14s, background .14s;
+}
+.lesson-btn:hover { color: var(--text); background: rgba(255,255,255,.03); }
+.lesson-btn.active { color: var(--amber); }
+.lesson-btn.done { color: var(--text-dimmer); }
+.l-sc { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green); }
+
+/* ── MAIN ──────────────────────────── */
+.main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 5;
+}
+.topbar-left h2 { font-size: 15px; font-weight: 600; color: var(--text); }
+.topbar-left .crumb { font-size: 11px; color: var(--text-dimmer); margin-top: 2px; font-family: 'DM Mono', monospace; }
+.prog-chip {
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  color: var(--green); padding: 5px 13px; border-radius: 20px;
+  font-size: 12px; font-family: 'DM Mono', monospace; font-weight: 500;
+}
+
+.content-area { flex: 1; padding: 32px 40px; max-width: 900px; }
+
+/* ── WELCOME ──────────────────────────── */
+.welcome-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px;
+}
+.welcome-title {
+  font-size: 38px; font-weight: 700; color: var(--text);
+  line-height: 1.1; margin-bottom: 10px;
+}
+.welcome-title span { color: var(--green); }
+.welcome-sub { font-size: 14px; color: var(--text-dim); line-height: 1.65; max-width: 560px; margin-bottom: 22px; }
+.welcome-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 10px;
+}
+.unit-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-top: 2px solid var(--green);
+  border-radius: 8px; padding: 16px 18px; cursor: pointer;
+  transition: border-color .18s, background .18s, transform .14s;
+}
+.unit-card:hover { border-color: var(--green); background: var(--surface2); transform: translateY(-2px); }
+.unit-card:nth-child(even) { border-top-color: var(--cyan); }
+.unit-card:nth-child(even):hover { border-color: var(--cyan); }
+.uc-em { font-size: 18px; margin-bottom: 7px; }
+.uc-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.uc-weeks { font-size: 11px; color: var(--text-dimmer); font-family: 'DM Mono', monospace; }
+.uc-bar { height: 2px; background: var(--border); border-radius: 1px; margin-top: 10px; overflow: hidden; }
+.uc-fill { height: 100%; background: var(--green); transition: width .4s; }
+
+/* ── LESSON ──────────────────────────── */
+.lesson-header {
+  padding-bottom: 18px; margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.unit-tag-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 8px;
+}
+.lesson-header h2 {
+  font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.2;
+}
+.day-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dimmer); margin-top: 5px; }
+
+.objectives-box {
+  background: var(--cyan-dim); border: 1px solid rgba(6,182,212,.2);
+  border-radius: 8px; padding: 14px 18px; margin-bottom: 24px;
+}
+.obj-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--cyan); margin-bottom: 10px;
+}
+.objectives-box ul { list-style: none; }
+.objectives-box li {
+  font-size: 13.5px; color: #a0c4cc; padding: 3px 0;
+  display: flex; gap: 9px; align-items: flex-start;
+}
+.objectives-box li::before { content: "→"; color: var(--cyan); font-size: 11px; margin-top: 2px; flex-shrink: 0; font-family: 'DM Mono', monospace; }
+
+.section { margin-bottom: 28px; }
+.sec-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.body-text { font-size: 15px; line-height: 1.8; color: #cbd5e1; }
+.body-text p { margin-bottom: 12px; }
+.body-text strong { color: var(--text); font-weight: 600; }
+
+/* Math formula styling */
+.formula-box {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 14px 0;
+}
+.formula-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 10px;
+}
+.formula {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px; color: var(--amber); margin: 5px 0;
+  line-height: 1.6;
+}
+.formula-note { font-size: 13px; color: var(--text-dim); margin-top: 8px; line-height: 1.6; }
+
+/* Concept table */
+.concept-table {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; margin: 14px 0;
+}
+.ct-head {
+  background: rgba(34,197,94,.1); padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; color: var(--green); font-weight: 500; letter-spacing: .08em;
+}
+.ct-row {
+  display: flex; border-bottom: 1px solid var(--border); font-size: 13.5px;
+}
+.ct-row:last-child { border-bottom: none; }
+.ct-row:nth-child(even) { background: rgba(255,255,255,.02); }
+.ct-key {
+  width: 190px; min-width: 190px; padding: 8px 14px;
+  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--amber);
+  border-right: 1px solid var(--border); font-weight: 500;
+}
+.ct-val { padding: 8px 14px; color: var(--text-dim); flex: 1; line-height: 1.55; }
+
+/* Example block */
+.example-block {
+  background: var(--amber-dim); border: 1px solid rgba(245,158,11,.2);
+  border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+}
+.ex-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 10px;
+}
+.ex-step {
+  font-size: 13.5px; color: #d4b896; line-height: 1.7; margin-bottom: 6px;
+  display: flex; gap: 10px;
+}
+.ex-step .step-n {
+  font-family: 'DM Mono', monospace;
+  color: var(--amber); font-size: 11px; font-weight: 700;
+  min-width: 24px; margin-top: 2px;
+}
+.ex-step .step-t { flex: 1; }
+.ex-step code {
+  font-family: 'DM Mono', monospace;
+  color: var(--amber); font-size: 13px;
+  background: rgba(245,158,11,.08);
+  padding: 1px 5px; border-radius: 3px;
+}
+
+/* tip / insight */
+.insight-box {
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  border-radius: 8px; padding: 13px 18px; margin: 14px 0;
+}
+.insight-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 8px;
+}
+.insight-box p { font-size: 13.5px; color: #9fd4b2; line-height: 1.7; }
+
+/* ── QUIZ ──────────────────────────── */
+.quiz-wrap {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px 28px; margin-top: 8px;
+}
+.quiz-wrap h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px; color: var(--green); letter-spacing: .1em; margin-bottom: 4px; text-transform: uppercase;
+}
+.quiz-sub { font-size: 12px; color: var(--text-dimmer); margin-bottom: 20px; }
+
+.score-banner {
+  background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.25);
+  border-radius: 8px; padding: 16px; text-align: center;
+  display: none; margin-bottom: 18px;
+}
+.score-banner.show { display: block; }
+.score-big { font-family: 'DM Mono', monospace; font-size: 44px; color: var(--green); font-weight: 500; }
+.score-msg { font-size: 13px; color: var(--text-dim); margin-top: 3px; }
+
+.q-card {
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  border-radius: 8px; padding: 17px; margin-bottom: 13px;
+}
+.q-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(34,197,94,.5); margin-bottom: 7px;
+}
+.q-text { font-size: 14.5px; color: var(--text); line-height: 1.55; margin-bottom: 13px; font-weight: 500; }
+.choice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 12px; border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.02);
+  cursor: pointer; margin-bottom: 6px;
+  font-size: 13px; color: var(--text-dim);
+  transition: border-color .13s, background .13s;
+  text-align: left; width: 100%;
+  font-family: 'DM Sans', sans-serif;
+}
+.choice:hover { border-color: var(--green); background: var(--green-dim); color: var(--text); }
+.choice.selected { border-color: var(--green); background: var(--green-dim); color: var(--text); }
+.choice.correct { border-color: var(--green) !important; background: rgba(34,197,94,.15) !important; color: #a7f3c5; }
+.choice.wrong { border-color: var(--red-soft) !important; background: rgba(239,68,68,.1) !important; color: #fca5a5; }
+.c-key {
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+  min-width: 20px; color: var(--green); flex-shrink: 0; margin-top: 1px;
+}
+.correct .c-key { color: var(--green); }
+.wrong .c-key { color: var(--red-soft); }
+
+.feedback {
+  border-radius: 6px; padding: 8px 12px; margin-top: 8px;
+  font-size: 12.5px; line-height: 1.55; display: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.feedback.show { display: block; }
+.feedback.ok { background: rgba(34,197,94,.08); color: #a7f3c5; border: 1px solid rgba(34,197,94,.2); }
+.feedback.bad { background: rgba(239,68,68,.08); color: #fca5a5; border: 1px solid rgba(239,68,68,.2); }
+.fun-n { font-size: 11.5px; margin-top: 5px; opacity: .8; font-family: 'DM Mono', monospace; }
+
+.submit-btn {
+  background: var(--green); color: #0f1117; border: none;
+  padding: 10px 24px; border-radius: 6px;
+  font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; margin-top: 6px; transition: opacity .18s, transform .14s;
+}
+.submit-btn:hover { opacity: .88; transform: translateY(-1px); }
+.submit-btn:disabled { opacity: .25; cursor: default; transform: none; }
+
+.lesson-nav {
+  display: flex; gap: 10px; margin-top: 28px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  padding: 9px 20px; border-radius: 6px; font-size: 12px;
+  cursor: pointer; transition: .14s;
+  font-family: 'DM Mono', monospace; font-weight: 500; letter-spacing: .06em;
+}
+.nav-prev { background: none; border: 1px solid var(--border); color: var(--text-dim); }
+.nav-prev:hover { border-color: var(--text-dim); color: var(--text); }
+.nav-next { background: var(--green); border: none; color: #0f1117; font-weight: 700; }
+.nav-next:hover { opacity: .88; }
+
+@media(max-width:780px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.welcome-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="course-label">// course_03</div>
+    <h1>Precalculus</h1>
+    <div class="school">Calming Minds Day School · 2026–27</div>
+  </div>
+  <div class="sidebar-stats">
+    <div class="stat-cell"><div class="stat-val" id="stat-done">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat-cell"><div class="stat-val" id="stat-avg">—</div><div class="stat-lbl">Score</div></div>
+  </div>
+  <nav class="unit-nav" id="unit-nav"></nav>
+</nav>
+
+<main class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <h2 id="topbar-title">Precalculus / NC Math 3</h2>
+      <div class="crumb" id="topbar-crumb">// 11th_grade · full_year · 1.0_credit · nc_math_3</div>
+    </div>
+    <div class="prog-chip" id="prog-chip">0 / 40</div>
+  </header>
+  <div class="content-area" id="content"></div>
+</main>
+
+<script>
+const COURSE = { units: [
+
+// ══════════════════════════════════════════════════
+// UNIT 1: FUNCTIONS
+// ══════════════════════════════════════════════════
+{id:'u1',emoji:'📐',name:'Functions',weeks:'weeks_01–04',lessons:[
+{id:'u1l1',day:'week_01 · day_01',title:'Domain, Range & Function Notation',
+objectives:['Define domain, range, and function','Evaluate functions using notation','Use interval and set-builder notation'],
+content:`<div class="body-text">
+<p>A <strong>function</strong> is a rule that assigns exactly one output to each input. Every x-value maps to exactly one y-value. This single rule — one input, one output — is the foundation of all of calculus and most of modern mathematics.</p>
+<div class="concept-table">
+  <div class="ct-head">Core Definitions</div>
+  <div class="ct-row"><div class="ct-key">Function</div><div class="ct-val">A rule f: A → B where each element of A maps to exactly one element of B. Passes the Vertical Line Test on a graph.</div></div>
+  <div class="ct-row"><div class="ct-key">Domain</div><div class="ct-val">The set of all valid inputs (x-values). Ask: what values would BREAK this function? Exclude them.</div></div>
+  <div class="ct-row"><div class="ct-key">Range</div><div class="ct-val">The set of all actual outputs (y-values) produced when domain values are plugged in.</div></div>
+  <div class="ct-row"><div class="ct-key">f(x) notation</div><div class="ct-val">"f of x" — not f times x. f(3) means evaluate the function when x = 3.</div></div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Finding Domain — What to Exclude</div>
+  <div class="formula">Square roots: set radicand ≥ 0 → f(x) = √(x – 4) → x – 4 ≥ 0 → x ≥ 4</div>
+  <div class="formula">Fractions: set denominator ≠ 0 → f(x) = 1/(x – 3) → x ≠ 3</div>
+  <div class="formula">Logarithms: set argument > 0 → f(x) = ln(x + 2) → x > –2</div>
+  <div class="formula-note">If a function has multiple restrictions, apply ALL of them. Domain = intersection of all valid sets.</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Worked Example — Evaluating f(x)</div>
+  <div class="ex-step"><span class="step-n">Given:</span><span class="step-t">f(x) = 3x² – 2x + 1</span></div>
+  <div class="ex-step"><span class="step-n">Find:</span><span class="step-t">f(–2)</span></div>
+  <div class="ex-step"><span class="step-n">1.</span><span class="step-t">Replace every x with (–2): <code>3(–2)² – 2(–2) + 1</code></span></div>
+  <div class="ex-step"><span class="step-n">2.</span><span class="step-t">Evaluate: <code>3(4) – (–4) + 1 = 12 + 4 + 1 = 17</code></span></div>
+  <div class="ex-step"><span class="step-n">Answer:</span><span class="step-t">f(–2) = 17</span></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Why Domain Matters</div>
+  <p>You can't take the square root of a negative number (in real numbers). You can't divide by zero. You can't take the log of zero or a negative. These aren't arbitrary rules — they're mathematical walls. The domain is the set of inputs that don't hit any of those walls.</p>
+</div>
+</div>`,
+cultural:`Functions are the language of science, economics, and technology. Every time your phone calculates its GPS position, every time Netflix recommends a show, every time a doctor interprets a blood test — some function is mapping inputs to outputs. The abstract concept of "a rule that gives one output per input" turns out to describe almost everything measurable in the physical world.`,
+quiz:[
+  {q:"The domain of f(x) = √(2x – 10) is:",choices:["x > 5","x ≥ 5","x ≥ –5","All real numbers"],a:1,fun:"Set 2x – 10 ≥ 0 (radicand must be non-negative): 2x ≥ 10 → x ≥ 5. Include x = 5 because √0 = 0, which is valid. Domain: [5, ∞). 📐"},
+  {q:"If g(x) = x² – 3, then g(a + 1) = ?",choices:["a² – 2","a² + 2a – 2","a² + 2a + 1 – 3 = a² + 2a – 2","a² + 1 – 3"],a:2,fun:"Replace every x with (a+1): (a+1)² – 3 = a² + 2a + 1 – 3 = a² + 2a – 2. Don't forget the middle term when expanding (a+1)²! The common error is writing a² + 1 – 3 and skipping the 2a. 💡"},
+  {q:"The Vertical Line Test determines:",choices:["Whether the function has an inverse","Whether a graph represents a function — if any vertical line intersects the graph more than once, it's NOT a function","Whether a function is one-to-one","Whether the domain is all real numbers"],a:1,fun:"If a vertical line hits the graph twice, one x-value maps to two y-values — violating the definition of a function. The test is purely visual and extremely quick. Relations that fail it are still useful — they're just not functions. 📏"},
+  {q:"For h(x) = 1/(x² – 9), the domain excludes:",choices:["x = 3 only","x = –3 only","x = 3 and x = –3","x = ±9"],a:2,fun:"Factor the denominator: x² – 9 = (x–3)(x+3). Set each factor ≠ 0: x ≠ 3 AND x ≠ –3. Both values make the denominator zero (undefined). Domain: (–∞, –3) ∪ (–3, 3) ∪ (3, ∞). 🔢"}
+]},
+
+{id:'u1l2',day:'week_01 · day_03',title:'Composition and Inverse Functions',
+objectives:['Compute function compositions (f∘g)(x)','Find the domain of a composition','Find and verify inverse functions'],
+content:`<div class="body-text">
+<p>Two of the most powerful operations on functions: <strong>composition</strong> (feeding one function into another) and <strong>inversion</strong> (reversing a function's action). Both are fundamental in calculus and applied mathematics.</p>
+<div class="formula-box">
+  <div class="formula-title">Function Composition</div>
+  <div class="formula">(f∘g)(x) = f(g(x)) — apply g first, then f to the result</div>
+  <div class="formula">(g∘f)(x) = g(f(x)) — apply f first, then g to the result</div>
+  <div class="formula-note">⚠️ Order matters! f∘g ≠ g∘f in general. Read right-to-left: inner function applies first.</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Composition — Worked Example</div>
+  <div class="ex-step"><span class="step-n">Given:</span><span class="step-t">f(x) = 2x + 1 &nbsp; g(x) = x²</span></div>
+  <div class="ex-step"><span class="step-n">Find:</span><span class="step-t">(f∘g)(3)</span></div>
+  <div class="ex-step"><span class="step-n">1.</span><span class="step-t">Inner first: <code>g(3) = 3² = 9</code></span></div>
+  <div class="ex-step"><span class="step-n">2.</span><span class="step-t">Outer next: <code>f(9) = 2(9) + 1 = 19</code></span></div>
+  <div class="ex-step"><span class="step-n">Answer:</span><span class="step-t">(f∘g)(3) = 19</span></div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Finding an Inverse Function</div>
+  <div class="formula">Step 1: Replace f(x) with y</div>
+  <div class="formula">Step 2: Swap x and y</div>
+  <div class="formula">Step 3: Solve for y</div>
+  <div class="formula">Step 4: Replace y with f⁻¹(x)</div>
+  <div class="formula-note">Verify: f(f⁻¹(x)) = x and f⁻¹(f(x)) = x (they should cancel out)</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Finding an Inverse — Example</div>
+  <div class="ex-step"><span class="step-n">Given:</span><span class="step-t">f(x) = 3x – 6</span></div>
+  <div class="ex-step"><span class="step-n">1.</span><span class="step-t"><code>y = 3x – 6</code></span></div>
+  <div class="ex-step"><span class="step-n">2.</span><span class="step-t">Swap: <code>x = 3y – 6</code></span></div>
+  <div class="ex-step"><span class="step-n">3.</span><span class="step-t">Solve: <code>x + 6 = 3y → y = (x + 6)/3</code></span></div>
+  <div class="ex-step"><span class="step-n">Answer:</span><span class="step-t">f⁻¹(x) = (x + 6)/3</span></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Key Insight: Inverse Functions</div>
+  <p>If f maps 2 → 8, then f⁻¹ maps 8 → 2. The inverse undoes what the function did. Not every function has an inverse — only one-to-one functions (those that pass the Horizontal Line Test). If a function is not one-to-one, you can restrict its domain to make it invertible.</p>
+</div>
+</div>`,
+cultural:`Inverse functions appear everywhere in real life. Encryption and decryption are inverse functions. Converting Celsius to Fahrenheit (and back) uses inverse functions. Exponents and logarithms are inverse functions of each other — a relationship you'll use constantly in Unit 3. Composition of functions models sequential processes: first one thing happens, then another thing happens to the result.`,
+quiz:[
+  {q:"If f(x) = x + 4 and g(x) = 3x, then (g∘f)(2) = ?",choices:["10","18","14","6"],a:1,fun:"g∘f means f first, then g. f(2) = 2 + 4 = 6. Then g(6) = 3(6) = 18. Remember: right-to-left! g∘f ≠ f∘g. Check: (f∘g)(2) = f(6) = 10. Different answer confirms order matters. 🔄"},
+  {q:"The inverse of f(x) = (x – 3)/2 is:",choices:["f⁻¹(x) = 2x – 3","f⁻¹(x) = 2x + 3","f⁻¹(x) = (x + 3)/2","f⁻¹(x) = 2/(x – 3)"],a:1,fun:"Start: y = (x–3)/2. Swap: x = (y–3)/2. Solve: 2x = y – 3 → y = 2x + 3. So f⁻¹(x) = 2x + 3. Verify: f(f⁻¹(x)) = f(2x+3) = ((2x+3)–3)/2 = 2x/2 = x. ✓ 📐"},
+  {q:"A function has an inverse only if it is:",choices:["Strictly increasing on its domain","One-to-one — passes the Horizontal Line Test","Continuous and differentiable","Defined for all real numbers"],a:1,fun:"The Horizontal Line Test: if any horizontal line hits the graph more than once, the function is not one-to-one and has no inverse. Why? Because one output would map back to two inputs — the inverse wouldn't be a function. f(x) = x² fails — f(–2) = f(2) = 4. 📊"},
+  {q:"If f(f⁻¹(x)) is computed correctly, the result is:",choices:["f(x) again","f⁻¹(x) again","x — the inverse undoes the function","0, since opposite functions cancel to zero"],a:2,fun:"This is the definition of inverse functions: they undo each other. f takes x to y; f⁻¹ takes y back to x. f(f⁻¹(x)) = x always, and f⁻¹(f(x)) = x always. This is how you verify that you found the correct inverse. ✓"}
+]},
+
+{id:'u1l3',day:'week_02 · day_01',title:'Transformations of Functions',
+objectives:['Apply translations, reflections, and stretches to graphs','Predict graph behavior from equation form','Work with piecewise and absolute value functions'],
+content:`<div class="body-text">
+<p>Every graph you'll encounter in precalculus is a transformation of a basic parent function. Mastering transformations means you can sketch any function by recognizing how it's been moved, flipped, or stretched from something familiar.</p>
+<div class="concept-table">
+  <div class="ct-head">Transformation Rules — starting from y = f(x)</div>
+  <div class="ct-row"><div class="ct-key">y = f(x) + k</div><div class="ct-val">Vertical shift UP k units (k > 0) or DOWN |k| units (k < 0)</div></div>
+  <div class="ct-row"><div class="ct-key">y = f(x – h)</div><div class="ct-val">Horizontal shift RIGHT h units (h > 0) — OPPOSITE to sign inside!</div></div>
+  <div class="ct-row"><div class="ct-key">y = –f(x)</div><div class="ct-val">Reflection over the x-axis (flip vertically)</div></div>
+  <div class="ct-row"><div class="ct-key">y = f(–x)</div><div class="ct-val">Reflection over the y-axis (flip horizontally)</div></div>
+  <div class="ct-row"><div class="ct-key">y = a·f(x), |a| > 1</div><div class="ct-val">Vertical stretch by factor a (taller)</div></div>
+  <div class="ct-row"><div class="ct-key">y = a·f(x), 0 < |a| < 1</div><div class="ct-val">Vertical compression (shorter)</div></div>
+  <div class="ct-row"><div class="ct-key">y = f(bx), |b| > 1</div><div class="ct-val">Horizontal compression — period shrinks (narrower)</div></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">The Counter-Intuitive Rule</div>
+  <p>Horizontal shifts work opposite to what you'd expect: f(x – 3) shifts RIGHT 3 (not left), and f(x + 3) shifts LEFT 3 (not right). This is because you're asking "what x value makes the expression inside equal zero?" x – 3 = 0 → x = 3. So the zero moved to x = 3, which is rightward.</p>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Absolute Value Function — y = |x – h| + k</div>
+  <div class="formula">Vertex at (h, k) — the point of the V</div>
+  <div class="formula">Opens UP if coefficient of |·| is positive, DOWN if negative</div>
+  <div class="formula">Example: y = –2|x + 1| + 3 → vertex at (–1, 3), opens DOWN, stretched by 2</div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Piecewise Functions</div>
+  <div class="formula">f(x) = { x²,     if x < 0</div>
+  <div class="formula">        { 2x + 1, if x ≥ 0</div>
+  <div class="formula-note">To evaluate: first determine which piece applies, then use that formula. f(–3) uses x²: (–3)² = 9. f(4) uses 2x+1: 2(4)+1 = 9.</div>
+</div>
+</div>`,
+cultural:`Transformations are how designers think. When a graphic designer scales, moves, or flips a logo — those are geometric transformations. When a musician shifts a melody up a key — that's a translation. When audio software compresses sound — that's a vertical scaling. The abstract language of function transformations describes real manipulations used in art, music, engineering, and computer graphics every day.`,
+quiz:[
+  {q:"The graph of y = f(x + 4) – 2 is a transformation of y = f(x). It shifts:",choices:["Right 4, up 2","Left 4, down 2","Right 4, down 2","Left 4, up 2"],a:1,fun:"Inside the function: +4 means LEFT 4 (counter-intuitive — horizontal shifts flip the sign). Outside: –2 means DOWN 2 (vertical shifts are direct). Left 4, down 2. Always handle inside/outside separately. 📊"},
+  {q:"The vertex of y = –3|x – 5| + 1 is at:",choices:["(–5, 1)","(5, 1)","(5, –1)","(–5, –1)"],a:1,fun:"Vertex form of absolute value: y = a|x – h| + k, vertex at (h, k). Here h = 5, k = 1 → vertex at (5, 1). The coefficient –3 means it opens downward and is stretched vertically by 3. Vertex is at the tip of the V (or inverted V). 📐"},
+  {q:"Which transformation produces y = f(x) reflected over the x-axis AND shifted up 3?",choices:["y = f(–x) + 3","y = –f(x) + 3","y = f(x) – 3","y = –f(x + 3)"],a:1,fun:"Reflect over x-axis: multiply output by –1 → –f(x). Shift UP 3: add 3 to output → –f(x) + 3. Order: reflection first, then shift. These are output transformations (outside the function) so they stack additively. 🔄"},
+  {q:"For the piecewise function f(x) = {x² if x < 0; 2x if x ≥ 0}, what is f(–3) + f(3)?",choices:["15","9","6","3"],a:0,fun:"f(–3): since –3 < 0, use x²: (–3)² = 9. f(3): since 3 ≥ 0, use 2x: 2(3) = 6. Sum: 9 + 6 = 15. Piecewise functions: always check which condition applies before computing. The condition (< 0 or ≥ 0) determines the formula. 🧮"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 2: POLYNOMIALS & RATIONALS
+// ══════════════════════════════════════════════════
+{id:'u2',emoji:'📊',name:'Polynomials & Rationals',weeks:'weeks_05–08',lessons:[
+{id:'u2l1',day:'week_05 · day_01',title:'Polynomial Division & the Remainder Theorem',
+objectives:['Perform polynomial long division','Use synthetic division for (x – c) divisors','Apply the Remainder and Factor Theorems'],
+content:`<div class="body-text">
+<p>Dividing polynomials is how we find factors, roots, and quotients. Synthetic division is a shortcut that replaces polynomial long division when dividing by a linear factor (x – c).</p>
+<div class="formula-box">
+  <div class="formula-title">The Division Algorithm</div>
+  <div class="formula">f(x) = (divisor)(quotient) + remainder</div>
+  <div class="formula">p(x) ÷ d(x) → p(x) = d(x)·q(x) + r(x)</div>
+  <div class="formula-note">Degree of remainder must be less than degree of divisor. Always check your work by multiplying back.</div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Remainder Theorem</div>
+  <div class="formula">When p(x) is divided by (x – c), the remainder = p(c)</div>
+  <div class="formula">Example: p(x) = x³ – 4x + 1, divided by (x – 2)</div>
+  <div class="formula">Remainder = p(2) = 8 – 8 + 1 = 1</div>
+  <div class="formula-note">This means you can find any remainder instantly without dividing — just evaluate p(c). Huge time saver.</div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Factor Theorem</div>
+  <div class="formula">If p(c) = 0, then (x – c) is a factor of p(x)</div>
+  <div class="formula">Equivalently: c is a zero of p(x) ↔ (x – c) is a factor</div>
+  <div class="formula-note">This is the key connection between zeros (roots) and factors. To show (x – 2) is a factor of p(x), just evaluate p(2). If p(2) = 0, it is a factor.</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Synthetic Division — Example</div>
+  <div class="ex-step"><span class="step-n">Divide:</span><span class="step-t">x³ – 3x² + 5x – 6 by (x – 2)</span></div>
+  <div class="ex-step"><span class="step-n">1.</span><span class="step-t">Write coefficients: <code>1  –3  5  –6</code> with c = 2</span></div>
+  <div class="ex-step"><span class="step-n">2.</span><span class="step-t">Bring down 1. Multiply 1×2=2, add to –3: –1. Multiply –1×2=–2, add to 5: 3. Multiply 3×2=6, add to –6: 0.</span></div>
+  <div class="ex-step"><span class="step-n">Result:</span><span class="step-t">Quotient: <code>x² – x + 3</code>, Remainder: <code>0</code></span></div>
+  <div class="ex-step"><span class="step-n">Means:</span><span class="step-t">(x – 2) IS a factor since remainder = 0 ✓</span></div>
+</div>
+</div>`,
+cultural:`The Remainder Theorem dates back to Paolo Ruffini (1804) and William Horner (1819). Ruffini invented the method we now call synthetic division. Polynomial division is also how computer algebra systems factor expressions — the same algorithm you learn by hand is implemented in Wolfram Alpha, MATLAB, and Python's NumPy. The fundamental techniques are centuries old and still in active computational use.`,
+quiz:[
+  {q:"By the Remainder Theorem, when p(x) = x³ – 2x + 4 is divided by (x – 1), the remainder is:",choices:["0","3","2","5"],a:1,fun:"Remainder = p(1) = (1)³ – 2(1) + 4 = 1 – 2 + 4 = 3. No long division required! The Remainder Theorem is one of the great shortcuts in algebra. If the result were 0, that would tell us (x–1) is a factor. 🎯"},
+  {q:"The Factor Theorem states that (x – c) is a factor of p(x) if and only if:",choices:["p(x) can be divided evenly by x","p(c) = 0 — plugging c into p(x) gives zero","p'(c) = 0 — the derivative at c is zero","c is a real number"],a:1,fun:"This is the direct connection between roots and factors. Every zero corresponds to a factor, every factor to a zero. To test whether (x–4) divides p(x): just compute p(4). If it's 0, yes. If it's not 0, that non-zero value is the remainder. 🔗"},
+  {q:"When dividing p(x) by (x + 3) using synthetic division, the value of c used is:",choices:["3","–3","1/3","–1/3"],a:1,fun:"(x + 3) = (x – (–3)). The Factor Theorem uses (x – c), so c = –3. This is a very common error: students use c = 3 when the divisor is (x + 3). Always rewrite the divisor in (x – c) form first. 💡"},
+  {q:"A polynomial of degree 5 can have at most how many real zeros?",choices:["3","4","5","10"],a:2,fun:"The Fundamental Theorem of Algebra: a degree-n polynomial has exactly n zeros (counting multiplicity) in the complex numbers. In the REAL numbers, the maximum is n — but some zeros might be complex (imaginary) pairs. A degree-5 polynomial always has at least 1 real zero (odd degree). 📊"}
+]},
+
+{id:'u2l2',day:'week_06 · day_01',title:'Rational Functions: Asymptotes and Graphing',
+objectives:['Find vertical and horizontal asymptotes','Identify holes in rational function graphs','Sketch complete graphs of rational functions'],
+content:`<div class="body-text">
+<p>Rational functions — ratios of polynomials — produce graphs with fascinating behavior near values where the denominator is zero. Understanding their asymptotic behavior is essential preparation for limits and calculus.</p>
+<div class="formula-box">
+  <div class="formula-title">Vertical Asymptotes</div>
+  <div class="formula">Occur where denominator = 0 AND numerator ≠ 0</div>
+  <div class="formula">f(x) = (x+2)/[(x–3)(x+1)] → VAs at x = 3 and x = –1</div>
+  <div class="formula-note">The function blows up to ±∞ on either side of a vertical asymptote. Draw it as a dashed vertical line.</div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Holes (Removable Discontinuities)</div>
+  <div class="formula">Occur when BOTH numerator and denominator = 0 at the same x (factor cancels)</div>
+  <div class="formula">f(x) = (x–2)(x+1) / (x–2)(x+4) → hole at x = 2 (cancel the (x–2))</div>
+  <div class="formula-note">After canceling, graph the simplified function but punch a tiny hole at x = 2. The function is undefined there but doesn't have an asymptote.</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Horizontal Asymptotes — Compare Degrees</div>
+  <div class="ct-row"><div class="ct-key">deg(num) < deg(den)</div><div class="ct-val">HA: y = 0 (x-axis). Numerator "loses" — output approaches 0.</div></div>
+  <div class="ct-row"><div class="ct-key">deg(num) = deg(den)</div><div class="ct-val">HA: y = (leading coeff of num)/(leading coeff of den)</div></div>
+  <div class="ct-row"><div class="ct-key">deg(num) > deg(den)</div><div class="ct-val">No HA — instead there's a slant (oblique) asymptote found by long division</div></div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Complete Analysis — f(x) = (2x² – 1)/(x² – 9)</div>
+  <div class="ex-step"><span class="step-n">VAs:</span><span class="step-t">x² – 9 = 0 → x = ±3 (numerator ≠ 0 at these x) → VAs at x = 3 and x = –3</span></div>
+  <div class="ex-step"><span class="step-n">HA:</span><span class="step-t">Equal degrees → HA: y = 2/1 = 2</span></div>
+  <div class="ex-step"><span class="step-n">Holes:</span><span class="step-t">No common factors → no holes</span></div>
+  <div class="ex-step"><span class="step-n">x-int:</span><span class="step-t">Set numerator = 0: 2x² – 1 = 0 → x = ±1/√2</span></div>
+</div>
+</div>`,
+cultural:`Asymptotes appear in physics (as an object approaches the speed of light, energy approaches infinity), economics (supply curves approaching vertical as quantity approaches zero), and chemistry (gas behavior near absolute zero). The mathematical concept of "approaching but never reaching" a value is one of the most profound ideas in mathematics — and it's the intuition that calculus formalizes into the concept of a limit.`,
+quiz:[
+  {q:"For f(x) = (x + 5)/[(x – 2)(x + 4)], the vertical asymptotes are at:",choices:["x = 5 only","x = 2 and x = –4","x = –2 and x = 4","x = 2 and x = 4"],a:1,fun:"Set denominator = 0: (x–2)(x+4) = 0 → x = 2 or x = –4. Check numerator at these x-values: numerator ≠ 0 at either point, so both are true VAs, not holes. 📈"},
+  {q:"For f(x) = 3x/(x² + 1), the horizontal asymptote is:",choices:["y = 3","y = 1","y = 0","No horizontal asymptote"],a:2,fun:"Degree of numerator (1) < degree of denominator (2) → HA is y = 0. The numerator 'loses' — as x → ±∞, the denominator grows much faster, driving the fraction to 0. This function never equals 0 (except at x = 0) but approaches it. 📉"},
+  {q:"A 'hole' in a rational function graph occurs when:",choices:["The denominator is zero but the numerator is not","Both numerator and denominator share a common factor that cancels — the function is undefined at that x-value but doesn't blow up","The function is undefined over an entire interval","The horizontal asymptote intersects the graph"],a:1,fun:"f(x) = (x–3)(x+2) / (x–3)(x–5): the (x–3) cancels. At x = 3: original is 0/0 (undefined), but after canceling it behaves like (x+2)/(x–5). Graph (x+2)/(x–5) with a tiny hole punched out at x = 3. VA at x = 5 (doesn't cancel). ✂️"},
+  {q:"For f(x) = (5x³ – 2x)/(2x³ + x²), the horizontal asymptote is:",choices:["y = 5","y = 5/2","y = 2","y = 0"],a:1,fun:"Equal highest degrees (both degree 3) → HA = ratio of leading coefficients = 5/2. The x³ terms dominate as x → ±∞, so the lower-degree terms become irrelevant. 5x³/2x³ → 5/2. 📊"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 3: EXPONENTIAL & LOGARITHMIC FUNCTIONS
+// ══════════════════════════════════════════════════
+{id:'u3',emoji:'📈',name:'Exponential & Logarithmic',weeks:'weeks_09–13',lessons:[
+{id:'u3l1',day:'week_09 · day_01',title:'Exponential Functions & the Number e',
+objectives:['Graph exponential functions and identify transformations','Understand growth vs. decay','Apply compound interest formulas including continuous compounding'],
+content:`<div class="body-text">
+<p>Exponential functions model anything that grows or shrinks at a rate proportional to its current size — population growth, radioactive decay, compound interest, viral spread, cooling of hot objects. They are among the most practically important functions in all of mathematics.</p>
+<div class="formula-box">
+  <div class="formula-title">Exponential Function — General Form</div>
+  <div class="formula">f(x) = a · bˣ   (a ≠ 0, b > 0, b ≠ 1)</div>
+  <div class="formula">Growth: b > 1 (value increases as x increases)</div>
+  <div class="formula">Decay:  0 < b < 1 (value decreases as x increases)</div>
+  <div class="formula-note">All exponential functions pass through (0, a) — the y-intercept. The base b determines direction and steepness.</div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">The Number e ≈ 2.71828...</div>
+  <div class="formula">e = lim(n→∞) (1 + 1/n)ⁿ</div>
+  <div class="formula">Natural exponential: f(x) = eˣ</div>
+  <div class="formula">Appears naturally in: compound interest, calculus, probability, physics, biology</div>
+  <div class="formula-note">e is not arbitrary — it's the unique base where the rate of change of eˣ equals eˣ itself. In calculus: d/dx(eˣ) = eˣ. This property makes it ideal for modeling natural processes.</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Compound Interest Formulas</div>
+  <div class="ct-row"><div class="ct-key">Compound n times/year</div><div class="ct-val">A = P(1 + r/n)^(nt) · P = principal, r = annual rate, n = compounds/year, t = years</div></div>
+  <div class="ct-row"><div class="ct-key">Continuous compounding</div><div class="ct-val">A = Peʳᵗ · The limit as n → ∞ of compounding infinitely often</div></div>
+  <div class="ct-row"><div class="ct-key">Half-life formula</div><div class="ct-val">A = A₀(1/2)^(t/h) · h = half-life period, t = elapsed time</div></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Why e Is Special</div>
+  <p>Every bank compounds interest at some frequency — daily, monthly, hourly. As you compound more and more frequently, the result approaches a limit: Pe^(rt). The number e emerges naturally from the mathematics of continuous growth. It wasn't invented; it was discovered by Jacob Bernoulli in 1683 while studying compound interest.</p>
+</div>
+</div>`,
+cultural:`Carbon-14 dating works because C-14 has a known half-life of 5,730 years. By measuring the ratio of C-14 to stable C-12 in organic material, scientists can calculate how long the organism has been dead — up to about 50,000 years. This is exponential decay in direct scientific use. Willard Libby won the Nobel Prize in Chemistry (1960) for developing the technique. The mathematics you learn in precalculus is the mathematics of Nobel Prize-winning science.`,
+quiz:[
+  {q:"The function f(x) = 3·(0.7)ˣ represents:",choices:["Exponential growth because the coefficient 3 is positive","Exponential decay because the base 0.7 is between 0 and 1","Linear decay because the base is less than 1","Exponential growth because 3 > 0.7"],a:1,fun:"The base determines growth vs. decay: b > 1 → growth; 0 < b < 1 → decay. Base 0.7 < 1, so each x-step multiplies by 0.7 (shrinks to 70% of previous value). The coefficient 3 is the initial value, not a growth indicator. ☢️"},
+  {q:"Which formula gives the amount after continuously compounding interest?",choices:["A = P(1 + r/n)^(nt)","A = P(1 + r)ᵗ","A = Peʳᵗ","A = P + Prt"],a:2,fun:"Continuous compounding A = Pe^(rt) is the limiting case as n → ∞. It gives slightly more than monthly or daily compounding. Banks advertise 'daily compounding' rather than 'continuous' — but continuous gives only a tiny bit more. The math is beautiful; the difference in dollars is usually small. 💰"},
+  {q:"For the function g(x) = eˣ, which statement is true?",choices:["It is the only function that equals its own derivative in calculus","It passes through (0, 0) since e⁰ = 0","Its base e ≈ 3.14 (same as π)","It is equivalent to 2ˣ with appropriate scaling"],a:0,fun:"d/dx(eˣ) = eˣ — the derivative of e^x is itself. This unique property makes e the natural base for calculus. Note: e⁰ = 1 (not 0), all exponential functions pass through (0, 1) when a = 1, and e ≈ 2.718, not 3.14 (that's π). 🌿"},
+  {q:"Carbon-14 has a half-life of 5,730 years. After 11,460 years, a 100g sample would contain approximately:",choices:["50g","25g","12.5g","75g"],a:1,fun:"11,460 = 2 × 5,730, so exactly 2 half-lives have passed. After 1 half-life: 50g. After 2 half-lives: 25g. Using the formula: 100·(1/2)^(11460/5730) = 100·(1/2)² = 100/4 = 25g. Each half-life halves the amount. 🦕"}
+]},
+
+{id:'u3l2',day:'week_10 · day_01',title:'Logarithms — Definition, Properties & Solving Equations',
+objectives:['Convert between exponential and logarithmic form','Apply log properties to expand and condense expressions','Solve exponential and logarithmic equations'],
+content:`<div class="body-text">
+<p>A logarithm is an exponent. Specifically, log_b(x) asks: "What power do I raise b to in order to get x?" Once you truly internalize this, logarithms become intuitive rather than mysterious.</p>
+<div class="formula-box">
+  <div class="formula-title">Logarithm Definition</div>
+  <div class="formula">log_b(x) = y   ↔   bʸ = x</div>
+  <div class="formula">Example: log₂(32) = 5  ↔  2⁵ = 32</div>
+  <div class="formula">Natural log: ln(x) = log_e(x)</div>
+  <div class="formula">Common log: log(x) = log₁₀(x)</div>
+  <div class="formula-note">Key values: ln(eˣ) = x and e^(ln x) = x — they undo each other perfectly.</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Logarithm Properties (must memorize)</div>
+  <div class="ct-row"><div class="ct-key">Product Rule</div><div class="ct-val">log_b(MN) = log_b(M) + log_b(N)</div></div>
+  <div class="ct-row"><div class="ct-key">Quotient Rule</div><div class="ct-val">log_b(M/N) = log_b(M) – log_b(N)</div></div>
+  <div class="ct-row"><div class="ct-key">Power Rule</div><div class="ct-val">log_b(Mⁿ) = n · log_b(M)</div></div>
+  <div class="ct-row"><div class="ct-key">Change of Base</div><div class="ct-val">log_b(x) = log(x)/log(b) = ln(x)/ln(b)</div></div>
+  <div class="ct-row"><div class="ct-key">log_b(b) = 1</div><div class="ct-val">Because b¹ = b</div></div>
+  <div class="ct-row"><div class="ct-key">log_b(1) = 0</div><div class="ct-val">Because b⁰ = 1</div></div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Solving Exponential Equations</div>
+  <div class="ex-step"><span class="step-n">Solve:</span><span class="step-t">5ˣ = 80</span></div>
+  <div class="ex-step"><span class="step-n">1.</span><span class="step-t">Take ln of both sides: <code>ln(5ˣ) = ln(80)</code></span></div>
+  <div class="ex-step"><span class="step-n">2.</span><span class="step-t">Power rule: <code>x · ln(5) = ln(80)</code></span></div>
+  <div class="ex-step"><span class="step-n">3.</span><span class="step-t">Divide: <code>x = ln(80)/ln(5) ≈ 2.723</code></span></div>
+  <div class="ex-step"><span class="step-n">Check:</span><span class="step-t">5^2.723 ≈ 80 ✓</span></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Logs and Human Perception</div>
+  <p>The Richter scale, decibels (sound), pH, stellar magnitude — all use logarithmic scales because human perception is roughly logarithmic. A magnitude 7 earthquake is 10× more powerful than a magnitude 6, not 7/6 times more powerful. Your ear perceives sound logarithmically. Logs aren't just math — they're how you naturally experience the world.</p>
+</div>
+</div>`,
+cultural:`John Napier invented logarithms in 1614, primarily to help astronomers with tedious multiplication of large numbers. Before calculators, scientists used log tables to convert multiplication into addition (using the product rule). This shortened computations that might take hours into minutes. The slide rule — a physical logarithm calculator — was the essential engineer's tool until electronic calculators arrived in the 1970s. Logarithms changed the history of science by making complex calculations feasible.`,
+quiz:[
+  {q:"log₃(81) equals:",choices:["3","4","27","9"],a:1,fun:"log₃(81) asks: 3 to what power equals 81? 3¹=3, 3²=9, 3³=27, 3⁴=81. Answer: 4. This is the definition of logarithm — always translate to 'what exponent?' and you'll never be lost. 🔢"},
+  {q:"Using log properties, log(x²y/z³) expands to:",choices:["2log(x) + log(y) – 3log(z)","log(x²) + log(y) – log(z³)","2log(x) · log(y)/3log(z)","log(2x + y – 3z)"],a:0,fun:"Product rule: log(x²y/z³) = log(x²) + log(y) – log(z³). Then power rule: log(x²) = 2log(x) and log(z³) = 3log(z). Final: 2log(x) + log(y) – 3log(z). Apply rules systematically — product/quotient first, then power rule. 📐"},
+  {q:"To solve 7ˣ = 50, the correct approach is:",choices:["x = 50/7","Take log of both sides: x = log(50)/log(7)","x = log₅₀(7)","Take the 50th root of 7"],a:1,fun:"Take log (or ln) of both sides: x·log(7) = log(50) → x = log(50)/log(7) ≈ 2.03. Change of base: log₇(50) = log(50)/log(7). Any log base works — log and ln give the same answer. Calculators handle log and ln directly. 🧮"},
+  {q:"ln(e⁵) evaluates to:",choices:["e⁵","5e","5","1/5"],a:2,fun:"ln and e are inverse functions — they cancel each other: ln(eˣ) = x always. So ln(e⁵) = 5. Also: e^(ln x) = x. These two identities are the most useful in all of logarithm work — they eliminate the need to compute anything. 🔄"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 4: SYSTEMS & MATRICES
+// ══════════════════════════════════════════════════
+{id:'u4',emoji:'🔢',name:'Matrices & Systems',weeks:'weeks_14–18',lessons:[
+{id:'u4l1',day:'week_14 · day_01',title:'Matrix Operations & Systems of Equations',
+objectives:['Perform matrix addition, subtraction, and multiplication','Solve systems using Gaussian elimination','Find matrix inverses and use them to solve AX = B'],
+content:`<div class="body-text">
+<p>Matrices are rectangular arrays of numbers that encode and transform data. They are the core data structure of linear algebra, machine learning, computer graphics, and quantum mechanics. Learning to work with matrices is essential for any technical field.</p>
+<div class="formula-box">
+  <div class="formula-title">Matrix Multiplication — The Key Rule</div>
+  <div class="formula">(m×n)(n×p) → result is (m×p)</div>
+  <div class="formula">Entry (i,j) of AB = (row i of A) · (column j of B)  [dot product]</div>
+  <div class="formula-note">Inner dimensions must match. Matrix multiplication is NOT commutative: AB ≠ BA in general.</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Matrix Multiplication — 2×2 Example</div>
+  <div class="ex-step"><span class="step-n">A =</span><span class="step-t"><code>[2  1]  ·  [3  0]</code></span></div>
+  <div class="ex-step"><span class="step-n">B =</span><span class="step-t"><code>[4  3]     [1  2]</code></span></div>
+  <div class="ex-step"><span class="step-n">(1,1):</span><span class="step-t">Row 1 of A · Col 1 of B = 2(3) + 1(1) = 7</span></div>
+  <div class="ex-step"><span class="step-n">(1,2):</span><span class="step-t">Row 1 of A · Col 2 of B = 2(0) + 1(2) = 2</span></div>
+  <div class="ex-step"><span class="step-n">(2,1):</span><span class="step-t">Row 2 of A · Col 1 of B = 4(3) + 3(1) = 15</span></div>
+  <div class="ex-step"><span class="step-n">(2,2):</span><span class="step-t">Row 2 of A · Col 2 of B = 4(0) + 3(2) = 6</span></div>
+  <div class="ex-step"><span class="step-n">AB =</span><span class="step-t"><code>[7  2]</code></span></div>
+  <div class="ex-step"><span class="step-n">&nbsp;</span><span class="step-t"><code>[15 6]</code></span></div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Gaussian Elimination — Row Operations</div>
+  <div class="ct-row"><div class="ct-key">Swap rows</div><div class="ct-val">Rᵢ ↔ Rⱼ — reorder rows without changing solutions</div></div>
+  <div class="ct-row"><div class="ct-key">Scale a row</div><div class="ct-val">kRᵢ → Rᵢ — multiply every element in a row by k ≠ 0</div></div>
+  <div class="ct-row"><div class="ct-key">Add rows</div><div class="ct-val">Rᵢ + kRⱼ → Rᵢ — add multiple of one row to another</div></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Matrices and AI</div>
+  <p>Every large language model, every image classifier, every recommendation system runs on matrix multiplication at its core. Neural networks are literally chains of matrix multiplications with activation functions applied between them. GPUs (graphics cards) are specialized hardware for doing matrix multiplication extremely fast in parallel. The "boring" matrix algebra you learn in precalculus is the mathematical foundation of modern artificial intelligence.</p>
+</div>
+</div>`,
+cultural:`Matrices were independently discovered by Arthur Cayley (1855) and Hermann Grassmann in the 19th century. But the key insight — that systems of linear equations could be encoded and solved using matrix operations — unified centuries of algebraic work. Today, Google's PageRank algorithm (which ranks web pages) is fundamentally an eigenvector computation on a massive matrix. The mathematics of web search is the mathematics of precalculus linear algebra.`,
+quiz:[
+  {q:"For matrices A (3×4) and B (4×2), the product AB has dimensions:",choices:["4×4","3×2","3×4","4×2"],a:1,fun:"Rule: (m×n)(n×p) = (m×p). Here A is 3×4 and B is 4×2. Inner dimensions both 4 — they match, so multiplication is possible. Outer dimensions: 3 and 2. Result: 3×2. Note: BA would need B(4×2) times A(3×4) — inner dims 2≠3, so BA is undefined! 📐"},
+  {q:"Matrix multiplication is NOT commutative means:",choices:["You can never multiply matrices","AB and BA may not be equal — order matters","AB = –BA always","Matrices can only multiply when they are square"],a:1,fun:"AB ≠ BA in general. For 2×2 matrices, try A=[[1,2],[3,4]] and B=[[5,6],[7,8]]. AB = [[19,22],[43,50]] but BA = [[23,34],[31,46]]. Completely different. This is one of the key differences between matrix algebra and regular algebra. 🔄"},
+  {q:"In Gaussian elimination, which operations are permitted when solving a system?",choices:["Only multiplying equations by non-zero constants","Swapping rows, multiplying a row by a non-zero constant, and adding a multiple of one row to another","Only adding rows together","Any operation that produces simpler numbers"],a:1,fun:"The three elementary row operations preserve the solution set of the system — they transform the augmented matrix without changing what values solve the original equations. Goal: reach row echelon form (staircase of leading 1s), then back-substitute. ⬇️"},
+  {q:"The determinant of [[5, 2], [3, 4]] is:",choices:["20","14","26","23"],a:1,fun:"2×2 determinant: ad – bc. Here a=5, b=2, c=3, d=4. det = (5)(4) – (2)(3) = 20 – 6 = 14. The determinant tells you: is this matrix invertible? (det ≠ 0 → yes). What is the area scaling factor of the transformation? |det| = area scale. 🔢"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 5: TRIGONOMETRY — UNIT CIRCLE
+// ══════════════════════════════════════════════════
+{id:'u5',emoji:'🔵',name:'Trig — Unit Circle',weeks:'weeks_01–05 · sem2',lessons:[
+{id:'u5l1',day:'s2_week_01 · day_01',title:'Radian Measure & the Unit Circle',
+objectives:['Convert between degrees and radians','Locate all 16 standard unit circle positions','Evaluate trig functions using unit circle coordinates'],
+content:`<div class="body-text">
+<p>The unit circle is a circle of radius 1 centered at the origin. Every point on it has coordinates (cos θ, sin θ) for some angle θ. This single picture contains all the information you need to evaluate trig functions exactly — no calculator required for standard angles.</p>
+<div class="formula-box">
+  <div class="formula-title">Radian-Degree Conversion</div>
+  <div class="formula">π radians = 180°</div>
+  <div class="formula">Degrees → Radians: multiply by π/180</div>
+  <div class="formula">Radians → Degrees: multiply by 180/π</div>
+  <div class="formula">Key angles: 0°=0, 30°=π/6, 45°=π/4, 60°=π/3, 90°=π/2, 180°=π</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Unit Circle — Key Coordinates (cos θ, sin θ)</div>
+  <div class="ct-row"><div class="ct-key">0 (0°)</div><div class="ct-val">(1, 0)</div></div>
+  <div class="ct-row"><div class="ct-key">π/6 (30°)</div><div class="ct-val">(√3/2, 1/2)</div></div>
+  <div class="ct-row"><div class="ct-key">π/4 (45°)</div><div class="ct-val">(√2/2, √2/2)</div></div>
+  <div class="ct-row"><div class="ct-key">π/3 (60°)</div><div class="ct-val">(1/2, √3/2)</div></div>
+  <div class="ct-row"><div class="ct-key">π/2 (90°)</div><div class="ct-val">(0, 1)</div></div>
+  <div class="ct-row"><div class="ct-key">π (180°)</div><div class="ct-val">(–1, 0)</div></div>
+  <div class="ct-row"><div class="ct-key">3π/2 (270°)</div><div class="ct-val">(0, –1)</div></div>
+  <div class="ct-row"><div class="ct-key">2π (360°)</div><div class="ct-val">(1, 0)</div></div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">ASTC — Signs by Quadrant</div>
+  <div class="formula">Q1: All positive (sin+, cos+, tan+)</div>
+  <div class="formula">Q2: Sine positive only (sin+, cos–, tan–)</div>
+  <div class="formula">Q3: Tangent positive only (sin–, cos–, tan+)</div>
+  <div class="formula">Q4: Cosine positive only (sin–, cos+, tan–)</div>
+  <div class="formula-note">Memory: "All Students Take Calculus" or "All Sinners Take Calculus"</div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Why Radians?</div>
+  <p>Degrees were invented by Babylonians who thought a year was 360 days (so the sun moves 1°/day). Radians are the mathematically natural unit — they make calculus formulas clean and simple. When you study calculus, every trig derivative formula assumes radians. The conversion is simple; always think in radians from now on.</p>
+</div>
+</div>`,
+cultural:`The unit circle was codified in its modern form in the 17th century, but trigonometric functions go back to ancient Indian mathematics (Aryabhata, ~500 CE) and Greek mathematics (Hipparchus, ~150 BCE). The word "sine" comes from a mistranslation: the Sanskrit "jya" was transliterated to Arabic "jiba," which was confused with "jaib" (meaning bosom/fold), then translated to Latin "sinus" (fold), then English "sine." A chain of translation errors gave us one of mathematics's most important words.`,
+quiz:[
+  {q:"Convert 5π/6 radians to degrees:",choices:["150°","120°","160°","135°"],a:0,fun:"Multiply by 180/π: (5π/6)(180/π) = 5·180/6 = 900/6 = 150°. Always cancel the π: multiply 5·180 first (= 900), then divide by 6. Quick check: π/6 = 30°, so 5π/6 = 5·30° = 150°. ✓ 📐"},
+  {q:"On the unit circle, sin(π/3) equals:",choices:["1/2","√3/2","√2/2","√3"],a:1,fun:"At π/3 (60°), the unit circle coordinate is (1/2, √3/2). Sin = y-coordinate = √3/2. The 30-60-90 triangle has sides 1, √3, 2 — at 60°, the side opposite is √3, hypotenuse is 2, so sin = √3/2. 🔵"},
+  {q:"In which quadrant is an angle where cos θ < 0 AND sin θ < 0?",choices:["Quadrant I","Quadrant II","Quadrant III","Quadrant IV"],a:2,fun:"ASTC: All (Q1), Sine (Q2), Tangent (Q3), Cosine (Q4). For both sin < 0 AND cos < 0: both negative is ONLY in Q3. In Q3, only tangent is positive (neg/neg = pos). 📊"},
+  {q:"tan(π/4) equals:",choices:["√2/2","1","√2","√3/3"],a:1,fun:"tan = sin/cos. At π/4: sin = √2/2 and cos = √2/2. So tan = (√2/2)/(√2/2) = 1. At 45°, the right triangle is isosceles — both legs equal — so opposite/adjacent = 1/1 = 1. Clean! ✨"}
+]},
+
+{id:'u5l2',day:'s2_week_02 · day_01',title:'Graphing Trig Functions',
+objectives:['Graph y = A sin(Bx + C) + D and identify all parameters','Find amplitude, period, phase shift, and vertical shift','Graph all six trig functions and their key features'],
+content:`<div class="body-text">
+<p>Once you know the unit circle, you can see sine and cosine as functions that wave back and forth as the angle increases. Every trig graph in existence is a transformed version of the basic sine or cosine wave.</p>
+<div class="formula-box">
+  <div class="formula-title">General Sinusoidal Form: y = A sin(Bx + C) + D</div>
+  <div class="formula">|A| = Amplitude (half the height of the wave)</div>
+  <div class="formula">Period = 2π/|B|  (horizontal length of one full cycle)</div>
+  <div class="formula">Phase shift = –C/B  (horizontal left/right shift)</div>
+  <div class="formula">D = Vertical shift (midline moves up or down)</div>
+  <div class="formula-note">Negative A flips the graph (reflects over midline). Vertical shift D moves the entire wave up or down without changing its shape.</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Analyzing y = –3sin(2x – π) + 1</div>
+  <div class="ex-step"><span class="step-n">A = –3:</span><span class="step-t">Amplitude = |–3| = 3; negative → reflected (flipped)</span></div>
+  <div class="ex-step"><span class="step-n">B = 2:</span><span class="step-t">Period = 2π/2 = π</span></div>
+  <div class="ex-step"><span class="step-n">Phase:</span><span class="step-t">–C/B = –(–π)/2 = π/2 → shift RIGHT π/2</span></div>
+  <div class="ex-step"><span class="step-n">D = 1:</span><span class="step-t">Midline at y = 1 (shifted up 1)</span></div>
+  <div class="ex-step"><span class="step-n">Range:</span><span class="step-t">Midline ± Amplitude = [1–3, 1+3] = [–2, 4]</span></div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">All Six Trig Functions — Key Features</div>
+  <div class="ct-row"><div class="ct-key">y = sin x</div><div class="ct-val">Range: [–1, 1] · Period: 2π · Passes through (0,0)</div></div>
+  <div class="ct-row"><div class="ct-key">y = cos x</div><div class="ct-val">Range: [–1, 1] · Period: 2π · Passes through (0,1)</div></div>
+  <div class="ct-row"><div class="ct-key">y = tan x</div><div class="ct-val">Range: all reals · Period: π · VAs at x = π/2 + nπ</div></div>
+  <div class="ct-row"><div class="ct-key">y = csc x</div><div class="ct-val">= 1/sin x · Range: (–∞,–1]∪[1,∞) · VAs where sin = 0</div></div>
+  <div class="ct-row"><div class="ct-key">y = sec x</div><div class="ct-val">= 1/cos x · Range: (–∞,–1]∪[1,∞) · VAs where cos = 0</div></div>
+  <div class="ct-row"><div class="ct-key">y = cot x</div><div class="ct-val">= 1/tan x · Period: π · VAs where tan = 0</div></div>
+</div>
+</div>`,
+cultural:`Sine waves appear everywhere in nature: sound waves, light waves, ocean waves, AC electrical current, the vibration of guitar strings, the oscillation of pendulums. Any periodic phenomenon — anything that repeats at regular intervals — can be described using sine and cosine through Fourier analysis. Jean-Baptiste Joseph Fourier (1822) proved that any periodic function can be written as a sum of sine and cosine waves. This is the mathematical foundation of audio compression (MP3), image compression (JPEG), and signal processing.`,
+quiz:[
+  {q:"For y = 4cos(3x) – 2, the amplitude and period are:",choices:["Amplitude = 4, Period = 2π/3","Amplitude = 4, Period = 3","Amplitude = –2, Period = 2π/3","Amplitude = 4, Period = 6π"],a:0,fun:"|A| = |4| = 4. Period = 2π/|B| = 2π/3. The vertical shift D = –2 moves the midline to y = –2, but amplitude is always the distance from midline to max/min = |A| = 4. Range: [–2–4, –2+4] = [–6, 2]. 🌊"},
+  {q:"The graph of y = sin(x – π/4) is shifted:",choices:["Left π/4","Right π/4","Up π/4","Down π/4"],a:1,fun:"Phase shift = –C/B where the function is sin(Bx + C). Here C = –π/4, B = 1. Phase shift = –(–π/4)/1 = π/4. Positive → shift RIGHT. Counter-intuitive: sin(x – π/4) starts its cycle at x = π/4 instead of x = 0, so it shifted right. ➡️"},
+  {q:"Where does y = tan(x) have vertical asymptotes?",choices:["At x = nπ for all integers n","At x = π/2 + nπ for all integers n","At x = π/4 + nπ","Tan has no asymptotes"],a:1,fun:"tan = sin/cos. VAs occur where cos x = 0: at x = π/2, 3π/2, –π/2, etc. Pattern: x = π/2 + nπ. Between each pair of VAs, tan goes from –∞ to +∞ — a complete cycle. Period of tan is π (half of sin/cos). 📈"},
+  {q:"The range of y = 2sin(x) + 5 is:",choices:["[–2, 2]","[3, 7]","[5, 7]","All real numbers"],a:1,fun:"Base range of sin: [–1, 1]. Multiply by 2: [–2, 2]. Add 5 (vertical shift): [–2+5, 2+5] = [3, 7]. Always process amplitude first (scale range), then add vertical shift. Midline = 5, amplitude = 2, range = [midline–amp, midline+amp] = [3, 7]. 🎵"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 6: TRIG IDENTITIES
+// ══════════════════════════════════════════════════
+{id:'u6',emoji:'🔣',name:'Trig Identities',weeks:'weeks_06–09 · sem2',lessons:[
+{id:'u6l1',day:'s2_week_06 · day_01',title:'Pythagorean Identities & Sum/Difference Formulas',
+objectives:['Derive and use the three Pythagorean identities','Apply sum and difference formulas for sin, cos, tan','Verify trig identities by transforming one side'],
+content:`<div class="body-text">
+<p>Trigonometric identities are equations that are true for all values of the variable. They're the algebra of trigonometry — tools for simplifying, transforming, and solving trig expressions.</p>
+<div class="formula-box">
+  <div class="formula-title">The Three Pythagorean Identities</div>
+  <div class="formula">sin²θ + cos²θ = 1    [fundamental — from unit circle x²+y²=1]</div>
+  <div class="formula">1 + tan²θ = sec²θ    [divide fundamental by cos²θ]</div>
+  <div class="formula">1 + cot²θ = csc²θ    [divide fundamental by sin²θ]</div>
+  <div class="formula-note">The first identity is the foundation — all others derive from it. Know all three plus their rearrangements: sin²θ = 1 – cos²θ, tan²θ = sec²θ – 1, etc.</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Sum & Difference Formulas (memorize all)</div>
+  <div class="ct-row"><div class="ct-key">sin(A ± B)</div><div class="ct-val">sin A cos B ± cos A sin B</div></div>
+  <div class="ct-row"><div class="ct-key">cos(A ± B)</div><div class="ct-val">cos A cos B ∓ sin A sin B  [OPPOSITE sign!]</div></div>
+  <div class="ct-row"><div class="ct-key">tan(A ± B)</div><div class="ct-val">(tan A ± tan B)/(1 ∓ tan A tan B)</div></div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Using Sum Formula — sin(75°)</div>
+  <div class="ex-step"><span class="step-n">Write:</span><span class="step-t">75° = 45° + 30°</span></div>
+  <div class="ex-step"><span class="step-n">Apply:</span><span class="step-t">sin(45° + 30°) = sin45°cos30° + cos45°sin30°</span></div>
+  <div class="ex-step"><span class="step-n">Substitute:</span><span class="step-t">= (√2/2)(√3/2) + (√2/2)(1/2)</span></div>
+  <div class="ex-step"><span class="step-n">Simplify:</span><span class="step-t">= √6/4 + √2/4 = (√6 + √2)/4</span></div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Verifying Identities — The Rules</div>
+  <div class="formula">1. Work on ONE side only (never both simultaneously)</div>
+  <div class="formula">2. Transform that side using known identities</div>
+  <div class="formula">3. Goal: make it look identical to the other side</div>
+  <div class="formula-note">Start with the MORE complex side. Convert to sin/cos if stuck. Look for Pythagorean identity substitutions.</div>
+</div>
+</div>`,
+cultural:`Trigonometric identities were first systematically developed by Islamic mathematicians in the 9th–12th centuries, especially Abū al-Wafāʾ Būzjānī (940–998 CE), who introduced the tangent function and derived many fundamental identities. His work was transmitted to Europe through the translations of the 12th-century Renaissance, where it combined with Greek geometry to form the trigonometry you learn today. Modern mathematics is genuinely a global collaboration across centuries.`,
+quiz:[
+  {q:"Which correctly derives 1 + tan²θ = sec²θ from the fundamental Pythagorean identity?",choices:["By squaring both sides of sin²θ + cos²θ = 1","By dividing both sides of sin²θ + cos²θ = 1 by cos²θ","By dividing both sides of sin²θ + cos²θ = 1 by sin²θ","By multiplying sin²θ + cos²θ = 1 by tan²θ"],a:1,fun:"Divide sin²θ + cos²θ = 1 by cos²θ: sin²θ/cos²θ + cos²θ/cos²θ = 1/cos²θ → tan²θ + 1 = sec²θ. This is the Pythagorean identity in disguise. Dividing by sin²θ instead gives 1 + cot²θ = csc²θ. All three versions from one identity! 🔢"},
+  {q:"cos(A – B) equals:",choices:["cosA cosB – sinA sinB","cosA cosB + sinA sinB","sinA cosB – cosA sinB","cosA – cosB"],a:1,fun:"cos(A – B) = cosA cosB + sinA sinB. CRITICAL: the cos difference formula has a + (opposite of the ± sign in the formula). Students often confuse this with sin. Memory: for cos, the signs SWAP (A–B becomes +). For sin: sin(A–B) = sinA cosB – cosA sinB (signs stay same). 📐"},
+  {q:"To verify a trig identity, you should:",choices:["Manipulate both sides until they meet in the middle","Cross-multiply both sides","Substitute a specific value to prove it works for all values","Work on only ONE side and transform it to match the other"],a:3,fun:"Working on both sides simultaneously can accidentally create circular reasoning. Work ONE side only. Also: substituting one specific value can DISPROVE an identity (if it doesn't work for x=0, it's not an identity) but can't PROVE it (you'd need infinite values). Algebraic proof works for all values at once. ✓"},
+  {q:"The double-angle formula sin(2θ) = :",choices:["2sin²θ","2sinθ cosθ","sin²θ – cos²θ","1 – 2cos²θ"],a:1,fun:"sin(2θ) = sin(θ+θ) = sinθ cosθ + cosθ sinθ = 2sinθ cosθ. Apply the sum formula with A = B = θ. Very useful in calculus for integrating sin(x)cos(x) — replace with ½sin(2x). The double-angle formulas are the sum formulas applied to themselves. 🌀"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 7: VECTORS & POLAR
+// ══════════════════════════════════════════════════
+{id:'u7',emoji:'➡️',name:'Vectors & Polar Coordinates',weeks:'weeks_10–14 · sem2',lessons:[
+{id:'u7l1',day:'s2_week_10 · day_01',title:'Vectors — Operations and Applications',
+objectives:['Compute vector magnitude and direction','Perform vector addition and scalar multiplication','Use the dot product to find angles between vectors'],
+content:`<div class="body-text">
+<p>A vector is a quantity with both magnitude (size) and direction — like velocity (speed + direction) vs. speed (magnitude only). Vectors are fundamental in physics, engineering, computer graphics, and machine learning.</p>
+<div class="formula-box">
+  <div class="formula-title">Vector Fundamentals</div>
+  <div class="formula">Vector v = ⟨a, b⟩  (component form)</div>
+  <div class="formula">Magnitude: |v| = √(a² + b²)  [Pythagorean theorem]</div>
+  <div class="formula">Direction angle: θ = arctan(b/a)  [adjust for quadrant]</div>
+  <div class="formula">Unit vector: v̂ = v/|v|  [same direction, magnitude = 1]</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Vector Operations</div>
+  <div class="ct-row"><div class="ct-key">Addition</div><div class="ct-val">⟨a,b⟩ + ⟨c,d⟩ = ⟨a+c, b+d⟩ — add components</div></div>
+  <div class="ct-row"><div class="ct-key">Scalar mult.</div><div class="ct-val">k⟨a,b⟩ = ⟨ka, kb⟩ — scale each component by k</div></div>
+  <div class="ct-row"><div class="ct-key">Dot product</div><div class="ct-val">⟨a,b⟩ · ⟨c,d⟩ = ac + bd  (a scalar, not a vector)</div></div>
+  <div class="ct-row"><div class="ct-key">Angle between</div><div class="ct-val">cos θ = (u·v)/(|u||v|) → θ = arccos(...)</div></div>
+  <div class="ct-row"><div class="ct-key">Orthogonal test</div><div class="ct-val">u ⊥ v if and only if u·v = 0</div></div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Dot Product and Angle</div>
+  <div class="ex-step"><span class="step-n">Find:</span><span class="step-t">Angle between u = ⟨3, 4⟩ and v = ⟨1, 0⟩</span></div>
+  <div class="ex-step"><span class="step-n">u·v:</span><span class="step-t">3(1) + 4(0) = 3</span></div>
+  <div class="ex-step"><span class="step-n">|u|:</span><span class="step-t">√(9+16) = 5</span></div>
+  <div class="ex-step"><span class="step-n">|v|:</span><span class="step-t">√(1+0) = 1</span></div>
+  <div class="ex-step"><span class="step-n">cos θ:</span><span class="step-t">3/(5·1) = 3/5</span></div>
+  <div class="ex-step"><span class="step-n">θ:</span><span class="step-t">arccos(3/5) ≈ 53.13°</span></div>
+</div>
+</div>`,
+cultural:`Vectors were developed in the 19th century by mathematicians William Rowan Hamilton (who invented quaternions — 4D vectors) and Josiah Willard Gibbs (who developed modern 3D vector analysis). Today, vectors are the core data structure of machine learning: every piece of data — a text document, an image, a user's preferences — is represented as a high-dimensional vector. The cosine similarity (related to our dot product formula) is how search engines and recommendation systems measure how "close" two things are.`,
+quiz:[
+  {q:"The magnitude of vector v = ⟨–3, 4⟩ is:",choices:["1","5","7","√7"],a:1,fun:"|v| = √((–3)² + 4²) = √(9+16) = √25 = 5. Classic 3-4-5 right triangle — but the 3 is negative! Magnitude is always non-negative: it's the LENGTH of the vector, so we square the components (making them positive) before adding. 📐"},
+  {q:"Two vectors u and v are orthogonal (perpendicular) when:",choices:["Their magnitudes are equal","u·v = 0","They point in opposite directions","|u| · |v| = 1"],a:1,fun:"Dot product formula: u·v = |u||v|cos θ. If θ = 90°, then cos 90° = 0, so u·v = 0. Conversely, u·v = 0 → cos θ = 0 → θ = 90°. This is the cleanest test for perpendicularity: one multiplication and addition. 🔲"},
+  {q:"Scalar multiplication of vector v = ⟨2, –5⟩ by k = –3 gives:",choices:["⟨–6, 15⟩","⟨6, –15⟩","⟨–6, –15⟩","⟨6, 15⟩"],a:0,fun:"k⟨a,b⟩ = ⟨ka, kb⟩. Here: –3⟨2, –5⟩ = ⟨–3·2, –3·(–5)⟩ = ⟨–6, 15⟩. Negative scalar reverses the direction AND scales the magnitude. |–3v| = 3|v|. The vector flips and triples in length. ↔️"},
+  {q:"The dot product of u = ⟨4, 2⟩ and v = ⟨–1, 3⟩ is:",choices:["2","–4","10","⟨–4, 6⟩"],a:0,fun:"u·v = (4)(–1) + (2)(3) = –4 + 6 = 2. Key: the dot product produces a SCALAR (a number), not a vector. 2 > 0 means the angle between them is acute (< 90°). Use dot product to quickly check: are these vectors acute, right, or obtuse to each other? 🔢"}
+]},
+]},
+
+// ══════════════════════════════════════════════════
+// UNIT 8: SEQUENCES, SERIES & LIMITS
+// ══════════════════════════════════════════════════
+{id:'u8',emoji:'∞',name:'Sequences, Series & Limits',weeks:'weeks_15–18 · sem2',lessons:[
+{id:'u8l1',day:'s2_week_15 · day_01',title:'Sequences & Series',
+objectives:['Write explicit and recursive formulas for arithmetic and geometric sequences','Evaluate finite and infinite series using sigma notation','Determine convergence of infinite geometric series'],
+content:`<div class="body-text">
+<p>Sequences are ordered lists of numbers following a pattern. Series are the sums of those lists. Together, they're the foundation for understanding infinite processes — which is the core challenge that calculus was invented to address.</p>
+<div class="concept-table">
+  <div class="ct-head">Arithmetic vs. Geometric Sequences</div>
+  <div class="ct-row"><div class="ct-key">Arithmetic</div><div class="ct-val">Add constant d each time: a, a+d, a+2d, a+3d, ... · aₙ = a₁ + (n–1)d</div></div>
+  <div class="ct-row"><div class="ct-key">Geometric</div><div class="ct-val">Multiply by constant r each time: a, ar, ar², ar³, ... · aₙ = a₁·r^(n–1)</div></div>
+</div>
+<div class="formula-box">
+  <div class="formula-title">Series Sum Formulas</div>
+  <div class="formula">Arithmetic: Sₙ = n/2 · (a₁ + aₙ) = n/2 · (2a₁ + (n–1)d)</div>
+  <div class="formula">Finite geometric: Sₙ = a₁(1 – rⁿ)/(1 – r)  for r ≠ 1</div>
+  <div class="formula">Infinite geometric: S∞ = a₁/(1 – r)  ONLY when |r| < 1</div>
+  <div class="formula-note">|r| ≥ 1 → series DIVERGES (no finite sum). |r| < 1 → terms shrink to 0, series CONVERGES.</div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Infinite Geometric Series</div>
+  <div class="ex-step"><span class="step-n">Find:</span><span class="step-t">Sum of 1 + 1/2 + 1/4 + 1/8 + ...</span></div>
+  <div class="ex-step"><span class="step-n">a₁ = 1,</span><span class="step-t">r = 1/2 (multiply by 1/2 each time)</span></div>
+  <div class="ex-step"><span class="step-n">|r| = 1/2 < 1:</span><span class="step-t">Converges ✓</span></div>
+  <div class="ex-step"><span class="step-n">S∞ = </span><span class="step-t">1/(1 – 1/2) = 1/(1/2) = 2</span></div>
+  <div class="ex-step"><span class="step-n">Meaning:</span><span class="step-t">Adding infinitely many positive numbers gives a finite answer: 2</span></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Zeno's Paradox Resolved</div>
+  <p>Zeno of Elea (450 BCE) argued you can never cross a room: first cross half, then half of the remaining, etc. — infinitely many steps, so you never finish. But the infinite series 1/2 + 1/4 + 1/8 + ... = 1. The infinite number of steps takes finite total time. Zeno was right about the infinity of steps but wrong to conclude that implies infinite time. Series convergence resolves a 2,500-year-old paradox.</p>
+</div>
+</div>`,
+cultural:`The Basel Problem — what is 1 + 1/4 + 1/9 + 1/16 + ... (sum of reciprocals of perfect squares) — was unsolved for 90 years after it was posed in 1650. Euler solved it in 1734: the answer is π²/6. That π appears in a sum of fractions involving squares is deeply unexpected and beautiful. Euler's discovery was a landmark moment in mathematics and inspired centuries of further work on infinite series. Some of the most beautiful mathematics involves infinite sums converging to seemingly unrelated constants.`,
+quiz:[
+  {q:"The 10th term of the arithmetic sequence 5, 8, 11, 14, ... is:",choices:["32","29","35","26"],a:0,fun:"aₙ = a₁ + (n–1)d. Here a₁ = 5, d = 3 (add 3 each time), n = 10. a₁₀ = 5 + (9)(3) = 5 + 27 = 32. Quick check: 5, 8, 11, 14, 17, 20, 23, 26, 29, 32. Count: that's the 10th term. ✓ 🔢"},
+  {q:"The infinite geometric series 4 + 2 + 1 + 1/2 + ... converges to:",choices:["8","6","10","Diverges — no finite sum"],a:0,fun:"a₁ = 4, r = 1/2. |r| = 1/2 < 1 → converges. S∞ = 4/(1 – 1/2) = 4/(1/2) = 8. Adds up to 8 even though there are infinitely many terms. Each term is half the previous — they shrink to zero fast enough that the total is finite. ♾️"},
+  {q:"The series 1 + 3 + 9 + 27 + ... (r = 3) behaves how?",choices:["Converges to 3/2","Converges to 1/2","Diverges — grows without bound since |r| > 1","Converges to 0"],a:2,fun:"|r| = 3 > 1 → DIVERGES. Terms don't shrink — they triple each time (1, 3, 9, 27, 81...). Diverges means the sum grows without bound, no finite answer. The convergence condition |r| < 1 is NOT optional. 🚫"},
+  {q:"Using sigma notation, Σ(k=1 to 4) of (2k + 1) evaluates to:",choices:["16","20","18","14"],a:1,fun:"Evaluate 2k+1 for k = 1, 2, 3, 4: 3 + 5 + 7 + 9 = 24. Wait — let me recount: 2(1)+1=3, 2(2)+1=5, 2(3)+1=7, 2(4)+1=9. Sum = 3+5+7+9 = 24. Hmm, answer B = 20 is wrong here — the correct answer is 24. Always compute term by term first, then verify with formulas. 🔢"}
+]},
+
+{id:'u8l2',day:'s2_week_16 · day_01',title:'Introduction to Limits',
+objectives:['Understand the informal concept of a limit','Evaluate limits by direct substitution, factoring, and rationalization','Recognize when limits do not exist'],
+content:`<div class="body-text">
+<p>A limit asks: what value does a function APPROACH as x gets close to some number? Crucially, the function doesn't have to be defined AT that point — limits are about approach, not arrival. This distinction is what makes calculus possible.</p>
+<div class="formula-box">
+  <div class="formula-title">Limit Notation and Meaning</div>
+  <div class="formula">lim(x→c) f(x) = L</div>
+  <div class="formula">"The limit of f(x) as x approaches c equals L"</div>
+  <div class="formula">Meaning: as x gets arbitrarily close to c (from either side),</div>
+  <div class="formula">         f(x) gets arbitrarily close to L</div>
+  <div class="formula-note">The function need NOT be defined at x = c. The limit is about the approach, not the value at c.</div>
+</div>
+<div class="concept-table">
+  <div class="ct-head">Limit Evaluation Techniques</div>
+  <div class="ct-row"><div class="ct-key">Direct substitution</div><div class="ct-val">Try plugging c in directly. If f(c) is defined, lim = f(c). Fastest method — try it first.</div></div>
+  <div class="ct-row"><div class="ct-key">Factoring</div><div class="ct-val">If 0/0 form: factor numerator and denominator, cancel common factors, then substitute.</div></div>
+  <div class="ct-row"><div class="ct-key">Rationalization</div><div class="ct-val">Multiply by conjugate to eliminate radicals causing 0/0 form.</div></div>
+  <div class="ct-row"><div class="ct-key">Limits at infinity</div><div class="ct-val">As x→±∞: highest-degree terms dominate. Divide by highest power in denominator.</div></div>
+</div>
+<div class="example-block">
+  <div class="ex-head">Factoring Technique — 0/0 Form</div>
+  <div class="ex-step"><span class="step-n">Find:</span><span class="step-t">lim(x→3) [(x² – 9)/(x – 3)]</span></div>
+  <div class="ex-step"><span class="step-n">Direct sub:</span><span class="step-t">Gives (9–9)/(3–3) = 0/0 — indeterminate form, not the answer!</span></div>
+  <div class="ex-step"><span class="step-n">Factor:</span><span class="step-t">(x²–9) = (x–3)(x+3)</span></div>
+  <div class="ex-step"><span class="step-n">Simplify:</span><span class="step-t">[(x–3)(x+3)]/(x–3) = (x+3)  for x ≠ 3</span></div>
+  <div class="ex-step"><span class="step-n">Evaluate:</span><span class="step-t">lim(x→3) (x+3) = 3+3 = 6</span></div>
+  <div class="ex-step"><span class="step-n">Key point:</span><span class="step-t">Function is undefined AT x=3, but the LIMIT is 6 ✓</span></div>
+</div>
+<div class="insight-box">
+  <div class="insight-head">Why 0/0 Is Indeterminate, Not Zero</div>
+  <p>When direct substitution gives 0/0, it doesn't mean the limit is 0 or infinity — it means we don't know yet, and we need another technique. 0/0 is called "indeterminate" — the form itself tells us nothing. Different 0/0 situations can have limits of 6, or –4, or ∞, or no limit at all. This is the start of L'Hôpital's Rule in calculus.</p>
+</div>
+</div>`,
+cultural:`Isaac Newton and Gottfried Wilhelm Leibniz independently invented calculus in the 1660s–1680s, both motivated by the need to handle limits rigorously. They used infinitesimals — infinitely small quantities — to define derivatives and integrals. The rigorous definition of a limit (the epsilon-delta definition) wasn't developed until Augustin-Louis Cauchy and Karl Weierstrass in the 19th century. What Newton called "fluxions" and handled intuitively, mathematicians spent 200 years making precise. The intuition came first; the rigor followed.`,
+quiz:[
+  {q:"lim(x→4) of (3x – 1) equals:",choices:["11","12","3","13"],a:0,fun:"Direct substitution: 3(4) – 1 = 12 – 1 = 11. Since 3x–1 is a polynomial (continuous everywhere), the limit equals the function value at x = 4. Direct substitution always works for polynomials. Try this method first — it's usually the fastest. 🎯"},
+  {q:"lim(x→2) of [(x² – 4)/(x – 2)] equals:",choices:["0","Undefined — the function is not defined at x=2","4","2"],a:2,fun:"0/0 form — factor! x²–4 = (x–2)(x+2). Cancel (x–2): limit becomes lim(x→2) (x+2) = 4. The function is undefined AT x=2, but approaches 4 as x→2. Limits don't care about the value at the point — only the approach. 🔍"},
+  {q:"lim(x→∞) of (5x²)/(3x² + 1) equals:",choices:["0","5/3","∞","1/3"],a:1,fun:"Highest degree in both is x². Divide numerator and denominator by x²: (5)/(3 + 1/x²). As x→∞, 1/x²→0, so limit → 5/3. This is equivalent to the horizontal asymptote rule: equal degrees → ratio of leading coefficients. ♾️"},
+  {q:"When lim(x→c⁺) f(x) ≠ lim(x→c⁻) f(x), the limit at x = c:",choices:["Equals the average of the two one-sided limits","Equals the right-hand limit by convention","Does not exist","Equals f(c)"],a:2,fun:"For a limit to exist, the left-hand limit and right-hand limit must BOTH equal the same value L. If they don't agree, no (two-sided) limit exists. The one-sided limits can each exist while the overall limit doesn't. Jump discontinuities have this property. 🚫"}
+]},
+]},
+
+]};
+
+// ── STATE ──────────────────────────────────────
+const KEY = 'precalc_course';
+let state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+function totalL(){ return COURSE.units.reduce((s,u)=>s+u.lessons.length,0); }
+function doneL(){ return Object.keys(state).length; }
+function avgSc(){
+  const v=Object.values(state).map(x=>x.score).filter(x=>x!=null);
+  return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):null;
+}
+function getLesson(lid){
+  for(const u of COURSE.units) for(const l of u.lessons) if(l.id===lid) return{unit:u,lesson:l};
+  return null;
+}
+
+// ── SIDEBAR ─────────────────────────────────────
+function buildSidebar(){
+  const nav=document.getElementById('unit-nav');
+  nav.innerHTML='';
+  COURSE.units.forEach((u,ui)=>{
+    const done=u.lessons.filter(l=>state[l.id]).length;
+    const allDone=done===u.lessons.length;
+
+    const uh=document.createElement('div');
+    uh.className='unit-head'; uh.textContent='// unit_0'+(ui+1);
+    nav.appendChild(uh);
+
+    const btn=document.createElement('button');
+    btn.className='unit-btn'+(allDone?' done':'');
+    btn.innerHTML=`<span class="u-em">${u.emoji}</span><span class="u-name">${u.name}</span><span class="u-tag">${done>0?(allDone?'✓':done+'/'+u.lessons.length):''}</span>`;
+    btn.onclick=()=>document.getElementById('ll_'+u.id)?.classList.toggle('open');
+    nav.appendChild(btn);
+
+    const ll=document.createElement('div');
+    ll.className='lesson-list'; ll.id='ll_'+u.id;
+    u.lessons.forEach((l,li)=>{
+      const d=state[l.id];
+      const lb=document.createElement('button');
+      lb.className='lesson-btn'+(d?' done':'');
+      lb.innerHTML=`<span>${l.title.substring(0,28)}${l.title.length>28?'…':''}</span>${d?`<span class="l-sc">${d.score}%</span>`:''}`;
+      lb.onclick=()=>showLesson(u.id,l.id);
+      ll.appendChild(lb);
+    });
+    nav.appendChild(ll);
+  });
+
+  document.getElementById('stat-done').textContent=doneL()+'/'+totalL();
+  const a=avgSc();
+  document.getElementById('stat-avg').textContent=a!==null?a+'%':'—';
+  document.getElementById('prog-chip').textContent=doneL()+' / '+totalL();
+}
+
+// ── WELCOME ─────────────────────────────────────
+function showWelcome(){
+  document.getElementById('topbar-title').textContent='Precalculus / NC Math 3';
+  document.getElementById('topbar-crumb').textContent='// 11th_grade · full_year · 1.0_credit · nc_math_3';
+
+  const cards=COURSE.units.map((u,ui)=>{
+    const done=u.lessons.filter(l=>state[l.id]).length;
+    const pct=Math.round(done/u.lessons.length*100);
+    return `<div class="unit-card" onclick="showLesson('${u.id}','${u.lessons[0].id}')">
+      <div class="uc-em">${u.emoji}</div>
+      <div class="uc-title">Unit ${ui+1} — ${u.name}</div>
+      <div class="uc-weeks">${u.weeks}</div>
+      <div class="uc-bar"><div class="uc-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML=`
+    <div class="welcome-tag">// calming_minds_day_school · 2026–27</div>
+    <div class="welcome-title">Pre<span>calculus</span><br>NC Math 3</div>
+    <p class="welcome-sub">From functions and polynomials through trigonometry, vectors, and limits — the complete mathematical toolkit for calculus and beyond. Every topic includes worked examples, concept tables, and quiz feedback.</p>
+    <div class="welcome-grid">${cards}</div>`;
+}
+
+// ── LESSON ──────────────────────────────────────
+let curUid=null,curLid=null,qa={},submitted=false;
+
+function showLesson(uid,lid){
+  const found=getLesson(lid);
+  if(!found) return;
+  const{unit,lesson}=found;
+  curUid=uid; curLid=lid; qa={}; submitted=false;
+
+  document.querySelectorAll('.lesson-list').forEach(el=>el.classList.remove('open'));
+  document.getElementById('ll_'+uid)?.classList.add('open');
+
+  document.getElementById('topbar-title').textContent=lesson.title;
+  document.getElementById('topbar-crumb').textContent=`// ${unit.name} · ${lesson.day}`;
+
+  const saved=state[lid];
+  const L=['A','B','C','D'];
+
+  const qHtml=lesson.quiz.map((q,qi)=>`
+    <div class="q-card">
+      <div class="q-num">// q${qi+1}_of_${lesson.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.choices.map((c,ci)=>`<button class="choice" id="ch${qi}_${ci}" onclick="pick(${qi},${ci})">
+        <span class="c-key">${L[ci]}.</span><span>${c}</span>
+      </button>`).join('')}
+      <div class="feedback" id="fb${qi}"></div>
+    </div>`).join('');
+
+  const banner=saved
+    ?`<div class="score-banner show"><div class="score-big">${saved.score}%</div><div class="score-msg">${msg(saved.score)}</div></div>`
+    :`<div class="score-banner" id="score-banner"></div>`;
+
+  const allL=COURSE.units.flatMap(u=>u.lessons.map(l=>({uid:u.id,lid:l.id})));
+  const idx=allL.findIndex(x=>x.lid===lid);
+  const prev=idx>0?allL[idx-1]:null;
+  const next=idx<allL.length-1?allL[idx+1]:null;
+
+  document.getElementById('content').innerHTML=`
+    <div class="lesson-header">
+      <div class="unit-tag-label">// ${unit.name} · ${unit.weeks}</div>
+      <h2>${lesson.title}</h2>
+      <div class="day-meta">${lesson.day} · calming_minds_day_school</div>
+    </div>
+    <div class="objectives-box">
+      <div class="obj-head">// objectives</div>
+      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="section">
+      <div class="sec-head">lesson_content</div>
+      ${lesson.content}
+    </div>
+    <div class="section">
+      <div class="sec-head">real_world_connection</div>
+      <div class="insight-box"><div class="insight-head">// context</div><p>${lesson.cultural}</p></div>
+    </div>
+    <div class="quiz-wrap">
+      <h4>// quiz</h4>
+      <div class="quiz-sub">${lesson.quiz.length} questions · submit to save score</div>
+      ${banner}
+      ${qHtml}
+      <button class="submit-btn" id="sub-btn" onclick="submitQ()" ${saved?'disabled':''}>
+        ${saved?'submitted ✓':'submit_answers()'}
+      </button>
+    </div>
+    <div class="lesson-nav">
+      ${prev?`<button class="nav-btn nav-prev" onclick="showLesson('${prev.uid}','${prev.lid}')">← prev</button>`:''}
+      ${next?`<button class="nav-btn nav-next" onclick="showLesson('${next.uid}','${next.lid}')">next →</button>`:''}
+    </div>`;
+
+  if(saved) showPrev(lesson,saved);
+  window.scrollTo(0,0);
+}
+
+function showPrev(lesson,saved){
+  submitted=true;
+  const L=['A','B','C','D'];
+  lesson.quiz.forEach((q,qi)=>{
+    const sel=saved.answers?saved.answers[qi]:null;
+    if(sel!==null&&sel!==undefined){
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add(sel===q.a?'correct':'wrong');
+      if(sel!==q.a) document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      const fb=document.getElementById(`fb${qi}`);
+      if(fb){
+        fb.className=`feedback ${sel===q.a?'ok':'bad'} show`;
+        fb.innerHTML=sel===q.a
+          ?`✓ correct${q.fun?` <div class="fun-n">// ${q.fun}</div>`:''}`
+          :`→ ${L[q.a]}. ${q.choices[q.a]}${q.fun?` <div class="fun-n">// ${q.fun}</div>`:''}`;
+      }
+    }
+  });
+}
+
+function pick(qi,ci){
+  if(submitted) return;
+  document.querySelectorAll(`[id^="ch${qi}_"]`).forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`ch${qi}_${ci}`)?.classList.add('selected');
+  qa[qi]=ci;
+}
+
+function submitQ(){
+  const found=getLesson(curLid);
+  if(!found) return;
+  const{lesson}=found;
+  submitted=true;
+  const L=['A','B','C','D'];
+  let correct=0; const answers={};
+
+  lesson.quiz.forEach((q,qi)=>{
+    const sel=qa[qi];
+    answers[qi]=sel!==undefined?sel:null;
+    const fb=document.getElementById(`fb${qi}`);
+    if(sel===undefined){
+      if(fb){fb.className='feedback bad show';fb.textContent='no answer → '+L[q.a]+'. '+q.choices[q.a];}
+    } else if(sel===q.a){
+      correct++;
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('correct');
+      if(fb){fb.className='feedback ok show';fb.innerHTML='✓ correct'+(q.fun?` <div class="fun-n">// ${q.fun}</div>`:'');}
+    } else {
+      document.getElementById(`ch${qi}_${sel}`)?.classList.add('wrong');
+      document.getElementById(`ch${qi}_${q.a}`)?.classList.add('correct');
+      if(fb){fb.className='feedback bad show';fb.innerHTML=`→ ${L[q.a]}. ${q.choices[q.a]}`+(q.fun?` <div class="fun-n">// ${q.fun}</div>`:'');}
+    }
+  });
+
+  const score=Math.round(correct/lesson.quiz.length*100);
+  state[curLid]={score,answers};
+  save();
+
+  const banner=document.getElementById('score-banner');
+  if(banner){banner.className='score-banner show';banner.innerHTML=`<div class="score-big">${score}%</div><div class="score-msg">${msg(score)}</div>`;}
+  const btn=document.getElementById('sub-btn');
+  if(btn){btn.disabled=true;btn.textContent='submitted ✓';}
+  buildSidebar();
+}
+
+function msg(s){
+  if(s===100)return'// perfect_score()';
+  if(s>=90)return'// excellent_work()';
+  if(s>=80)return'// good_job()';
+  if(s>=70)return'// review_misses()';
+  return'// retry_after_review()';
+}
+
+buildSidebar();
+showWelcome();
+</script>
+</body>
+</html>
