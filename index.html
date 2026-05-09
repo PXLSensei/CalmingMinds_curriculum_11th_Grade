@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calming Minds Day School — 2026–27 Curriculum</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #1a1a2e;
+  --navy2:   #16213e;
+  --navy3:   #0f3460;
+  --cyan:    #00d4ff;
+  --cyan-dim:   rgba(0,212,255,.12);
+  --cyan-glow:  rgba(0,212,255,.35);
+  --purple:  #9b59ff;
+  --purple-dim:  rgba(155,89,255,.12);
+  --purple-glow: rgba(155,89,255,.35);
+  --gold:    #f5c518;
+  --green:   #22c55e;
+  --green-dim: rgba(34,197,94,.15);
+  --rose:    #f43f5e;
+  --text:    #e8eaf6;
+  --dim:     #7986cb;
+  --dimmer:  #303a60;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Exo 2',system-ui,sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── ANIMATED BG ── */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);
+  background-size:50px 50px;
+  animation:gridDrift 20s linear infinite;
+}
+@keyframes gridDrift{from{background-position:0 0}to{background-position:50px 50px}}
+.bg-glow-l{position:fixed;left:-200px;top:30%;width:500px;height:500px;background:radial-gradient(circle,rgba(155,89,255,.15) 0%,transparent 70%);z-index:0;pointer-events:none;animation:pulseL 8s ease-in-out infinite;}
+.bg-glow-r{position:fixed;right:-200px;top:60%;width:500px;height:500px;background:radial-gradient(circle,rgba(0,212,255,.1) 0%,transparent 70%);z-index:0;pointer-events:none;animation:pulseR 10s ease-in-out infinite;}
+@keyframes pulseL{0%,100%{opacity:.6;transform:translateY(0)}50%{opacity:1;transform:translateY(-30px)}}
+@keyframes pulseR{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:.9;transform:translateY(20px)}}
+
+/* ── LAYOUT ── */
+.page{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px 80px;}
+
+/* ── HEADER ── */
+header{padding:48px 0 36px;text-align:center;}
+.school-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--cyan-dim);border:1px solid var(--cyan-glow);
+  border-radius:30px;padding:6px 18px;
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:20px;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Orbitron',sans-serif;font-size:clamp(28px,5.5vw,62px);font-weight:900;line-height:1.05;letter-spacing:.04em;color:#fff;margin-bottom:8px;}
+h1 .c1{color:var(--cyan);text-shadow:0 0 30px var(--cyan-glow);}
+h1 .c2{color:var(--purple);text-shadow:0 0 30px var(--purple-glow);}
+.subtitle{font-size:14px;color:var(--dim);letter-spacing:.06em;margin-bottom:28px;text-transform:uppercase;}
+
+/* ── HEADER STATS ── */
+.header-stats{
+  display:inline-flex;
+  background:rgba(255,255,255,.03);border:1px solid var(--dimmer);
+  border-radius:10px;overflow:hidden;
+}
+.hs-item{padding:12px 22px;text-align:center;border-right:1px solid var(--dimmer);}
+.hs-item:last-child{border-right:none;}
+.hs-num{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;color:var(--cyan);display:block;}
+.hs-label{font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+
+/* ── SECTION DIVIDER ── */
+.section-label{
+  font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--purple);margin:44px 0 18px;
+  display:flex;align-items:center;gap:14px;
+}
+.section-label::before,.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+
+/* ════════════════════════════════════
+   DAY TRACKER
+════════════════════════════════════ */
+.tracker-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:6px;
+}
+
+/* School day log card */
+.day-log-card{
+  background:var(--navy2);border:1px solid var(--dimmer);
+  border-top:3px solid var(--cyan);border-radius:12px;
+  padding:22px 24px;
+}
+.card-hdr{
+  font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.card-hdr-icon{font-size:16px;}
+
+/* date display */
+.today-display{
+  display:flex;align-items:center;gap:14px;margin-bottom:18px;
+}
+.today-date{
+  font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700;color:#fff;
+}
+.today-sub{font-size:12px;color:var(--dim);margin-top:3px;}
+.day-number-badge{
+  background:var(--cyan-dim);border:1px solid var(--cyan-glow);
+  border-radius:8px;padding:8px 14px;text-align:center;
+}
+.day-number-badge .num{font-family:'Orbitron',sans-serif;font-size:26px;color:var(--cyan);font-weight:700;}
+.day-number-badge .lbl{font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;}
+
+/* log session controls */
+.session-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.course-select{
+  flex:1;min-width:160px;
+  background:var(--navy3);border:1px solid var(--dimmer);
+  color:var(--text);border-radius:7px;padding:9px 12px;
+  font-family:'Exo 2',sans-serif;font-size:13px;cursor:pointer;
+  outline:none;
+}
+.course-select:focus{border-color:var(--cyan);}
+.course-select option{background:var(--navy2);}
+
+/* live timer */
+.live-timer{
+  display:none;align-items:center;gap:10px;
+  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);
+  border-radius:8px;padding:10px 14px;margin-bottom:14px;
+}
+.live-timer.running{display:flex;}
+.timer-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+.timer-course{font-size:13px;color:#9ae6b4;flex:1;}
+.timer-display{font-family:'Orbitron',sans-serif;font-size:18px;color:var(--green);font-weight:700;}
+
+/* today's log list */
+.today-sessions{margin-top:14px;}
+.ts-head{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.session-list{max-height:150px;overflow-y:auto;}
+.session-list::-webkit-scrollbar{width:4px;}
+.session-list::-webkit-scrollbar-track{background:transparent;}
+.session-list::-webkit-scrollbar-thumb{background:var(--dimmer);border-radius:2px;}
+.session-item{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 0;border-bottom:1px solid var(--dimmer);
+  font-size:12.5px;
+}
+.session-item:last-child{border-bottom:none;}
+.session-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.session-course{flex:1;color:var(--text);}
+.session-mins{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--cyan);}
+.session-time{font-size:10px;color:var(--dimmer);}
+.empty-state{font-size:12px;color:var(--dimmer);font-style:italic;padding:8px 0;}
+
+/* ── SCHOOL YEAR CALENDAR ── */
+.calendar-card{
+  background:var(--navy2);border:1px solid var(--dimmer);
+  border-top:3px solid var(--purple);border-radius:12px;
+  padding:22px 24px;display:flex;flex-direction:column;
+}
+.cal-nav{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.cal-month{font-family:'Orbitron',sans-serif;font-size:13px;color:#fff;flex:1;text-align:center;letter-spacing:.06em;}
+.cal-arrow{
+  background:none;border:1px solid var(--dimmer);color:var(--dim);
+  border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px;
+  transition:border-color .14s,color .14s;
+}
+.cal-arrow:hover{border-color:var(--purple);color:var(--purple);}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:3px;
+}
+.cal-dow{
+  text-align:center;font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dimmer);padding:4px 0;
+}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:6px;font-size:11px;color:var(--dim);cursor:default;
+  position:relative;transition:background .12s;
+}
+.cal-day.other-month{opacity:.25;}
+.cal-day.weekend{color:#4a5580;}
+.cal-day.today{
+  background:var(--cyan-dim);color:var(--cyan);
+  font-family:'Orbitron',sans-serif;font-weight:700;
+  border:1px solid var(--cyan-glow);
+}
+.cal-day.has-session{background:var(--green-dim);color:var(--green);font-weight:600;}
+.cal-day.has-session.today{background:var(--cyan-dim);}
+.cal-day.school-holiday{background:rgba(245,197,24,.1);color:var(--gold);}
+.cal-day.no-school{color:#2a3060;}
+/* session indicator dot */
+.cal-day.has-session::after{
+  content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--green);
+}
+.cal-day.today.has-session::after{background:var(--cyan);}
+
+/* day legend */
+.cal-legend{
+  display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;
+}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim);}
+.leg-dot{width:8px;height:8px;border-radius:50%;}
+
+/* ── TIME ANALYTICS ── */
+.analytics-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+}
+
+/* stat cards */
+.stat-card{
+  background:var(--navy2);border:1px solid var(--dimmer);
+  border-radius:10px;padding:18px 20px;
+}
+.sc-label{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.sc-value{font-family:'Orbitron',sans-serif;font-size:28px;color:var(--cyan);font-weight:700;}
+.sc-sub{font-size:11px;color:var(--dimmer);margin-top:4px;}
+
+/* per-course breakdown */
+.breakdown-card{
+  background:var(--navy2);border:1px solid var(--dimmer);
+  border-radius:12px;padding:22px 24px;
+  grid-column:span 3;
+}
+.course-row{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:10px;
+}
+.course-row:last-child{margin-bottom:0;}
+.cr-emoji{font-size:16px;flex-shrink:0;}
+.cr-name{font-size:13px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cr-bar-wrap{flex:2;background:var(--dimmer);border-radius:4px;height:6px;overflow:hidden;}
+.cr-bar{height:100%;border-radius:4px;transition:width .6s ease;}
+.cr-mins{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--dim);min-width:52px;text-align:right;}
+.cr-days{font-size:10px;color:var(--dimmer);min-width:38px;text-align:right;}
+
+/* ── COURSE GRID ── */
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:14px;}
+
+/* ── COURSE CARD ── */
+.course-card{
+  background:var(--navy2);border:1px solid var(--dimmer);
+  border-radius:14px;overflow:hidden;
+  text-decoration:none;color:var(--text);
+  display:flex;flex-direction:column;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+  position:relative;
+  opacity:0;transform:translateY(20px);
+  animation:cardIn .5s ease forwards;
+  animation-delay:var(--cd,0s);
+}
+@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
+.course-card:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.course-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cc,#fff);box-shadow:0 0 16px var(--cc,#fff);}
+.course-card:hover{border-color:var(--cc,#fff);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(var(--ccr,255),var(--ccg,255),var(--ccb,255),.15);}
+.course-card::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);transform:translateX(-100%);transition:transform .6s;border-radius:14px;}
+.course-card:hover::after{transform:translateX(100%);}
+
+.card-top{padding:22px 22px 14px;flex:1;}
+.card-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.card-num{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:.2em;color:var(--cc,#fff);font-weight:700;text-transform:uppercase;}
+.card-sep{width:1px;height:12px;background:var(--dimmer);}
+.card-credit{font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;}
+.card-icon{font-size:28px;margin-bottom:8px;display:block;}
+.card-title{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px;letter-spacing:.02em;}
+.card-desc{font-size:12px;color:var(--dim);line-height:1.6;}
+
+/* time badge on card */
+.card-time-badge{
+  display:flex;align-items:center;gap:6px;
+  margin-top:10px;
+  font-family:'Orbitron',sans-serif;font-size:10px;color:var(--cc,#aaa);
+  opacity:.8;
+}
+.ctb-bar{flex:1;height:2px;background:var(--dimmer);border-radius:1px;overflow:hidden;}
+.ctb-fill{height:100%;background:var(--cc,#aaa);border-radius:1px;transition:width .5s;}
+
+.card-bottom{
+  padding:12px 22px;border-top:1px solid var(--dimmer);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,0,0,.15);
+}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid var(--dimmer);color:var(--dim);}
+.card-arrow{width:28px;height:28px;border-radius:50%;background:var(--cc,#aaa);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--navy);flex-shrink:0;transition:transform .2s;}
+.course-card:hover .card-arrow{transform:translateX(3px);}
+
+/* Full-width card */
+.full-width{grid-column:1/-1;flex-direction:row;}
+.full-width .card-top{display:flex;align-items:center;gap:18px;padding:18px 22px;}
+.full-width .card-icon{font-size:32px;margin:0;flex-shrink:0;}
+.full-width .fw-text{flex:1;}
+.full-width .card-title{margin-bottom:3px;}
+.full-width .card-bottom{border-top:none;border-left:1px solid var(--dimmer);min-width:150px;flex-direction:column;gap:8px;align-items:flex-start;background:none;}
+
+/* ── PROGRESS / HOW IT WORKS ── */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;}
+.info-block{}
+.info-block .ib-head{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+.info-block p{font-size:13px;color:var(--dim);line-height:1.65;}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:36px 0 16px;border-top:1px solid var(--dimmer);margin-top:56px;}
+.footer-brand{font-family:'Orbitron',sans-serif;font-size:12px;color:var(--cyan);letter-spacing:.15em;margin-bottom:7px;}
+.footer-sub{font-size:12px;color:var(--dimmer);}
+.footer-sub a{color:var(--cyan);text-decoration:none;}
+.footer-sub a:hover{text-decoration:underline;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--navy3);border:1px solid var(--cyan-glow);
+  color:var(--cyan);border-radius:10px;
+  padding:12px 20px;font-size:13px;
+  font-family:'Exo 2',sans-serif;
+  transform:translateY(20px);opacity:0;
+  transition:all .3s;z-index:100;pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .tracker-grid{grid-template-columns:1fr;}
+  .analytics-grid{grid-template-columns:1fr 1fr;}
+  .breakdown-card{grid-column:span 2;}
+}
+@media(max-width:600px){
+  .header-stats{flex-wrap:wrap;}
+  .analytics-grid{grid-template-columns:1fr;}
+  .breakdown-card{grid-column:span 1;}
+  .full-width{flex-direction:column;}
+  .full-width .card-bottom{border-left:none;border-top:1px solid var(--dimmer);flex-direction:row;min-width:unset;width:100%;}
+  h1{font-size:28px;}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow-l"></div>
+<div class="bg-glow-r"></div>
+<div class="page">
+
+<header>
+  <div class="school-badge"><span class="dot"></span>NC DNPE Registered &middot; Non-Public School</div>
+  <h1><span class="c1">CALMING</span><br>MINDS<br><span class="c2">DAY SCHOOL</span></h1>
+  <p class="subtitle">2026&ndash;2027 Academic Curriculum &middot; 11th Grade</p>
+  <div class="header-stats">
+    <div class="hs-item"><span class="hs-num">8</span><span class="hs-label">Courses</span></div>
+    <div class="hs-item"><span class="hs-num">7.5</span><span class="hs-label">Credits</span></div>
+    <div class="hs-item"><span class="hs-num" id="h-days">0</span><span class="hs-label">Days Active</span></div>
+    <div class="hs-item"><span class="hs-num" id="h-hrs">0h</span><span class="hs-label">Total Time</span></div>
+  </div>
+</header>
+
+<div class="section-label">Today &amp; Activity</div>
+<div class="dashboard">
+  <div class="today-card">
+    <div class="card-hdr">&#x1F550; Today&rsquo;s Activity</div>
+    <div class="today-row">
+      <div><div class="t-date" id="today-date"></div><div class="t-day" id="today-weekday"></div></div>
+      <div class="school-day-chip"><span class="sdc-num" id="school-day-num">--</span><span class="sdc-lbl">School Day</span></div>
+    </div>
+    <div class="active-now" id="active-now">
+      <div class="an-pulse"></div>
+      <div class="an-text" id="an-course">Studying...</div>
+      <div class="an-timer" id="an-timer">0:00</div>
+    </div>
+    <div class="today-log-head">Sessions Today</div>
+    <div class="session-list" id="session-list">
+      <div class="empty-state">Open any course to start tracking automatically.</div>
+    </div>
+  </div>
+  <div class="calendar-card">
+    <div class="card-hdr">&#x1F4C6; School Year Calendar</div>
+    <div class="cal-nav">
+      <button class="cal-arrow" onclick="prevMonth()">&#8249;</button>
+      <div class="cal-month" id="cal-month-label"></div>
+      <button class="cal-arrow" onclick="nextMonth()">&#8250;</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--cyan)"></div>Today</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Session recorded</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Holiday</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Time Analytics</div>
+<div class="analytics-grid">
+  <div class="stat-card"><div class="sc-label">This Week</div><div class="sc-value" id="week-val">0m</div><div class="sc-sub" id="week-sub"></div></div>
+  <div class="stat-card"><div class="sc-label">This Month</div><div class="sc-value" id="month-val">0m</div><div class="sc-sub" id="month-sub"></div></div>
+  <div class="stat-card"><div class="sc-label">Daily Average</div><div class="sc-value" id="avg-val">0m</div><div class="sc-sub">Across all active days</div></div>
+  <div class="breakdown-card"><div class="card-hdr" style="margin-bottom:14px">&#x1F4C8; Time Per Course</div><div id="course-breakdown"><div class="empty-state">No sessions yet &mdash; time tracks automatically when you open a course.</div></div></div>
+</div>
+
+<div class="section-label">Core Academic Courses</div>
+<div class="course-grid">
+<a href="Course1_English_III.html" class="course-card" style="--cc:#c9a84c;--cd:.05s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 01</span><span class="card-sep"></span><span class="card-credit">1.0 Credit &middot; Full Year</span></div>
+    <span class="card-icon">&#x1F4D6;</span>
+    <div class="card-title">English III<br>American Literature</div>
+    <div class="card-desc">Harlem Renaissance through dystopian fiction. 7 units, 13 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-English III">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-English III" style="width:0%"></div></div><div class="ct-active" id="cta-English III"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">NC ELA</span><span class="tag">Required</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+<a href="Course2_US_History.html" class="course-card" style="--cc:#b22234;--cd:.10s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 02</span><span class="card-sep"></span><span class="card-credit">1.0 Credit &middot; Full Year</span></div>
+    <span class="card-icon">&#x1F3DB;&#xFE0F;</span>
+    <div class="card-title">U.S. History II<br>Reconstruction to Present</div>
+    <div class="card-desc">Civil Rights, Cold War, 9/11, and modern America. 8 units, 14 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-US History">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-US History" style="width:0%"></div></div><div class="ct-active" id="cta-US History"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">NC History</span><span class="tag">Required</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+<a href="Course3_Precalculus.html" class="course-card" style="--cc:#22c55e;--cd:.15s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 03</span><span class="card-sep"></span><span class="card-credit">1.0 Credit &middot; Full Year</span></div>
+    <span class="card-icon">&#x1F4D0;</span>
+    <div class="card-title">Precalculus<br>NC Math 3</div>
+    <div class="card-desc">Functions, trig, matrices, vectors, and limits. 8 units, 14 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-Precalculus">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-Precalculus" style="width:0%"></div></div><div class="ct-active" id="cta-Precalculus"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">NC Math 3</span><span class="tag">Required</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+<a href="Course4_Spanish3.html" class="course-card" style="--cc:#16a34a;--cd:.20s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 04</span><span class="card-sep"></span><span class="card-credit">1.0 Credit &middot; Full Year</span></div>
+    <span class="card-icon">&#x1F30E;</span>
+    <div class="card-title">Espa&ntilde;ol 3<br>Spanish 3 &mdash; Curso Completo</div>
+    <div class="card-desc">Intermediate-Mid to Intermediate-High ACTFL. 6 units, 61 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-Spanish 3">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-Spanish 3" style="width:0%"></div></div><div class="ct-active" id="cta-Spanish 3"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">World Language</span><span class="tag">Required</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+</div>
+
+<div class="section-label">Elective Courses</div>
+<div class="course-grid">
+<a href="Course5_AI_ML.html" class="course-card" style="--cc:#7c3aed;--cd:.25s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 05</span><span class="card-sep"></span><span class="card-credit">1.0 Credit &middot; CTE Elective</span></div>
+    <span class="card-icon">&#x1F916;</span>
+    <div class="card-title">AI &amp; Machine Learning<br>Fundamentals</div>
+    <div class="card-desc">Neural networks, LLMs, ethics, and safety. 7 units, 14 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-AI & ML">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-AI & ML" style="width:0%"></div></div><div class="ct-active" id="cta-AI & ML"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">CTE Elective</span><span class="tag">Full Year</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+<a href="Course6_TrueCrime.html" class="course-card" style="--cc:#c0392b;--cd:.30s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 06</span><span class="card-sep"></span><span class="card-credit">0.5 Credit &middot; Semester 1</span></div>
+    <span class="card-icon">&#x2696;&#xFE0F;</span>
+    <div class="card-title">True Crime &amp;<br>Criminal Justice</div>
+    <div class="card-desc">Forensic science, wrongful convictions, and reform. 5 units, 10 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-True Crime">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-True Crime" style="width:0%"></div></div><div class="ct-active" id="cta-True Crime"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">General Elective</span><span class="tag">Semester 1</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+<a href="Course7_PE_Health.html" class="course-card" style="--cc:#16a34a;--cd:.35s">
+  <div class="card-top">
+    <div class="card-meta"><span class="card-num">Course 07</span><span class="card-sep"></span><span class="card-credit">0.5 Credit &middot; Full Year</span></div>
+    <span class="card-icon">&#x1F4AA;</span>
+    <div class="card-title">Healthful Living<br>&amp; Physical Education</div>
+    <div class="card-desc">Fitness, nutrition, sleep, mental health, CPR/AED. 6 units, 13 lessons.</div>
+    <div class="card-time"><span class="ct-val" id="ct-PE & Health">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-PE & Health" style="width:0%"></div></div><div class="ct-active" id="cta-PE & Health"></div></div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">Health &amp; PE</span><span class="tag">CPR Certified</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+</div>
+
+<div class="section-label">Driver Education</div>
+<div class="course-grid">
+<a href="DriversEd_NC.html" class="course-card full-width" style="--cc:#f5c518;--cd:.40s">
+  <div class="card-top">
+    <span class="card-icon">&#x1F697;</span>
+    <div class="fw-text">
+      <div class="card-meta"><span class="card-num">NC Standard Driver Education</span><span class="card-sep"></span><span class="card-credit">DMV Knowledge Test Prep</span></div>
+      <div class="card-title">NC Driver&rsquo;s Education &mdash; Complete Course</div>
+      <div class="card-desc">GDL system, traffic laws, signs, defensive driving, emergencies + 25-question DMV practice test. 6 units, 12 lessons, 69 questions.</div>
+      <div class="card-time"><span class="ct-val" id="ct-Driver&#39;s Ed">0m</span><div class="ct-bar-wrap"><div class="ct-bar" id="ctb-Driver&#39;s Ed" style="width:0%"></div></div><div class="ct-active" id="cta-Driver&#39;s Ed"></div></div>
+    </div>
+  </div>
+  <div class="card-bottom"><div class="card-tags"><span class="tag">NC DMV Prep</span><span class="tag">25-Q Practice Test</span><span class="tag">80% Pass Threshold</span></div><div class="card-arrow">&#8594;</div></div>
+</a>
+</div>
+
+<div class="section-label">How It Works</div>
+<div style="background:var(--navy2);border:1px solid var(--dimmer);border-radius:14px;padding:26px 30px;opacity:0;animation:cardIn .5s ease .75s forwards">
+  <div class="info-grid">
+    <div><div class="ib-head">&#x26A1; Auto-Tracking</div><div class="ib-body">Time tracks automatically the moment you open a course. When you switch tabs or close the window it saves silently &mdash; no buttons, no input ever required.</div></div>
+    <div><div class="ib-head">&#x1F4BE; Same Device</div><div class="ib-body">All data lives in your browser&rsquo;s local storage. Return to this page on the same device and browser to see your full history.</div></div>
+    <div><div class="ib-head">&#x1F4C5; Session Merging</div><div class="ib-body">If you study the same course multiple times within 30 minutes, those sessions merge automatically into one clean entry.</div></div>
+    <div><div class="ib-head">&#x1F7E2; Live Updates</div><div class="ib-body">This page refreshes every 30 seconds. Open a course in another tab and the green active dot appears here within half a minute.</div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">CALMING MINDS DAY SCHOOL</div>
+  <div class="footer-sub">2026&ndash;2027 Academic Year &middot; 11th Grade &middot; NC DNPE Registered<br>Curriculum by <a href="https://productivemind.ai" target="_blank">ProductiveMind.AI</a> &middot; <a href="mailto:support@productivemind.ai">support@productivemind.ai</a></div>
+</footer>
+</div>
+
+<script>
+var KEY="cms_tracker_v1";
+var SS=new Date(2026,7,17),SE=new Date(2027,4,21);
+var HOL=new Set(["2026-09-07","2026-11-11","2026-11-25","2026-11-26","2026-11-27","2026-12-21","2026-12-22","2026-12-23","2026-12-24","2026-12-25","2026-12-28","2026-12-29","2026-12-30","2026-12-31","2027-01-01","2027-01-18","2027-02-15","2027-04-02","2027-04-05","2027-04-06","2027-04-07","2027-04-08","2027-04-09","2027-05-31"]);
+var CC={"English III":"#c9a84c","US History":"#b22234","Precalculus":"#22c55e","Spanish 3":"#16a34a","AI & ML":"#7c3aed","True Crime":"#c0392b","PE & Health":"#16a34a","Driver's Ed":"#f5c518"};
+var EM={"English III":"📖","US History":"🏛️","Precalculus":"📐","Spanish 3":"🌎","AI & ML":"🤖","True Crime":"⚖️","PE & Health":"💪","Driver's Ed":"🚗"};
+function pad(n){return String(n).padStart(2,"0");}
+function ds(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function today(){return ds(new Date());}
+function fmt(s){if(!s)return"0m";var m=Math.floor(s/60);if(m<60)return m+"m";return Math.floor(m/60)+"h "+(m%60?m%60+"m":"");}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{sessions:[]};}catch(e){return{sessions:[]};}}
+function isWE(d){return d.getDay()===0||d.getDay()===6;}
+function isSD(d){var s=ds(d);return d>=SS&&d<=SE&&!isWE(d)&&!HOL.has(s);}
+function sdNum(t){var c=0,d=new Date(SS);while(d<=t){if(isSD(d))c++;d.setDate(d.getDate()+1);}return c;}
+
+function rHeader(){
+  var n=new Date();
+  document.getElementById("today-date").textContent=n.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+  document.getElementById("today-weekday").textContent=n.toLocaleDateString("en-US",{weekday:"long"});
+  document.getElementById("school-day-num").textContent=isSD(n)?sdNum(n):"--";
+  var d=load(),total=d.sessions.reduce(function(a,s){return a+(s.secs||0);},0);
+  var days=new Set(d.sessions.map(function(s){return s.date;})).size;
+  document.getElementById("h-days").textContent=days;
+  var h=total/3600;
+  document.getElementById("h-hrs").textContent=h<1?Math.floor(total/60)+"m":Math.floor(h)+"h";
+}
+
+function rToday(){
+  var d=load(),t=today();
+  var s=d.sessions.filter(function(x){return x.date===t;});
+  var el=document.getElementById("session-list");
+  if(!s.length){el.innerHTML="<div class='empty-state'>Open any course to start tracking automatically.</div>";return;}
+  el.innerHTML=s.map(function(x){return"<div class='session-item'><div class='s-dot' style='background:"+(CC[x.course]||"#555")+"'></div><div class='s-course'>"+x.course+"</div><div class='s-dur'>"+fmt(x.secs||0)+"</div><div class='s-time'>"+(x.time||"")+"</div></div>";}).join("");
+}
+
+function rAnalytics(){
+  var d=load(),s=d.sessions,n=new Date();
+  var dow=n.getDay(),ws=new Date(n);
+  ws.setDate(n.getDate()-(dow===0?6:dow-1));ws.setHours(0,0,0,0);
+  var we=new Date(ws);we.setDate(ws.getDate()+6);we.setHours(23,59,59,999);
+  var wk=s.filter(function(x){var d=new Date(x.date+"T12:00:00");return d>=ws&&d<=we;}).reduce(function(a,x){return a+(x.secs||0);},0);
+  var ms=new Date(n.getFullYear(),n.getMonth(),1),me=new Date(n.getFullYear(),n.getMonth()+1,0,23,59,59);
+  var mo=s.filter(function(x){var d=new Date(x.date+"T12:00:00");return d>=ms&&d<=me;}).reduce(function(a,x){return a+(x.secs||0);},0);
+  var days=new Set(s.map(function(x){return x.date;})).size;
+  var total=s.reduce(function(a,x){return a+(x.secs||0);},0);
+  var avg=days?Math.round(total/days):0;
+  document.getElementById("week-val").textContent=fmt(wk);
+  document.getElementById("week-sub").textContent=ws.toLocaleDateString("en-US",{month:"short",day:"numeric"})+" - "+we.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+  document.getElementById("month-val").textContent=fmt(mo);
+  document.getElementById("month-sub").textContent=n.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+  document.getElementById("avg-val").textContent=fmt(avg);
+  var pc={};Object.keys(CC).forEach(function(c){pc[c]=0;});
+  s.forEach(function(x){if(pc[x.course]!==undefined)pc[x.course]+=(x.secs||0);});
+  var mx=Math.max.apply(null,Object.values(pc).concat([1]));
+  var ent=Object.entries(pc).filter(function(e){return e[1]>0;}).sort(function(a,b){return b[1]-a[1];});
+  var bd=document.getElementById("course-breakdown");
+  if(!ent.length){bd.innerHTML="<div class='empty-state'>No sessions yet.</div>";}
+  else{bd.innerHTML=ent.map(function(e){var c=e[0],sc=e[1];var pct=Math.round(sc/mx*100);var dd=new Set(s.filter(function(x){return x.course===c;}).map(function(x){return x.date;})).size;return"<div class='course-row'><span class='cr-emoji'>"+(EM[c]||"📚")+"</span><span class='cr-name'>"+c+"</span><div class='cr-bar-wrap'><div class='cr-bar' style='width:"+pct+"%;background:"+(CC[c]||"#555")+"'></div></div><span class='cr-time'>"+fmt(sc)+"</span><span class='cr-days'>"+dd+"d</span></div>";}).join("");}
+  Object.keys(CC).forEach(function(c){var sc=pc[c]||0;var pct=Math.round(sc/mx*100);var el=document.getElementById("ct-"+c);var bar=document.getElementById("ctb-"+c);if(el)el.textContent=sc?fmt(sc):"0m";if(bar)bar.style.width=pct+"%";});
+}
+
+var calY=new Date().getFullYear(),calM=new Date().getMonth();
+function rCal(){
+  var d=load(),sd=new Set(d.sessions.map(function(s){return s.date;})),t=today();
+  document.getElementById("cal-month-label").textContent=new Date(calY,calM,1).toLocaleDateString("en-US",{month:"long",year:"numeric"}).toUpperCase();
+  var dw=["Su","Mo","Tu","We","Th","Fr","Sa"];
+  var first=new Date(calY,calM,1).getDay(),dim=new Date(calY,calM+1,0).getDate(),prev=new Date(calY,calM,0).getDate();
+  var h=dw.map(function(x){return"<div class='cal-dow'>"+x+"</div>";}).join("");
+  for(var i=first-1;i>=0;i--)h+="<div class='cal-day other-month'>"+(prev-i)+"</div>";
+  for(var dd=1;dd<=dim;dd++){var dt=new Date(calY,calM,dd);var dstr=ds(dt);var cl="cal-day";if(dstr===t)cl+=" today";if(sd.has(dstr))cl+=" has-session";if(HOL.has(dstr))cl+=" holiday";if(isWE(dt))cl+=" weekend";if(dt<SS||dt>SE)cl+=" other-month";h+="<div class='"+cl+"'>"+(dd)+"</div>";}
+  var rem=(first+dim)%7;rem=rem?7-rem:0;
+  for(var dd=1;dd<=rem;dd++)h+="<div class='cal-day other-month'>"+dd+"</div>";
+  document.getElementById("cal-grid").innerHTML=h;
+}
+function prevMonth(){calM--;if(calM<0){calM=11;calY--;}rCal();}
+function nextMonth(){calM++;if(calM>11){calM=0;calY++;}rCal();}
+
+var lTO=null;
+function checkLive(){
+  var d=load(),n=Date.now(),cut=n-90000,t=today(),live=null;
+  d.sessions.forEach(function(s){if(s.date===t&&s._lastUpdate&&s._lastUpdate>cut){if(!live||s._lastUpdate>live._lastUpdate)live=s;}});
+  var el=document.getElementById("active-now");
+  if(live){
+    el.classList.add("show");
+    document.getElementById("an-course").textContent="Studying "+live.course+"...";
+    document.getElementById("an-timer").textContent=fmt(live.secs||0);
+    Object.keys(CC).forEach(function(c){var dot=document.getElementById("cta-"+c);if(dot)dot.classList.toggle("show",c===live.course);});
+    clearTimeout(lTO);lTO=setTimeout(function(){el.classList.remove("show");Object.keys(CC).forEach(function(c){var dot=document.getElementById("cta-"+c);if(dot)dot.classList.remove("show");});},95000);
+  }
+}
+
+function all(){rHeader();rToday();rAnalytics();rCal();checkLive();}
+all();
+setInterval(all,30000);
+</script>
+</body>
+</html>

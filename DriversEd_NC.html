@@ -1,6 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var COURSE = "Driver's Ed";
+  var KEY    = 'cms_tracker_v1';
+  var start  = null;
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function todayStr(){
+    var d = new Date();
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  }
+  function nowTime(){
+    var d = new Date();
+    return pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY))||{sessions:[]}; }
+    catch(e){ return {sessions:[]}; }
+  }
+  function save(d){ localStorage.setItem(KEY, JSON.stringify(d)); }
+
+  function flush(){
+    if(!start) return;
+    var secs = Math.round((Date.now()-start)/1000);
+    start = null;
+    if(secs < 5) return; // ignore accidental flickers < 5 seconds
+    var d = load();
+    // merge into an existing session for today+course if within 30 min gap
+    var today = todayStr();
+    var cutoff = Date.now() - 30*60*1000;
+    var existing = null;
+    for(var i=d.sessions.length-1; i>=0; i--){
+      var s = d.sessions[i];
+      if(s.course===COURSE && s.date===today && s._lastUpdate && s._lastUpdate > cutoff){
+        existing = s; break;
+      }
+    }
+    if(existing){
+      existing.secs = (existing.secs||0) + secs;
+      existing._lastUpdate = Date.now();
+    } else {
+      d.sessions.push({
+        id: Date.now(),
+        date: today,
+        time: nowTime(),
+        course: COURSE,
+        secs: secs,
+        _lastUpdate: Date.now()
+      });
+    }
+    save(d);
+  }
+
+  function begin(){
+    if(!start) start = Date.now();
+  }
+
+  // Page Visibility API
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ flush(); } else { begin(); }
+  });
+
+  // Tab/window close
+  window.addEventListener('beforeunload', flush);
+  window.addEventListener('pagehide', flush);
+
+  // Start immediately if visible
+  if(!document.hidden) begin();
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NC Driver's Education — Calming Minds Day School</title>
@@ -875,6 +946,57 @@ quiz:[
 ]},
 ]},
 
+
+// ══════════════════════════════════════
+// UNIT 7: NC DMV PRACTICE TEST
+// ══════════════════════════════════════
+{id:'u7', emoji:'📝', name:'DMV Practice Test', weeks:'Final · 25 Questions', lessons:[
+{id:'u7l1', day:'DMV Simulation', title:'NC DMV Knowledge Practice Test — 25 Questions',
+objectives:['Demonstrate readiness for the NC DMV written knowledge test','Score at least 20/25 (80%) — the passing threshold','Identify any topic areas needing additional review before your real test'],
+content:`<div class="body-text">
+<p>This practice test simulates the NC DMV knowledge examination. Like the real test, it contains 25 questions drawn from all topic areas in the NC Driver's Handbook. You need <strong>20 correct (80%)</strong> to pass.</p>
+<div class="sign-box">
+  <div class="sb-head">About the Real NC DMV Knowledge Test</div>
+  <div class="sb-row"><div class="sb-key">Questions</div><div class="sb-val">25 multiple-choice questions</div></div>
+  <div class="sb-row"><div class="sb-key">Passing score</div><div class="sb-val">20 correct (80%) — you may miss 5</div></div>
+  <div class="sb-row"><div class="sb-key">Retake policy</div><div class="sb-val">Up to 3 attempts; after 3 failures, a waiting period is imposed</div></div>
+  <div class="sb-row"><div class="sb-key">Format</div><div class="sb-val">Multiple choice; questions drawn from the NC Driver's Handbook</div></div>
+  <div class="sb-row"><div class="sb-key">Topics covered</div><div class="sb-val">Traffic signs, traffic laws, safe driving practices — all topics in this course</div></div>
+</div>
+<div class="tip-box">
+  <div class="tb-head">Practice Test Instructions</div>
+  <p>Answer all 25 questions below, then submit to see your score, correct answers, and explanations. This test can be retaken as many times as you like — each submission is scored independently. Use the detailed feedback to identify weak areas and review the relevant lessons before your real DMV appointment.</p>
+</div>
+</div>`,
+cultural:`The NC DMV knowledge test is administered at any NC Division of Motor Vehicles driver's license office. You can schedule an appointment online at ncdot.gov/dmv. Bring your required documents (proof of identity, Social Security number, two proofs of NC residency, and if under 18, a parent or guardian). The test is taken on a computer terminal. Results are immediate. If you've studied this course and can consistently score 20/25 or higher on this practice test, you are ready for your appointment.`,
+quiz:[
+  {q:"NC's Graduated Driver Licensing (GDL) system requires a Limited Learner's Permit holder to complete how many total practice hours before being eligible for a Limited Provisional License?",choices:["30 hours total","45 hours total, including 5 nighttime","60 hours total, including 10 nighttime hours","75 hours total, including 15 nighttime hours"],a:2,fun:"60 hours total with at least 10 of those hours driven at night. These must be logged — NC requires parents/guardians to certify the hours. The night requirement exists because nighttime driving is where new drivers face the highest crash risk per mile. 🌙"},
+  {q:"You are driving in a residential area with no posted speed limit signs. The maximum speed limit is:",choices:["25 mph","35 mph","45 mph","55 mph"],a:1,fun:"35 mph is NC's statutory speed limit in residential and business districts when no speed limit signs are posted. Remember: the posted limit is only the maximum under ideal conditions — the basic speed law may require slower speeds. 🏘️"},
+  {q:"At a 4-way stop, which vehicle has the right of way when two cars arrive at exactly the same time from perpendicular directions?",choices:["The vehicle traveling at higher speed","The vehicle that honks first","The vehicle on the left yields to the vehicle on the right","The vehicle turning has priority over the vehicle going straight"],a:2,fun:"Yield to the right at a 4-way stop tie. If you arrive simultaneously with a car on your left: you go. If you arrive simultaneously with a car on your right: they go. This rule resolves the most common tie scenario. ⚖️"},
+  {q:"A flashing yellow traffic signal means:",choices:["Stop completely and wait for a green signal","The signal is about to turn red — prepare to stop","Slow down and proceed with caution — treat as a yield situation","The signal is malfunctioning — stop and wait for police"],a:2,fun:"Flashing yellow = yield. Flashing red = stop (treat as stop sign). Both indicate the normal signal cycle is not operating — either due to low traffic volume off-hours or a malfunction. 🟡"},
+  {q:"When must NC drivers use headlights?",choices:["Only between midnight and 5am","Only in complete darkness when you cannot see without them","From 30 minutes after sunset to 30 minutes before sunrise, and when visibility is less than 400 feet","Only during officially declared hazardous weather conditions"],a:2,fun:"30 min after sunset, 30 min before sunrise, and anytime visibility drops below 400 feet (rain, fog, smoke). Many drivers use daytime running lights and mistakenly think they satisfy the headlight requirement — but DRLs often don't illuminate taillights. Check that rear lights are actually on. 💡"},
+  {q:"A solid yellow center line on a two-lane road on YOUR side means:",choices:["You may pass when you can see clearly ahead","Passing is prohibited from your lane","You are approaching a school zone","The road is under construction"],a:1,fun:"Solid yellow on your side = no passing for you. Solid on both sides = no passing either direction. Dashed yellow = passing allowed when safe. The line's style tells you the rule that applies to YOUR lane, not just the general road condition. 🚫"},
+  {q:"What is the minimum following distance recommended under ideal driving conditions?",choices:["1 second","2 seconds","3 seconds","5 seconds"],a:2,fun:"3 seconds is the minimum under ideal conditions. Pick a fixed point — when the vehicle ahead passes it, you should not reach it before counting three seconds. Double it (6 seconds) in rain, fog, at night, or when following large trucks. 🕐"},
+  {q:"When a school bus has stopped with its red lights flashing and stop arm extended on an undivided two-lane road, drivers in BOTH directions must:",choices:["Slow to 25 mph and proceed carefully","Stop at least 10 feet away and wait until the lights stop and the arm retracts","Yield and proceed if no children are visible","Only buses behind the bus must stop"],a:1,fun:"BOTH directions stop on undivided roads. Only exception: divided highways with 4+ lanes (raised median) — opposing traffic may proceed. Failing to stop for a school bus is a 5-point violation in NC — the most points for any single traffic violation. 🚌"},
+  {q:"The shape of a yield sign is:",choices:["Octagon (8-sided)","Diamond","Downward-pointing triangle","Pentagon (5-sided)"],a:2,fun:"Triangle pointing down = yield. Octagon = stop. Diamond = warning. Rectangle/square = regulatory or informational. You should be able to identify sign categories by shape alone — important in poor visibility. 🔺"},
+  {q:"A green arrow signal light means:",choices:["You may proceed in the arrow direction but must yield to all oncoming traffic","You have a protected right of way in the arrow direction — opposing traffic is stopped","You must turn only in the arrow direction — going straight is prohibited","The regular green ball will appear in 5 seconds"],a:1,fun:"Green arrow = protected turn. Opposing traffic has a red light. You still yield to pedestrians crossing your path (their crossing signal may be on). Green ball = unprotected — you must still yield to oncoming traffic when turning left. 💚"},
+  {q:"Under NC law, texting while driving is:",choices:["Legal for adults 21 and older","Legal if stopped at a red light","Prohibited for all drivers at all times, including when stopped at traffic lights","Only prohibited for drivers under 18"],a:2,fun:"NC bans texting for ALL drivers at ALL times — including at red lights. The law treats the vehicle as 'in operation' when in traffic, even when stopped. For under-18 drivers, ALL cell phone use is prohibited. For adults: talking on hand-held is currently permitted in NC (though hands-free is strongly recommended). 📵"},
+  {q:"What does a white dashed lane marking between lanes of same-direction traffic indicate?",choices:["No lane changes permitted — maintain your lane","Lane changes are permitted when safe","You are entering a one-way road","These lanes have different speed limits"],a:1,fun:"White dashed line between same-direction lanes = lane changes allowed when safe. White solid line = lane changes discouraged. Yellow lines (solid or dashed) separate opposite-direction traffic. Color + solid/dashed = the complete system. ⬜"},
+  {q:"NC's implied consent law means that by driving in NC, you have:",choices:["Agreed to allow police to search your vehicle without a warrant","Consented to a chemical test (blood or breath) if an officer has probable cause to suspect DWI — refusal results in 30-day license revocation","Waived your right to contest traffic violations in court","Agreed to submit to random roadside sobriety tests"],a:1,fun:"By accepting a NC driver's license, you consent to chemical testing if lawfully stopped for suspected DWI. Refusal triggers an automatic 30-day revocation — and the refusal itself can be used as evidence against you in court. You have the right to refuse; there are just consequences. 🚨"},
+  {q:"The legal Blood Alcohol Content (BAC) limit for a driver under 21 in NC is:",choices:["0.08% — same as adults","0.04%","0.02%","0.00% — any detectable alcohol"],a:3,fun:"NC has zero tolerance for underage drinking and driving: any detectable alcohol = DWI for drivers under 21. A single drink can put someone over 0.00%. The under-21 DWI consequences include 1-year license revocation, criminal conviction, and insurance surcharges that last years. 🚫"},
+  {q:"When approaching an emergency vehicle with lights and siren active from behind you, you should:",choices:["Speed up to clear the path as quickly as possible","Maintain your current speed and position — emergency vehicles will navigate around you","Pull to the right side of the road and stop until the vehicle has passed","Move to the center lane to allow the vehicle to pass on either side"],a:2,fun:"Pull RIGHT and stop — not just slow down, but stop. If on a divided highway, stay on your side (don't cross the median to 'get out of the way'). The emergency vehicle needs a clear path, and stopping on the right provides that. 🚑"},
+  {q:"NC's Move-It Law requires drivers involved in a crash with no injuries and drivable vehicles to:",choices:["Wait exactly where the crash occurred until police arrive","Move vehicles off the roadway to the nearest safe location to prevent secondary crashes","Call 911 and wait for instruction before moving any vehicles","Place flares and remain with vehicles in the roadway"],a:1,fun:"Blocking a travel lane after a minor crash creates a serious secondary crash risk — people standing in the road have been seriously injured and killed. NC law requires moving drivable vehicles to the shoulder or a nearby parking area. Photograph the scene first, exchange information, then move. 📱"},
+  {q:"The NC penalty for failing to stop for a school bus with flashing red lights is:",choices:["1 point and $100 fine","2 points and a warning","5 points on your license and $500+ fine for first offense","Immediate license revocation"],a:2,fun:"5 points — the single highest point value for any moving violation in NC. Most violations are 2-4 points. At 12 points in 3 years, your license is suspended. The 5-point school bus violation can push a driver with other violations to suspension on its own. 💸"},
+  {q:"Hydroplaning occurs most easily when:",choices:["Driving at very low speeds through deep puddles","Driving at higher speeds on wet roads with worn tires — tires can't channel water away fast enough","Only in standing water more than 4 inches deep","When driving on freshly paved roads during the first rainfall"],a:1,fun:"Hydroplaning risk increases with: higher speed (can begin at 35 mph on worn tires), more water (heavy rain, standing water), and less tread (worn tires can't channel water). Response: ease off gas, steer straight, do NOT brake hard. Prevention: slow down in rain, maintain proper tire tread. 💧"},
+  {q:"When backing out of a driveway, drivers should:",choices:["Honk to alert pedestrians and back out quickly","Back out slowly, checking mirrors and looking over both shoulders — back slowly into the roadway","Have a passenger direct you from outside the vehicle","Only back out if no vehicles are visible in either direction"],a:1,fun:"Driveways have the worst visibility and the most likely presence of small children. Look over both shoulders (not just mirrors), back slowly, and yield to all pedestrians and vehicles in the roadway. A driveway is private property — the moment you enter the road, you must yield to everyone on it. 🔄"},
+  {q:"On a multi-lane highway in NC, slower traffic should:",choices:["Stay in the center lane","Use any lane — speed determines lane choice","Keep right — the left lane is for passing only","Use the right lane only if driving below the speed limit"],a:2,fun:"NC law requires slower traffic to keep right on multi-lane highways. The left lane is for passing. Traveling at the speed limit in the left lane while blocking faster traffic is still a violation. After passing, return to the right. This reduces weaving, tailgating, and road rage. ➡️"},
+  {q:"What should you do if your vehicle begins to skid (rear slides out)?",choices:["Steer in the opposite direction of the skid and brake hard","Steer into the skid (toward the direction the rear is sliding) and avoid braking until the vehicle straightens","Brake hard and steer straight","Apply the parking brake to stop the skid"],a:1,fun:"'Steer into the skid' means steer where your rear end is going, not where you WANT to go. If the rear slides right, turn the wheel right. Avoid abrupt braking — it can worsen the skid. Release the accelerator. Let the tires regain traction, then straighten. 🔄"},
+  {q:"NC law requires all occupants of a vehicle to wear seatbelts. The driver is specifically responsible for ensuring seatbelts are worn by:",choices:["Only front-seat passengers","All passengers under 16, regardless of seating position","Only children under 8 years old","Passengers only if the vehicle is equipped with rear seatbelts"],a:1,fun:"The driver is legally responsible for seatbelt compliance of all passengers under 16. For passengers 16 and older, each person is responsible for their own belt. NC is a primary enforcement state — you can be stopped and cited for seatbelt violations without any other traffic offense. 🔒"},
+  {q:"When passing a large truck on the highway, you should:",choices:["Pass slowly and stay alongside the truck until you have a large gap","Pass quickly and decisively, signal before moving over, ensure you can see the truck's headlights in your mirror before moving back","Flash your high beams to signal your intent to pass","Always pass on the right where visibility is better"],a:1,fun:"Pass trucks quickly — minimize time in their blind spots. Before moving back into the lane ahead of them, make sure you can see BOTH of the truck's headlights in your rearview mirror (meaning you're safely ahead). Passing on the right of a truck is the worst option — that's their largest blind spot (2-3 lanes wide). 🚛"},
+  {q:"A pennant-shaped sign (elongated triangle pointing right) on the highway means:",choices:["Begin a passing zone — you may pass here","No passing zone — do not attempt to pass in this area","You are entering a construction zone","Keep right except to pass"],a:1,fun:"The pennant shape is unique to the No Passing Zone sign — you won't confuse it with anything else. It's posted on the left side of the road at the start of a no-passing zone, facing the direction of travel whose drivers cannot pass. Yellow diamond signs also mark no-passing zones — the pennant makes it explicit. 🚫"},
+  {q:"If you are involved in a crash and someone is injured, NC law requires you to:",choices:["Administer first aid and then move the vehicles","Call 911, render reasonable assistance, and remain at the scene until law enforcement arrives and releases you","Move vehicles immediately then report the crash within 24 hours","Exchange information and report the crash to insurance only — police are not required"],a:1,fun:"Crashes with injuries require: stop immediately, call 911, render reasonable assistance (do not move an injured person unless in immediate danger), remain until law enforcement releases you. Leaving the scene of an injury crash is a serious crime — felony hit-and-run. Crash with property damage over $1,000: must report to law enforcement. 🚨"}
+]},
+]},
 ]};
 
 // ── STATE ──────────────────────────────

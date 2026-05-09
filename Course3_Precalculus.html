@@ -1,6 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var COURSE = 'Precalculus';
+  var KEY    = 'cms_tracker_v1';
+  var start  = null;
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function todayStr(){
+    var d = new Date();
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  }
+  function nowTime(){
+    var d = new Date();
+    return pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY))||{sessions:[]}; }
+    catch(e){ return {sessions:[]}; }
+  }
+  function save(d){ localStorage.setItem(KEY, JSON.stringify(d)); }
+
+  function flush(){
+    if(!start) return;
+    var secs = Math.round((Date.now()-start)/1000);
+    start = null;
+    if(secs < 5) return; // ignore accidental flickers < 5 seconds
+    var d = load();
+    // merge into an existing session for today+course if within 30 min gap
+    var today = todayStr();
+    var cutoff = Date.now() - 30*60*1000;
+    var existing = null;
+    for(var i=d.sessions.length-1; i>=0; i--){
+      var s = d.sessions[i];
+      if(s.course===COURSE && s.date===today && s._lastUpdate && s._lastUpdate > cutoff){
+        existing = s; break;
+      }
+    }
+    if(existing){
+      existing.secs = (existing.secs||0) + secs;
+      existing._lastUpdate = Date.now();
+    } else {
+      d.sessions.push({
+        id: Date.now(),
+        date: today,
+        time: nowTime(),
+        course: COURSE,
+        secs: secs,
+        _lastUpdate: Date.now()
+      });
+    }
+    save(d);
+  }
+
+  function begin(){
+    if(!start) start = Date.now();
+  }
+
+  // Page Visibility API
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ flush(); } else { begin(); }
+  });
+
+  // Tab/window close
+  window.addEventListener('beforeunload', flush);
+  window.addEventListener('pagehide', flush);
+
+  // Start immediately if visible
+  if(!document.hidden) begin();
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Precalculus — Calming Minds Day School</title>
